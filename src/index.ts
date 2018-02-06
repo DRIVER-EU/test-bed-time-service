@@ -1,0 +1,84 @@
+import { App } from './app';
+import * as commandLineArgs from 'command-line-args';
+import { OptionDefinition } from 'command-line-args';
+import * as npmPackage from '../package.json';
+import { Application } from 'express';
+
+export interface ICommandOptions {
+  port: number;
+  interval: number;
+  help?: boolean;
+}
+
+export class CommandLineInterface {
+  static optionDefinitions: OptionDefinition[] = [{
+    name: 'help',
+    alias: 'h',
+    type: Boolean,
+    typeLabel: '[underline]{Boolean}',
+    description: 'Show help text'
+  }, {
+    name: 'port',
+    alias: 'p',
+    type: Number,
+    defaultValue: 8100,
+    typeLabel: '[underline]{Number}',
+    description: 'Endpoint port, e.g. http://localhost:PORT/time'
+  }, {
+    name: 'interval',
+    alias: 'i',
+    type: Number,
+    defaultValue: 5000,
+    defaultOption: true,
+    typeLabel: '[underline]{Number}',
+    description: 'Default time interval between time messages in msec.'
+  }];
+
+  static sections = [
+    {
+      header: `${npmPackage.name}, v${npmPackage.version}`,
+      content: `${npmPackage.license} license.
+
+    ${npmPackage.description}
+
+    The test-bed time service can be controlled via Apache Kafka. It listens to
+    state changes of the test-bed, e.g. scenario start and stop messages.
+    It publishes three times:
+    - Local system time: This is the same time that the NTP server should use.
+    - Fictive simulation time: The time that is used in the scenario. Note that
+      it may run faster than realtime.
+    - Speed factor: How much faster than realtime are we running.
+    - Scenario duration: The duration that the scenario is active (from start to stop,
+      expressed in real-time).
+    `
+    }, {
+      header: 'Options',
+      optionList: CommandLineInterface.optionDefinitions
+    }, {
+      header: 'Examples',
+      content: [{
+        desc: '01. Start the service.',
+        example: `$ ${npmPackage.name}`
+      }, {
+        desc: '02. Start the service, sending out time messages every second.',
+        example: `$ ${npmPackage.name} -i 1000`
+      }, {
+        desc: '03. Start the service on port 8080.',
+        example: `$ ${npmPackage.name} - 8080`
+      }]
+    }
+  ];
+}
+
+const options: ICommandOptions = commandLineArgs(
+  CommandLineInterface.optionDefinitions
+);
+
+if (options.help) {
+  const getUsage = require('command-line-usage');
+  const usage = getUsage(CommandLineInterface.sections);
+  console.log(usage);
+  process.exit(0);
+}
+const app: Application = new App(options).getApp();
+export { app };

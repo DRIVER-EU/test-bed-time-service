@@ -1,0 +1,45 @@
+{
+  "name": "test-bed-time-service",
+  "version": "0.0.0",
+  "description": "A time service for the test-bed, producing messages with real time, fictive time and scenario duration.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -w",
+    "patch-release": "npm version patch && npm publish && git push --follow-tags",
+    "minor-release": "npm version minor && npm publish && git push --follow-tags",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DRIVER-EU/test-bed-time-service.git"
+  },
+  "keywords": [
+    "test-bed",
+    "Apache",
+    "Kafka",
+    "time",
+    "service",
+    "NTP"
+  ],
+  "author": "Erik Vullings <erik.vullings@gmail.com> (http://www.tno.nl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DRIVER-EU/test-bed-time-service/issues"
+  },
+  "homepage": "https://github.com/DRIVER-EU/test-bed-time-service#readme",
+  "dependencies": {
+    "command-line-args": "^5.0.1",
+    "command-line-usage": "^4.1.0",
+    "express": "^4.16.2",
+    "node-test-bed-adapter": "^0.2.0",
+    "socketio": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.20",
+    "@types/command-line-args": "^4.0.2",
+    "@types/express": "^4.11.1",
+    "@types/node": "^9.4.0",
+    "@types/socket.io": "^1.4.31",
+    "typescript": "^2.7.1"
+  }
+}

@@ -6,7 +6,7 @@ Initialized -down-> Running : Start(trialTimeSpeed?)
 state Running {
     [*] --> Started
     Started --> Paused : Pause
-    Paused --> Started : Start
+    Paused --> Started : Start(trialTimeSpeed?)
     Started --> Started : Update(trialTime?, trialTimeSpeed?)
     Paused --> Paused : Update(trialTime?, trialTimeSpeed?)
 

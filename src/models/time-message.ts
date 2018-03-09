@@ -1,6 +1,4 @@
 export interface ITimeMessage {
-  /** Sequence ID */
-  id: number;
   /**
    * The date and time the trialTime was updated as the number of milliseconds
    * from the unix epoch, 1 January 1970 00:00:00.000 UTC.

@@ -1,0 +1,18 @@
+@startuml
+[*] --> Idle
+Idle -down-> Initialized : Initialize(trialTime?)
+Initialized -down-> Running : Start(trialTimeSpeed?)
+
+state Running {
+    [*] --> Started
+    Started --> Paused : Pause
+    Paused --> Started : Start
+    Started --> Started : Update(trialTime?, trialTimeSpeed?)
+    Paused --> Paused : Update(trialTime?, trialTimeSpeed?)
+
+}
+
+Started -left-> Stopped : Stop 
+Paused -left-> Stopped : Stop
+Stopped -up-> Idle : Reset
+@enduml

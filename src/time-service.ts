@@ -1,11 +1,13 @@
+import { TimeServiceState} from './states/time-service-states';
 import { ITimingControlMessage } from './models/timing-control-message';
 import { ICommandOptions } from './index';
 import { EventEmitter } from 'events';
-import { Message, ProduceRequest } from 'kafka-node';
-import { TestBedAdapter, Logger, LogLevel } from 'node-test-bed-adapter';
+import { ProduceRequest } from 'kafka-node';
+import { TestBedAdapter, Logger, LogLevel, IAdapterMessage } from 'node-test-bed-adapter';
 import { ITimeMessage } from './models/time-message';
+import { Idle } from './states/time-service-idle-state';
 
-const ConfigurationTopic = 'test-bed-configuration';
+const ConfigurationTopic = 'connect-status-time-control';
 const TimeTopic = 'connect-status-time';
 
 export class TimeService extends EventEmitter {
@@ -13,21 +15,19 @@ export class TimeService extends EventEmitter {
   private log = Logger.instance;
 
   /** Can be used in clearInterval to reset the timer */
-  private timeHandler?: NodeJS.Timer;
+  private _timeHandler?: NodeJS.Timer;
 
   /** Real-time when the scenario is started */
-  private realStartTime?: number;
+  private _realStartTime?: number;
   /** Real-time of last update */
-  private lastUpdateTime?: number;
+  private _lastTrialTimeUpdate?: number;
   /**  The fictive date and time of the simulation / trial as the number of milliseconds
    * from the UNIX epoch, 1 January 1970 00:00:00.000 UTC. */
-  private trialTime?: number;
+  private _trialTime?: number;
   /** Current speed of the simulation in number of times real-time */
-  private currentSpeed: number;
+  private _trialTimeSpeed: number;
 
-  private sequenceId: number;
-
-  // TODO: currently the fictive time always starts at the current time. This should be configurable?
+  private _state: TimeServiceState;
 
   /** Interval to send messages to Kafka and browser clients (via Socket.io.). */
   private readonly interval: number;
@@ -35,16 +35,17 @@ export class TimeService extends EventEmitter {
   constructor(options: ICommandOptions) {
     super();
     this.interval = options.interval;
-    this.currentSpeed = 1.0;
-    this.sequenceId = 0;
+    this._trialTimeSpeed = 0;
+    this._state = new Idle(this);
 
     this.adapter = new TestBedAdapter({
       kafkaHost: 'localhost:3501',
       schemaRegistry: 'localhost:3502',
       fetchAllSchemas: false,
       clientId: 'TimeService',
+      schemaFolder: 'schemas',
       consume: [
-         // { topic: ConfigurationTopic }
+        { topic: ConfigurationTopic }
       ],
       produce: [ TimeTopic ],
       logging: {
@@ -56,8 +57,6 @@ export class TimeService extends EventEmitter {
     });
     this.adapter.on('ready', () => {
       this.subscribe();
-      // TEST
-      this.startScenario();
       this.log.info('Consumer is connected');
     });
   }
@@ -72,47 +71,80 @@ export class TimeService extends EventEmitter {
     this.adapter.on('offsetOutOfRange', (err) => this.log.error(`Consumer received an offsetOutOfRange error: ${err}`));
   }
 
-  private handleMessage(message: Message) {
+  private handleMessage(message: IAdapterMessage) {
     switch (message.topic) {
-      case 'test-bed-configuration':
-      var controlmessage = message.value;
-        // When we receive a start scenario message, start it
-        this.startScenario();
-        // When we receive a stop scenario message, start it
-        this.stopScenario();
+      case ConfigurationTopic:
+        const controlMsg = message.value as ITimingControlMessage;
+        this._state = this._state.transition(controlMsg);
         break;
       default:
-        console.log(message.value);
+        console.log("Unhandled message: " + message.value);
         break;
     }
   }
 
-  private startScenario() {
-    this.realStartTime = Date.now();
-    this.trialTime = this.realStartTime;
-    this.lastUpdateTime = this.realStartTime;
+  get State() {
+    return this._state;
+  }
+
+  get TrialTime() {
+    return this._trialTime;
+  }
+
+  set TrialTime(val) {
+    // keep track of last time trial time was updated to allow correct computation of trial time based on speed
+    this._lastTrialTimeUpdate = Date.now(); 
+    this._trialTime = val;
+  }
+
+  get TrialTimeSpeed() {
+    return this._trialTimeSpeed;
+  }
+
+  set TrialTimeSpeed(val) {
+    this._trialTimeSpeed = val;
+  }
+  
+  get LastUpdateTime() {
+    return this._lastTrialTimeUpdate;
+  }
+
+  get RealStartTime() {
+    return this._realStartTime;
+  }
+
+  /**
+   * Computes the new Trial Time using the amount of time that has passed since the previous computation of TrialTime
+   * and the TrialTimeSpeed. Updates the Trial Time accordingly.
+   */
+  public progressTrialTime() {
+    const now = Date.now();
+    const passed = now - this.LastUpdateTime!;
+    const newTrialTime = this.TrialTime! + (passed * this.TrialTimeSpeed!);
+    this.TrialTime = newTrialTime;
+    this._lastTrialTimeUpdate = now;
+  }
+
+  public startScenario() {
+    this._realStartTime = Date.now();
+    if(this.TrialTime == null) {
+      this.log.warn("No trial time provided upon scenario start. Defaulting Trial Time to current Real-time");
+      this.TrialTime = this.RealStartTime;
+    }
+    this._lastTrialTimeUpdate = this.RealStartTime;
     this.startProducingTimeMessages();
   }
 
-  private stopScenario() {
+  public stopScenario() {
     this.stopProducingTimeMessages();
   }
 
-  private sendTimeMessage() {
-    const newUpdateTime = Date.now();
-    const elapsedSinceLastUpdate = newUpdateTime - this.lastUpdateTime!;
-    this.trialTime = this.trialTime! + elapsedSinceLastUpdate * this.currentSpeed;
-    const totalElapsed = newUpdateTime - this.realStartTime!;
+  public sendTimeUpdate() {
+    this.sendTimeMessage(this.State.createTimeMessage());
+  }
 
-    const timeMsg = {
-      id: this.sequenceId,
-      updatedAt: newUpdateTime,
-      trialTime: this.trialTime,
-      timeElapsed: totalElapsed,
-      trialTimeSpeed: this.currentSpeed
-    } as ITimeMessage;
-
-    this.emit('time', timeMsg as ITimeMessage);
+  public sendTimeMessage(timeMsg: ITimeMessage) {
+    this.emit('time', timeMsg);
 
     const payload = { 
       topic: TimeTopic, 
@@ -128,18 +160,15 @@ export class TimeService extends EventEmitter {
         this.log.info(data);
       }
     });
-
-    this.lastUpdateTime = newUpdateTime; // log the time of the last time update
-    this.sequenceId++;
   }
 
   private startProducingTimeMessages() {
-    this.timeHandler = setInterval(() => this.sendTimeMessage(), this.interval);
+    this._timeHandler = setInterval(() => this.sendTimeMessage(this._state.createTimeMessage()), this.interval);
   }
 
   private stopProducingTimeMessages() {
-    if (this.timeHandler) {
-      clearInterval(this.timeHandler);
+    if (this._timeHandler) {
+      clearInterval(this._timeHandler);
     }
   }
 }

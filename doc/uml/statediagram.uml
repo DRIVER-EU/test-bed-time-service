@@ -1,6 +1,6 @@
 @startuml
 [*] --> Idle
-Idle -down-> Initialized : Initialize(trialTime?)
+Idle -down-> Initialized : Init(trialTime?)
 Initialized -down-> Running : Start(trialTimeSpeed?)
 
 state Running {

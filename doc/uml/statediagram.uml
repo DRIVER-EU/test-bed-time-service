@@ -9,8 +9,9 @@ state Running {
     Paused --> Started : Start(trialTimeSpeed?)
     Started --> Started : Update(trialTime?, trialTimeSpeed?)
     Paused --> Paused : Update(trialTime?, trialTimeSpeed?)
-
 }
+
+note right of Running : While running, periodic Time Messages are sent
 
 Started -left-> Stopped : Stop 
 Paused -left-> Stopped : Stop

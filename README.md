@@ -10,10 +10,11 @@ In particular, this service will publish the fictive time, the real time, and sp
 - Fictive time (also as UTC time)
 - Scenario duration (the time that the simulation was in play state, expressed in msec)
 - Scenario speed
-- Status enum: play, paused, stopped, idle
-
-Time will also be transmitted as long (UTC, in msec since 1 january 1970 0:00).
 
 It may also check whether there are (simulation) services that are lagging behind, e.g. by requiring a response ("I'm done"). In case a simulation cannot keep up, the whole scenario needs to be slowed down (either pause or slowdown the total simulation).
 
-The service will be combined with an NTP service to get the real time. For example, by running [Ubuntu Chrony](https://linuxschool.net/note?os=Ubuntu_16.04&p=ntp&f=2) in a Docker container.
+The service will be combined with an NTP service to get the real time.
+
+## Usage 
+
+![States](out/doc/uml/statediagram/statediagram.png)

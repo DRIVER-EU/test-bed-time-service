@@ -18,8 +18,12 @@ The service will be combined with an NTP service to get the real time.
 ## Installation
 
 * Check out the repository
-* Run `yarn`
 * Run `npm i`
+* Run `tsc`
+* Run `yarn`
+
+## Running
+
 * Run `npm run start-tno-testbed` to run a time service for the driver-testbed.eu
 * OR Run `npm run start -- -k <kafka broker host:port> -s <schema registry host:port>
 

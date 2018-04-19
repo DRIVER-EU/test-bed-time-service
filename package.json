@@ -1,6 +1,6 @@
 {
   "name": "test-bed-time-service",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A time service for the test-bed, producing messages with real time, fictive time and scenario duration.",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "service",
     "NTP"
   ],
-  "author": "Erik Vullings <erik.vullings@gmail.com> (http://www.tno.nl)",
+  "author": "Pieter Hameete <phameete@gmail.com> (http://www.tno.nl)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/DRIVER-EU/test-bed-time-service/issues"
@@ -31,7 +31,7 @@
     "command-line-args": "^5.0.1",
     "command-line-usage": "^4.1.0",
     "express": "^4.16.2",
-    "node-test-bed-adapter": "0.3.1",
+    "node-test-bed-adapter": "0.4.0",
     "socketio": "^1.0.0"
   },
   "devDependencies": {

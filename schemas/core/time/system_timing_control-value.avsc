@@ -7,8 +7,8 @@
     {
       "name": "command",
       "type": {
-        "name": "command",
-        "namespace": "eu.driver.model.system",
+        "name": "Command",
+        "namespace": "eu.driver.model.core",
         "type": "enum",
         "symbols": [ "Init", "Start", "Pause", "Update", "Stop", "Reset" ]
       },

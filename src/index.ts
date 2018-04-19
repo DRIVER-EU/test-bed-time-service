@@ -7,6 +7,8 @@ import { Application } from 'express';
 export interface ICommandOptions {
   port: number;
   interval: number;
+  kafkaHost: string;
+  schemaRegistryUrl: string;
   help?: boolean;
 }
 
@@ -17,7 +19,24 @@ export class CommandLineInterface {
     type: Boolean,
     typeLabel: '[underline]{Boolean}',
     description: 'Show help text'
-  }, {
+  }, 
+  {
+    name: 'kafkaHost',
+    alias: 'k',
+    type: String,
+    defaultValue: "driver-testbed.eu:3501",
+    typeLabel: '[underline]{String}',
+    description: 'Kafka Broker address, e.g. localhost:3501'
+  },
+  {
+    name: 'schemaRegistryUrl',
+    alias: 's',
+    type: String,
+    defaultValue: "http://driver-testbed.eu:3502",
+    typeLabel: '[underline]{String}',
+    description: 'Schema Registry URL, e.g. http://localhost:3502'
+  },
+  {
     name: 'port',
     alias: 'p',
     type: Number,

@@ -7,8 +7,8 @@ import { TestBedAdapter, Logger, LogLevel, IAdapterMessage } from 'node-test-bed
 import { ITimeMessage } from './models/time-message';
 import { Idle } from './states/time-service-idle-state';
 
-const ConfigurationTopic = 'connect-status-time-control';
-const TimeTopic = 'connect-status-time';
+const ConfigurationTopic = 'system_timing_control';
+const TimeTopic = 'system_timing';
 
 export class TimeService extends EventEmitter {
   private adapter: TestBedAdapter;
@@ -39,15 +39,15 @@ export class TimeService extends EventEmitter {
     this._state = new Idle(this);
 
     this.adapter = new TestBedAdapter({
-      kafkaHost: 'localhost:3501',
-      schemaRegistry: 'localhost:3502',
+      kafkaHost: options.kafkaHost,
+      schemaRegistry: options.schemaRegistryUrl,
       fetchAllSchemas: false,
       clientId: 'TimeService',
       schemaFolder: 'schemas',
       consume: [
         { topic: ConfigurationTopic }
       ],
-      produce: [ TimeTopic ],
+      produce: [ TimeTopic,  ],
       logging: {
         logToConsole: LogLevel.Debug,
         logToFile: LogLevel.Debug,

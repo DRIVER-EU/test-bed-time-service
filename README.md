@@ -17,6 +17,8 @@ The service will be combined with an NTP service to get the real time.
 
 ## Installation
 
+This assumes you have Node.js installed, and node-gyp (`npm i -g node-gyp`).
+
 * Check out the repository
 * Run `npm i`
 * Run `tsc`

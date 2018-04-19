@@ -27,6 +27,7 @@ This assumes you have Node.js installed, and node-gyp (`npm i -g node-gyp`).
 ## Running
 
 * Run `npm run start-tno-testbed` to run a time service for the driver-testbed.eu
+* Run `npm run start-local` to run a time service for a localhost testbed.
 * OR Run `npm run start -- -k <kafka broker host:port> -s <schema registry host:port>
 
 ## Usage 

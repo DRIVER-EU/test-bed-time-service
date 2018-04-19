@@ -1,6 +1,6 @@
 {
   "name": "test-bed-time-service",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "A time service for the test-bed, producing messages with real time, fictive time and scenario duration.",
   "main": "index.js",
   "scripts": {

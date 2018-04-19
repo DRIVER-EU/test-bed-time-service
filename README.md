@@ -15,6 +15,14 @@ It may also check whether there are (simulation) services that are lagging behin
 
 The service will be combined with an NTP service to get the real time.
 
+## Installation
+
+* Check out the repository
+* Run `yarn`
+* Run `npm i`
+* Run `npm run start-tno-testbed` to run a time service for the driver-testbed.eu
+* OR Run `npm run start -- -k <kafka broker host:port> -s <schema registry host:port>
+
 ## Usage 
 
 The Test-bed Time Service acts as a state machine following the diagram below:

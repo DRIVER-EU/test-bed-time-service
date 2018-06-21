@@ -10,48 +10,64 @@ export interface ICommandOptions {
   kafkaHost: string;
   schemaRegistryUrl: string;
   help?: boolean;
+  version?: boolean;
+}
+
+export interface IOptionDefinition extends OptionDefinition {
+  typeLabel: string;
+  description: string;
 }
 
 export class CommandLineInterface {
-  static optionDefinitions: OptionDefinition[] = [{
-    name: 'help',
-    alias: 'h',
-    type: Boolean,
-    typeLabel: '[underline]{Boolean}',
-    description: 'Show help text'
-  }, 
-  {
-    name: 'kafkaHost',
-    alias: 'k',
-    type: String,
-    defaultValue: "driver-testbed.eu:3501",
-    typeLabel: '[underline]{String}',
-    description: 'Kafka Broker address, e.g. localhost:3501'
-  },
-  {
-    name: 'schemaRegistryUrl',
-    alias: 's',
-    type: String,
-    defaultValue: "http://driver-testbed.eu:3502",
-    typeLabel: '[underline]{String}',
-    description: 'Schema Registry URL, e.g. http://localhost:3502'
-  },
-  {
-    name: 'port',
-    alias: 'p',
-    type: Number,
-    defaultValue: 8100,
-    typeLabel: '[underline]{Number}',
-    description: 'Endpoint port, e.g. http://localhost:PORT/time'
-  }, {
-    name: 'interval',
-    alias: 'i',
-    type: Number,
-    defaultValue: 5000,
-    defaultOption: true,
-    typeLabel: '[underline]{Number}',
-    description: 'Default time interval between time messages in msec.'
-  }];
+  static optionDefinitions: IOptionDefinition[] = [
+    {
+      name: 'help',
+      alias: 'h',
+      type: Boolean,
+      typeLabel: '[underline]{Boolean}',
+      description: 'Show help text',
+    },
+    {
+      name: 'version',
+      alias: 'v',
+      type: Boolean,
+      typeLabel: '[underline]{Boolean}',
+      description: 'Show version number',
+    },
+    {
+      name: 'kafkaHost',
+      alias: 'k',
+      type: String,
+      defaultValue: process.env.KAFKA || 'driver-testbed.eu:3501',
+      typeLabel: '[underline]{String}',
+      description: 'Kafka Broker address, e.g. localhost:3501',
+    },
+    {
+      name: 'schemaRegistryUrl',
+      alias: 's',
+      type: String,
+      defaultValue: process.env.SCHEMA || 'http://driver-testbed.eu:3502',
+      typeLabel: '[underline]{String}',
+      description: 'Schema Registry URL, e.g. http://localhost:3502',
+    },
+    {
+      name: 'port',
+      alias: 'p',
+      type: Number,
+      defaultValue: process.env.PORT || 8100,
+      typeLabel: '[underline]{Number}',
+      description: 'Endpoint port, e.g. http://localhost:PORT/time',
+    },
+    {
+      name: 'interval',
+      alias: 'i',
+      type: Number,
+      defaultValue: 5000,
+      defaultOption: true,
+      typeLabel: '[underline]{Number}',
+      description: 'Default time interval between time messages in msec.',
+    },
+  ];
 
   static sections = [
     {
@@ -69,30 +85,37 @@ export class CommandLineInterface {
     - Speed factor: How much faster than realtime are we running.
     - Scenario duration: The duration that the scenario is active (from start to stop,
       expressed in real-time).
-    `
-    }, {
+    `,
+    },
+    {
       header: 'Options',
-      optionList: CommandLineInterface.optionDefinitions
-    }, {
+      optionList: CommandLineInterface.optionDefinitions,
+    },
+    {
       header: 'Examples',
-      content: [{
-        desc: '01. Start the service.',
-        example: `$ ${npmPackage.name}`
-      }, {
-        desc: '02. Start the service, sending out time messages every second.',
-        example: `$ ${npmPackage.name} -i 1000`
-      }, {
-        desc: '03. Start the service on port 8080.',
-        example: `$ ${npmPackage.name} - 8080`
-      }]
-    }
+      content: [
+        {
+          desc: '01. Start the service.',
+          example: `$ ${npmPackage.name}`,
+        },
+        {
+          desc: '02. Start the service, sending out time messages every second.',
+          example: `$ ${npmPackage.name} -i 1000`,
+        },
+        {
+          desc: '03. Start the service on port 8080.',
+          example: `$ ${npmPackage.name} - 8080`,
+        },
+      ],
+    },
   ];
 }
 
-const options: ICommandOptions = commandLineArgs(
-  CommandLineInterface.optionDefinitions
-);
+const options = commandLineArgs(CommandLineInterface.optionDefinitions) as ICommandOptions;
 
+if (options.version) {
+  console.log(`v${npmPackage.version}`);
+}
 if (options.help) {
   const getUsage = require('command-line-usage');
   const usage = getUsage(CommandLineInterface.sections);

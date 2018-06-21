@@ -18,6 +18,7 @@ export class App {
   constructor(options: ICommandOptions) {
     this.port = options.port;
     this.app = express();
+    this.app.use(express.static('public'));
     this.server = createServer(this.app);
     this.io = socketIO(this.server);
     this.setupRoutes();

@@ -1,9 +1,8 @@
-
-import { TimingControlCommand, ITimingControlMessage } from "./../models/timing-control-message";
-import { TimeServiceBaseState, TimeServiceState } from "./time-service-states";
-import { ITimeMessage } from "../models/time-message";
-import { Paused } from "./time-service-paused-state";
-import { Stopped } from "./time-service-stopped-state";
+import { TimingControlCommand, ITimingControlMessage } from './../models/timing-control-message';
+import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
+import { ITimeMessage } from '../models/time-message';
+import { Paused } from './time-service-paused-state';
+import { Stopped } from './time-service-stopped-state';
 
 export class Started extends TimeServiceBaseState {
   transition(controlMsg: ITimingControlMessage): TimeServiceState {
@@ -12,7 +11,7 @@ export class Started extends TimeServiceBaseState {
         this.timeService.progressTrialTime(); // progress time using old speed
         this.timeService.TrialTimeSpeed = 0; // set speed to 0 to pause
         this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
-        this.log.info("Received command " + controlMsg.command +". Transitioning to Paused.");
+        this.log.info('Received command ' + controlMsg.command + '. Transitioning to Paused.');
         return new Paused(this.timeService);
       }
       case TimingControlCommand.Stop: {
@@ -20,7 +19,7 @@ export class Started extends TimeServiceBaseState {
         this.timeService.TrialTimeSpeed = 0; // set speed to 0 to stop
         this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
         this.timeService.stopScenario(); // stop sending periodic messages
-        this.log.info("Received command " + controlMsg.command + ". Transitioning to Stopped.");
+        this.log.info('Received command ' + controlMsg.command + '. Transitioning to Stopped.');
         return new Stopped(this.timeService);
       }
       case TimingControlCommand.Update: {
@@ -35,11 +34,7 @@ export class Started extends TimeServiceBaseState {
         return this;
       }
       default: {
-        this.log.warn(
-          "Received command " +
-            controlMsg.command +
-            " while in Started state. Doing nothing!"
-        );
+        this.log.warn('Received command ' + controlMsg.command + ' while in Started state. Doing nothing!');
         return this;
       }
     }
@@ -54,7 +49,7 @@ export class Started extends TimeServiceBaseState {
       updatedAt: newUpdateTime,
       trialTime: trialTime,
       timeElapsed: timeElapsed,
-      trialTimeSpeed: this.timeService.TrialTimeSpeed
+      trialTimeSpeed: this.timeService.TrialTimeSpeed,
     } as ITimeMessage;
     return timeMsg;
   }

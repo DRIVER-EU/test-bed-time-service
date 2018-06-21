@@ -1,4 +1,4 @@
-import { TimeServiceState} from './states/time-service-states';
+import { TimeServiceState } from './states/time-service-states';
 import { ITimingControlMessage } from './models/timing-control-message';
 import { ICommandOptions } from './index';
 import { EventEmitter } from 'events';
@@ -44,16 +44,12 @@ export class TimeService extends EventEmitter {
       fetchAllSchemas: false,
       clientId: 'TimeService',
       schemaFolder: 'schemas',
-      consume: [
-        { topic: ConfigurationTopic }
-      ],
-      produce: [ TimeTopic,  ],
+      consume: [{ topic: ConfigurationTopic }],
+      produce: [TimeTopic],
       logging: {
-        logToConsole: LogLevel.Debug,
-        logToFile: LogLevel.Debug,
-        logToKafka: LogLevel.Debug,
-        logFile: 'log.txt'
-      }
+        logToConsole: LogLevel.Info,
+        logToKafka: LogLevel.Warn,
+      },
     });
     this.adapter.on('ready', () => {
       this.subscribe();
@@ -78,7 +74,7 @@ export class TimeService extends EventEmitter {
         this._state = this._state.transition(controlMsg);
         break;
       default:
-        console.log("Unhandled message: " + message.value);
+        console.log('Unhandled message: ' + message.value);
         break;
     }
   }
@@ -93,7 +89,7 @@ export class TimeService extends EventEmitter {
 
   set TrialTime(val) {
     // keep track of last time trial time was updated to allow correct computation of trial time based on speed
-    this._lastTrialTimeUpdate = Date.now(); 
+    this._lastTrialTimeUpdate = Date.now();
     this._trialTime = val;
   }
 
@@ -104,7 +100,7 @@ export class TimeService extends EventEmitter {
   set TrialTimeSpeed(val) {
     this._trialTimeSpeed = val;
   }
-  
+
   get LastUpdateTime() {
     return this._lastTrialTimeUpdate;
   }
@@ -120,15 +116,15 @@ export class TimeService extends EventEmitter {
   public progressTrialTime() {
     const now = Date.now();
     const passed = now - this.LastUpdateTime!;
-    const newTrialTime = this.TrialTime! + (passed * this.TrialTimeSpeed!);
+    const newTrialTime = this.TrialTime! + passed * this.TrialTimeSpeed!;
     this.TrialTime = newTrialTime;
     this._lastTrialTimeUpdate = now;
   }
 
   public startScenario() {
     this._realStartTime = Date.now();
-    if(this.TrialTime == null) {
-      this.log.warn("No trial time provided upon scenario start. Defaulting Trial Time to current Real-time");
+    if (this.TrialTime == null) {
+      this.log.warn('No trial time provided upon scenario start. Defaulting Trial Time to current Real-time');
       this.TrialTime = this.RealStartTime;
     }
     this._lastTrialTimeUpdate = this.RealStartTime;
@@ -146,10 +142,10 @@ export class TimeService extends EventEmitter {
   public sendTimeMessage(timeMsg: ITimeMessage) {
     this.emit('time', timeMsg);
 
-    const payload = { 
-      topic: TimeTopic, 
+    const payload = {
+      topic: TimeTopic,
       messages: timeMsg,
-      attributes: 1 // Gzip
+      attributes: 1, // Gzip
     } as ProduceRequest;
 
     this.adapter.send(payload, (err, data) => {

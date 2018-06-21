@@ -8,11 +8,11 @@ export interface ITimingControlMessage {
 }
 
 export enum TimingControlCommand {
-  Init = "Init",
-  Start = "Start",
-  Pause = "Pause",
-  Update = "Update",
-  Stop = "Stop",
-  Reset = "Reset"
+  Init = 'Init',
+  Start = 'Start',
+  Pause = 'Pause',
+  Update = 'Update',
+  Stop = 'Stop',
+  Reset = 'Reset',
 }
 

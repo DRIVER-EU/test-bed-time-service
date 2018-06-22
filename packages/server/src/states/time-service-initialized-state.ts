@@ -1,9 +1,14 @@
 import { TimingControlCommand, ITimingControlMessage } from './../models/timing-control-message';
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
 import { Started } from './time-service-started-state';
+import { States } from './states';
 
 export class Initialized extends TimeServiceBaseState {
-  transition(controlMsg: ITimingControlMessage): TimeServiceState {
+  public get name() {
+    return States.Initialized;
+  }
+
+  public transition(controlMsg: ITimingControlMessage): TimeServiceState {
     switch (controlMsg.command) {
       case TimingControlCommand.Start: {
         if (controlMsg.trialTimeSpeed == null) {

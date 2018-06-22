@@ -3,9 +3,14 @@ import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
 import { ITimeMessage } from '../models/time-message';
 import { Paused } from './time-service-paused-state';
 import { Stopped } from './time-service-stopped-state';
+import { States } from './states';
 
 export class Started extends TimeServiceBaseState {
-  transition(controlMsg: ITimingControlMessage): TimeServiceState {
+  public get name() {
+    return States.Started;
+  }
+
+  public transition(controlMsg: ITimingControlMessage): TimeServiceState {
     switch (controlMsg.command) {
       case TimingControlCommand.Pause: {
         this.timeService.progressTrialTime(); // progress time using old speed

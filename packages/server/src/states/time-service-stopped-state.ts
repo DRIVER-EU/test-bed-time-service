@@ -2,9 +2,14 @@ import { TimingControlCommand, ITimingControlMessage } from './../models/timing-
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
 import { ITimeMessage } from '../models/time-message';
 import { Idle } from './time-service-idle-state';
+import { States } from './states';
 
 export class Stopped extends TimeServiceBaseState {
-  transition(controlMsg: ITimingControlMessage): TimeServiceState {
+  public get name() {
+    return States.Stopped;
+  }
+
+  public transition(controlMsg: ITimingControlMessage): TimeServiceState {
     switch (controlMsg.command) {
       case TimingControlCommand.Reset: {
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Idle.');

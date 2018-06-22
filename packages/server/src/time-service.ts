@@ -6,11 +6,17 @@ import { ProduceRequest } from 'kafka-node';
 import { TestBedAdapter, Logger, LogLevel, IAdapterMessage } from 'node-test-bed-adapter';
 import { ITimeMessage } from './models/time-message';
 import { Idle } from './states/time-service-idle-state';
+import { States } from './states/states';
 
 const ConfigurationTopic = 'system_timing_control';
 const TimeTopic = 'system_timing';
 
-export class TimeService extends EventEmitter {
+export interface TimeService {
+  on(event: 'stateUpdated', listener: (state: States) => void): this;
+  on(event: 'time', listener: (time: ITimeMessage) => void): this;
+}
+
+export class TimeService extends EventEmitter implements TimeService {
   private adapter: TestBedAdapter;
   private log = Logger.instance;
 
@@ -43,9 +49,10 @@ export class TimeService extends EventEmitter {
       schemaRegistry: options.schemaRegistryUrl,
       fetchAllSchemas: false,
       clientId: 'TimeService',
+      autoRegisterSchemas: options.autoRegisterSchemas,
       schemaFolder: 'schemas',
       consume: [{ topic: ConfigurationTopic }],
-      produce: [TimeTopic],
+      produce: [TimeTopic, ConfigurationTopic],
       logging: {
         logToConsole: LogLevel.Info,
         logToKafka: LogLevel.Warn,
@@ -58,7 +65,13 @@ export class TimeService extends EventEmitter {
   }
 
   public connect() {
-    this.adapter.connect();
+    return this.adapter.connect();
+  }
+
+  /** Allow external services to control transitions. */
+  public transition(msg: ITimingControlMessage) {
+    this._state = this._state.transition(msg);
+    this.emit('stateUpdated', this._state.name);
   }
 
   private subscribe() {
@@ -71,7 +84,7 @@ export class TimeService extends EventEmitter {
     switch (message.topic) {
       case ConfigurationTopic:
         const controlMsg = message.value as ITimingControlMessage;
-        this._state = this._state.transition(controlMsg);
+        this.transition(controlMsg);
         break;
       default:
         console.log('Unhandled message: ' + message.value);

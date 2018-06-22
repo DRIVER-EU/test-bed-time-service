@@ -9,6 +9,7 @@ export interface ICommandOptions {
   interval: number;
   kafkaHost: string;
   schemaRegistryUrl: string;
+  autoRegisterSchemas: boolean;
   help?: boolean;
   version?: boolean;
 }
@@ -49,6 +50,14 @@ export class CommandLineInterface {
       defaultValue: process.env.SCHEMA || 'http://driver-testbed.eu:3502',
       typeLabel: '[underline]{String}',
       description: 'Schema Registry URL, e.g. http://localhost:3502',
+    },
+    {
+      name: 'autoRegisterSchemas',
+      alias: 'a',
+      type: Boolean,
+      typeLabel: '[underline]{Boolean}',
+      defaultValue: false,
+      description: 'Automatically register all schemas in the ./schemas folder.',
     },
     {
       name: 'port',

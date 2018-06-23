@@ -1,8 +1,10 @@
 {
   "name": "test-bed-time-service",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A time service for the test-bed, producing messages with real time, fictive time and scenario duration.",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "bin": "./bin/run.js",
   "scripts": {
     "start-tno-testbed": "node ./dist/index.js -- -k driver-testbed.eu:3501 -s driver-testbed.eu:3502",
     "start-local": "node ./dist/index.js -- -k localhost:3501 -s localhost:3502",

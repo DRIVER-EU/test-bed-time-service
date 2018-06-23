@@ -4,23 +4,37 @@ import { ITimeMessage } from '../models/time-message';
 import { SimulationState } from '../models/sim-state';
 
 const log = console.log;
-
 let socket: SocketIOClient.Socket;
 
 const setupSocket = () => {
-  socket = socket || io('http://localhost');
+  if (socket) {
+    return socket;
+  }
+  socket = io();
   socket.on('connect', () => log('Connected'));
   socket.on('event', (data: any) => log(data));
   socket.on('disconnect', () => log('Disconnected'));
-  socket.on('stateUpdated', (state: States) => SimulationState.state = state);
+  socket.on('stateUpdated', (state: States) => {
+    SimulationState.state = state;
+  });
+  let handler = -1;
   socket.on('time', (time: ITimeMessage) => {
-    SimulationState.trialTime = time.trialTime;
+    log(`Time message received: ${time.trialTime}`);
+    SimulationState.trialTime = time.trialTime || new Date().setHours(12, 0, 0).valueOf();
     SimulationState.trialTimeSpeed = time.trialTimeSpeed;
     SimulationState.timeElapsed = time.timeElapsed;
+    window.clearInterval(handler);
+    if (time.trialTimeSpeed > 0) {
+      const secDuration = 1000 / time.trialTimeSpeed;
+      handler = window.setInterval(() => {
+        SimulationState.trialTime += secDuration;
+      }, secDuration);
+    }
   });
   return socket;
 };
+socket = setupSocket();
 
 export const SocketService = {
-  socket: setupSocket(),
+  socket: socket || setupSocket(),
 };

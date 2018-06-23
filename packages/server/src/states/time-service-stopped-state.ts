@@ -24,9 +24,9 @@ export class Stopped extends TimeServiceBaseState {
 
   createTimeMessage(): ITimeMessage {
     const newUpdateTime = Date.now();
-    const timeElapsed = newUpdateTime - this.timeService.RealStartTime!;
+    const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
     // unlike when started, don't progress the trialtime before sending an update
-    const trialTime = this.timeService.TrialTime;
+    const trialTime = this.timeService.trialTime;
     const timeMsg = {
       updatedAt: newUpdateTime,
       trialTime: trialTime,

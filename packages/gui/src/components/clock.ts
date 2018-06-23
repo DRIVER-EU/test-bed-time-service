@@ -1,5 +1,7 @@
+import { SimulationState } from '../models/sim-state';
 import m from 'mithril';
 import { d3clock, sbb } from 'd3-clock';
+import { SocketService } from '../services/socket-service';
 
 export const Clock = () => {
   return {
@@ -7,13 +9,12 @@ export const Clock = () => {
     oncreate: () => {
       const el = document.getElementById('clock');
       const width = el ? Math.min(el.clientHeight, el.clientWidth) : 600;
+      SocketService.socket.on('time', () => m.redraw());
       d3clock({
         // Parent div to put the clock in
         target: '#clock',
-        // Width of the clock
         width,
-        // Fixed time
-        // date:'Mon May 25 2015 10:09:37',
+        date: () => SimulationState.trialTime,
         // Time zone offset
         TZOffset: { hours: 0 },
         // Clock face, e.g. sbb, braun, modern, or classic, must be imported

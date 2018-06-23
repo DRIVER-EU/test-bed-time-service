@@ -16,9 +16,9 @@ export class Paused extends TimeServiceBaseState {
         this.timeService.progressTrialTime(); // progress time using old speed (zero)
         if (controlMsg.trialTimeSpeed == null) {
           this.log.warn('No Trial Time Speed provided when resuming the Time Service. Defaulting to 1.0');
-          this.timeService.TrialTimeSpeed = 1.0;
+          this.timeService.trialTimeSpeed = 1.0;
         } else {
-          this.timeService.TrialTimeSpeed = controlMsg.trialTimeSpeed;
+          this.timeService.trialTimeSpeed = controlMsg.trialTimeSpeed;
         }
         this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Started.');
@@ -34,10 +34,10 @@ export class Paused extends TimeServiceBaseState {
       case TimingControlCommand.Update: {
         if (controlMsg.trialTimeSpeed != null) {
           this.timeService.progressTrialTime(); // progress time using old speed
-          this.timeService.TrialTimeSpeed = controlMsg.trialTimeSpeed;
+          this.timeService.trialTimeSpeed = controlMsg.trialTimeSpeed;
         }
         if (controlMsg.trialTime != null) {
-          this.timeService.TrialTime = controlMsg.trialTime;
+          this.timeService.trialTime = controlMsg.trialTime;
         }
         this.timeService.sendTimeUpdate(); // send updated values ASAP
         return this;
@@ -51,9 +51,9 @@ export class Paused extends TimeServiceBaseState {
 
   createTimeMessage(): ITimeMessage {
     const newUpdateTime = Date.now();
-    const timeElapsed = newUpdateTime - this.timeService.RealStartTime!;
+    const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
     // unlike when started, don't progress the trialtime before sending an update
-    const trialTime = this.timeService.TrialTime;
+    const trialTime = this.timeService.trialTime;
     const timeMsg = {
       updatedAt: newUpdateTime,
       trialTime: trialTime,

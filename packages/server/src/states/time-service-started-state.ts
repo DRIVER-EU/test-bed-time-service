@@ -14,14 +14,14 @@ export class Started extends TimeServiceBaseState {
     switch (controlMsg.command) {
       case TimingControlCommand.Pause: {
         this.timeService.progressTrialTime(); // progress time using old speed
-        this.timeService.TrialTimeSpeed = 0; // set speed to 0 to pause
+        this.timeService.trialTimeSpeed = 0; // set speed to 0 to pause
         this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Paused.');
         return new Paused(this.timeService);
       }
       case TimingControlCommand.Stop: {
         this.timeService.progressTrialTime(); // progress time using old speed
-        this.timeService.TrialTimeSpeed = 0; // set speed to 0 to stop
+        this.timeService.trialTimeSpeed = 0; // set speed to 0 to stop
         this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
         this.timeService.stopScenario(); // stop sending periodic messages
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Stopped.');
@@ -30,10 +30,10 @@ export class Started extends TimeServiceBaseState {
       case TimingControlCommand.Update: {
         if (controlMsg.trialTimeSpeed != null) {
           this.timeService.progressTrialTime(); // progress time using old speed
-          this.timeService.TrialTimeSpeed = controlMsg.trialTimeSpeed;
+          this.timeService.trialTimeSpeed = controlMsg.trialTimeSpeed;
         }
         if (controlMsg.trialTime != null) {
-          this.timeService.TrialTime = controlMsg.trialTime;
+          this.timeService.trialTime = controlMsg.trialTime;
         }
         this.timeService.sendTimeUpdate(); // send updated values ASAP
         return this;
@@ -47,14 +47,14 @@ export class Started extends TimeServiceBaseState {
 
   createTimeMessage(): ITimeMessage {
     const newUpdateTime = Date.now();
-    const timeElapsed = newUpdateTime - this.timeService.RealStartTime!;
+    const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
     this.timeService.progressTrialTime();
-    const trialTime = this.timeService.TrialTime;
+    const trialTime = this.timeService.trialTime;
     const timeMsg = {
       updatedAt: newUpdateTime,
       trialTime: trialTime,
       timeElapsed: timeElapsed,
-      trialTimeSpeed: this.timeService.TrialTimeSpeed,
+      trialTimeSpeed: this.timeService.trialTimeSpeed,
     } as ITimeMessage;
     return timeMsg;
   }

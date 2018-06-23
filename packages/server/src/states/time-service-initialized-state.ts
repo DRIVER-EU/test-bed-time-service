@@ -11,9 +11,9 @@ export class Initialized extends TimeServiceBaseState {
   public transition(controlMsg: ITimingControlMessage): TimeServiceState {
     switch (controlMsg.command) {
       case TimingControlCommand.Start: {
-        if (controlMsg.trialTimeSpeed == null) {
+        if (!controlMsg.trialTimeSpeed) {
           this.log.info('Received Start command but no TrialTimeSpeed was provided. Will default to 1.0.');
-          this.timeService.TrialTimeSpeed = 1.0;
+          this.timeService.trialTimeSpeed = 1.0;
         }
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Started.');
         this.timeService.startScenario();

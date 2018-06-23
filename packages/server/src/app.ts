@@ -28,9 +28,11 @@ export class App {
 
     this.timeService = new TimeService(options);
     this.timeService.on('time', (time: ITimeMessage) => {
+      console.log(`Sending time update: ${JSON.stringify(time, null, 2)}`);
       this.io.emit('time', time);
     });
     this.timeService.on('stateUpdated', (state: States) => {
+      console.log(`Sending state update: ${state}`);
       this.io.emit('stateUpdated', state);
     });
     this.timeService.connect().then(() => this.listen());
@@ -43,6 +45,8 @@ export class App {
 
     this.io.on('connect', (socket: SocketIO.Socket) => {
       console.log(`Connected client on port ${this.port}`);
+      socket.emit('stateUpdated', this.timeService.state.name);
+      socket.emit('time', { trialTime: this.timeService.trialTime, trialTimeSpeed: this.timeService.trialTimeSpeed });
       socket.on('message', (m: ITimeMessage) => {
         console.log('[server](message): %s', JSON.stringify(m));
         this.io.emit('message', m);
@@ -52,32 +56,32 @@ export class App {
         console.log('[server](message): init request received.');
         this.timeService.transition({
           trialTime,
-          command: TimingControlCommand.Init
+          command: TimingControlCommand.Init,
         });
       });
       socket.on('start', (trialTimeSpeed: number) => {
         console.log('[server](message): start request received.');
         this.timeService.transition({
           trialTimeSpeed,
-          command: TimingControlCommand.Start
+          command: TimingControlCommand.Start,
         });
       });
       socket.on('pause', () => {
         console.log('[server](message): pause request received.');
         this.timeService.transition({
-          command: TimingControlCommand.Pause
+          command: TimingControlCommand.Pause,
         });
       });
       socket.on('stop', () => {
         console.log('[server](message): stop request received.');
         this.timeService.transition({
-          command: TimingControlCommand.Stop
+          command: TimingControlCommand.Stop,
         });
       });
       socket.on('reset', () => {
         console.log('[server](message): reset request received.');
         this.timeService.transition({
-          command: TimingControlCommand.Reset
+          command: TimingControlCommand.Reset,
         });
       });
 

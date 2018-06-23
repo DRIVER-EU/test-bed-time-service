@@ -4,12 +4,11 @@
   "description": "A time service for the test-bed, producing messages with real time, fictive time and scenario duration.",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/index.js",
     "start-tno-testbed": "node ./dist/index.js -- -k driver-testbed.eu:3501 -s driver-testbed.eu:3502",
     "start-local": "node ./dist/index.js -- -k localhost:3501 -s localhost:3502",
     "build": "tsc",
     "watch": "tsc -w",
-    "dev": "tsc-watch --onSuccess \"node ./dist/index.js -k localhost:3501 -s localhost:3502\"",
+    "start": "tsc-watch --onSuccess \"node ./dist/index.js -k localhost:3501 -s localhost:3502\"",
     "patch-release": "npm version patch && npm publish && git push --follow-tags",
     "minor-release": "npm version minor && npm publish && git push --follow-tags",
     "test": "echo \"Error: no test specified\" && exit 1"

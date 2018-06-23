@@ -1,14 +1,18 @@
+import { SocketService } from './services/socket-service';
 import 'materialize-css/js/jquery.hammer';
 import 'materialize-css/js/hammer.min';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize.min';
-import m, { RouteDefs, Vnode } from 'mithril';
-import './styles.css';
+import m, { RouteDefs } from 'mithril';
 import { Layout } from './views/layout';
-import { Clock } from './views/clock';
+import { Clock } from './components/clock';
+import { Calendar } from './components/calendar/calendar';
+import './styles.css';
+
+const log = console.log;
 
 const waitForMaterialize = () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     let iterations = 0;
     const handler = window.setInterval(() => {
       iterations++;
@@ -23,8 +27,21 @@ const waitForMaterialize = () =>
         ma.toast &&
         ma.updateTextFields
       ) {
-        // tslint:disable-next-line:no-console
-        console.log(`waited ${iterations} iterations for Materialize to finish loading`);
+        log(`waited ${iterations} iterations for Materialize to finish loading`);
+        window.clearInterval(handler);
+        resolve();
+      }
+    }, 1);
+  });
+
+const waitForSocketIO = () =>
+  new Promise((resolve) => {
+    let iterations = 0;
+    const handler = window.setInterval(() => {
+      iterations++;
+      const socket = SocketService.socket;
+      if (socket.connected) {
+        log(`waited ${iterations} iterations for SocketIO to finish loading`);
         window.clearInterval(handler);
         resolve();
       }
@@ -33,9 +50,10 @@ const waitForMaterialize = () =>
 
 const routingTable: RouteDefs = {
   '/': {
-    render: (vnode: Vnode<{ id: number; editing: boolean }>) => m(Layout, m(Clock)),
+    render: () => m(Layout, [m(Clock), m(Calendar)]),
   },
 };
 
 waitForMaterialize()
+  .then(() => waitForSocketIO())
   .then(() => m.route(document.body, '/', routingTable));

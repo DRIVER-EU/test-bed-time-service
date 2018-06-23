@@ -11,6 +11,7 @@ declare module 'mithril-timepicker' {
   export interface ITimePickerAttributes {
     increment?: 5 | 15;
     time?: ITimePickerTime;
+    onchange?: (t: ITimePickerTime) => void;
     tfh?: boolean;
   }
 

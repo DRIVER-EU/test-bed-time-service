@@ -92,33 +92,33 @@ export class TimeService extends EventEmitter implements TimeService {
     }
   }
 
-  get State() {
+  get state() {
     return this._state;
   }
 
-  get TrialTime() {
+  get trialTime() {
     return this._trialTime;
   }
 
-  set TrialTime(val) {
+  set trialTime(val) {
     // keep track of last time trial time was updated to allow correct computation of trial time based on speed
     this._lastTrialTimeUpdate = Date.now();
     this._trialTime = val;
   }
 
-  get TrialTimeSpeed() {
+  get trialTimeSpeed() {
     return this._trialTimeSpeed;
   }
 
-  set TrialTimeSpeed(val) {
+  set trialTimeSpeed(val) {
     this._trialTimeSpeed = val;
   }
 
-  get LastUpdateTime() {
+  get lastUpdateTime() {
     return this._lastTrialTimeUpdate;
   }
 
-  get RealStartTime() {
+  get realStartTime() {
     return this._realStartTime;
   }
 
@@ -128,19 +128,19 @@ export class TimeService extends EventEmitter implements TimeService {
    */
   public progressTrialTime() {
     const now = Date.now();
-    const passed = now - this.LastUpdateTime!;
-    const newTrialTime = this.TrialTime! + passed * this.TrialTimeSpeed!;
-    this.TrialTime = newTrialTime;
+    const passed = now - this.lastUpdateTime!;
+    const newTrialTime = this.trialTime! + passed * this.trialTimeSpeed!;
+    this.trialTime = newTrialTime;
     this._lastTrialTimeUpdate = now;
   }
 
   public startScenario() {
     this._realStartTime = Date.now();
-    if (this.TrialTime == null) {
+    if (this.trialTime === null) {
       this.log.warn('No trial time provided upon scenario start. Defaulting Trial Time to current Real-time');
-      this.TrialTime = this.RealStartTime;
+      this.trialTime = this.realStartTime;
     }
-    this._lastTrialTimeUpdate = this.RealStartTime;
+    this._lastTrialTimeUpdate = this.realStartTime;
     this.startProducingTimeMessages();
   }
 
@@ -149,7 +149,7 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   public sendTimeUpdate() {
-    this.sendTimeMessage(this.State.createTimeMessage());
+    this.sendTimeMessage(this.state.createTimeMessage());
   }
 
   public sendTimeMessage(timeMsg: ITimeMessage) {

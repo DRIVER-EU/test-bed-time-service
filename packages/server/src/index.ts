@@ -25,14 +25,14 @@ export class CommandLineInterface {
       name: 'help',
       alias: 'h',
       type: Boolean,
-      typeLabel: '[underline]{Boolean}',
+      typeLabel: '[underline Boolean]',
       description: 'Show help text',
     },
     {
       name: 'version',
       alias: 'v',
       type: Boolean,
-      typeLabel: '[underline]{Boolean}',
+      typeLabel: '[underline Boolean]',
       description: 'Show version number',
     },
     {
@@ -40,7 +40,7 @@ export class CommandLineInterface {
       alias: 'k',
       type: String,
       defaultValue: process.env.KAFKA || 'driver-testbed.eu:3501',
-      typeLabel: '[underline]{String}',
+      typeLabel: '[underline String]',
       description: 'Kafka Broker address, e.g. localhost:3501',
     },
     {
@@ -48,14 +48,14 @@ export class CommandLineInterface {
       alias: 's',
       type: String,
       defaultValue: process.env.SCHEMA || 'http://driver-testbed.eu:3502',
-      typeLabel: '[underline]{String}',
+      typeLabel: '[underline String]',
       description: 'Schema Registry URL, e.g. http://localhost:3502',
     },
     {
       name: 'autoRegisterSchemas',
       alias: 'a',
       type: Boolean,
-      typeLabel: '[underline]{Boolean}',
+      typeLabel: '[underline Boolean]',
       defaultValue: false,
       description: 'Automatically register all schemas in the ./schemas folder.',
     },
@@ -64,7 +64,7 @@ export class CommandLineInterface {
       alias: 'p',
       type: Number,
       defaultValue: process.env.PORT || 8100,
-      typeLabel: '[underline]{Number}',
+      typeLabel: '[underline Number]',
       description: 'Endpoint port, e.g. http://localhost:PORT/time',
     },
     {
@@ -73,7 +73,7 @@ export class CommandLineInterface {
       type: Number,
       defaultValue: 5000,
       defaultOption: true,
-      typeLabel: '[underline]{Number}',
+      typeLabel: '[underline Number]',
       description: 'Default time interval between time messages in msec.',
     },
   ];
@@ -83,23 +83,23 @@ export class CommandLineInterface {
       header: `${npmPackage.name}, v${npmPackage.version}`,
       content: `${npmPackage.license} license.
 
-    ${npmPackage.description}
+      ${npmPackage.description}
 
-    The test-bed time service can be controlled via Apache Kafka. It listens to
-    state changes of the test-bed, e.g. scenario start and stop messages.
-    It publishes three times:
-    - Local system time: This is the same time that the NTP server should use.
-    - Fictive simulation time: The time that is used in the scenario. Note that
-      it may run faster than realtime.
-    - Speed factor: How much faster than realtime are we running.
-    - Scenario duration: The duration that the scenario is active (from start to stop,
-      expressed in real-time).
-    `,
+      The test-bed time service can be controlled via Apache Kafka. It listens to
+      state changes of the test-bed, e.g. scenario start and stop messages.
+      It publishes three times:
+      - Local system time: This is the same time that the NTP server should use.
+      - Fictive simulation time: The time that is used in the scenario. Note that
+        it may run faster than realtime.
+      - Speed factor: How much faster than realtime are we running.
+      - Scenario duration: The duration that the scenario is active (from start to
+        stop, expressed in real-time).
+      `,
     },
-    {
-      header: 'Options',
-      optionList: CommandLineInterface.optionDefinitions,
-    },
+      {
+        header: 'Options',
+        optionList: CommandLineInterface.optionDefinitions,
+      },
     {
       header: 'Examples',
       content: [
@@ -114,6 +114,10 @@ export class CommandLineInterface {
         {
           desc: '03. Start the service on port 8080.',
           example: `$ ${npmPackage.name} - 8080`,
+        },
+        {
+          desc: '04. Start the service specifying kafka host and schema registry.',
+          example: `$ ${npmPackage.name} -k localhost:3501 -s localhost:3502`,
         },
       ],
     },

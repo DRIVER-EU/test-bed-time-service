@@ -1,28 +1,30 @@
 # test-bed-time-service
 
-## Introduction
 In the test-bed, there will be one or more simulations that, together, create a virtual incident and reasonable responses of the environment. For example, there may be a flooding simulation or earthquake, after which the traffic (simulation) is disturbed too.
 
 The test-bed time service can be controlled via Apache Kafka. It listens to state changes of the test-bed, e.g. scenario start and stop messages.
 
 In particular, this service will publish the fictive time, the real time, and speed of the simulation at least every 5 seconds, and after a change of the fictive time status (e.g. a speed change, or pause/stop of the simulation). The time message will be described in AVRO, as detailed in the [avro-schemas repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-value.avsc), and contain:
-- Real time (or actual UTC time without timezones or summer-winter time)
+- Real time (or actual UTC time without time-zones or summer-winter time)
 - Fictive time (also as UTC time)
-- Scenario duration (the time that the simulation was in play state, expressed in msec)
+- Scenario duration (the time that the simulation was in play state, expressed in msec.)
 - Scenario speed
 
 It may also check whether there are (simulation) services that are lagging behind, e.g. by requiring a response ("I'm done"). In case a simulation cannot keep up, the whole scenario needs to be slowed down (either pause or slowdown the total simulation).
 
 The service will be combined with an NTP service to get the real time.
 
-## Installation
+![Alt text](./packages/server/doc/test-bed-time-service-gui.png?raw=true "Screenshot of the GUI.")
 
-This assumes you have Node.js installed, and node-gyp (`npm i -g node-gyp`).
+## Build instructions
+
+This assumes you have Node.js installed, node-gyp (`npm i -g node-gyp`) and python v2.7.
 
 * Check out the repository
 * Run `npm i`
-* Run `tsc`
-* Run `yarn`
+* Run `npm start`
+
+There are two packages, a server and a GUI, which are build and run in parallel.
 
 ## Running
 
@@ -30,13 +32,15 @@ This assumes you have Node.js installed, and node-gyp (`npm i -g node-gyp`).
 * Run `npm run start-local` to run a time service for a localhost testbed.
 * OR Run `npm run start -- -k <kafka broker host:port> -s <schema registry host:port>
 
-## Usage 
+Alternatively, you can install the time-service from [npmjs.com](https://npmjs.com) `npm i -g time-service`.
+
+## Usage
 
 The Test-bed Time Service acts as a state machine following the diagram below:
 
 ![States](out/doc/uml/statediagram/statediagram.png)
 
-State transitions can be triggered by sending Timing Control messages via Kafka. These messages are described in AVRO, as detailed in the [avro-schema-repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-control-value.avsc). 
+State transitions can be triggered by sending Timing Control messages via Kafka. These messages are described in AVRO, as detailed in the [avro-schema-repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-control-value.avsc).
 
 ### Idle to Initialized
 
@@ -58,7 +62,7 @@ Send a TimingControl message of type 'Start'.  Optionally provide the 'trialTime
 
 ### Paused or Started to Stopped
 
-Send a TimingControl message of type 'Stop'. 
+Send a TimingControl message of type 'Stop'.
 
 This will stop the periodic transmission of Time Messages by the Time Service.
 

@@ -1,4 +1,4 @@
 #! /usr/bin/env node
 
-var cli = require('../dist/cli');
+var cli = require('../dist/index');
 cli

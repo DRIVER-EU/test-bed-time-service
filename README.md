@@ -69,3 +69,11 @@ This will stop the periodic transmission of Time Messages by the Time Service.
 ### Stopped to Idle
 
 Send a TimingControl message of type 'Reset'. You may now re-initialize the Time Service for a new run.
+
+### Updating Trial Time Speed while Started
+
+While running, the Trial Time Speed may be changed via an Update message containing the 'trialTimeSpeed' property that contains a speed factor applied to the real-time.
+
+### Updating Trial Time while Paused
+
+While paused, the Trial Time may be changed via an Update message containing the 'trialTime' property that contains the new time as a UTC timestamp.

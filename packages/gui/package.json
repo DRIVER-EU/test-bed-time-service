@@ -1,6 +1,6 @@
 {
   "name": "test-bed-time-service-gui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "GUI for the time service, functioning as a simple time service controller or clock.",
   "scripts": {
     "start": "parcel watch index.html --out-dir ../server/public",

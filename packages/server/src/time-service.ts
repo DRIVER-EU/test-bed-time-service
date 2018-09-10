@@ -49,7 +49,7 @@ export class TimeService extends EventEmitter implements TimeService {
       schemaRegistry: options.schemaRegistryUrl,
       fetchAllSchemas: false,
       clientId: 'TimeService',
-      autoRegisterSchemas: options.autoRegisterSchemas,
+      autoRegisterSchemas: true,
       schemaFolder: 'schemas',
       consume: [{ topic: ConfigurationTopic }],
       produce: [TimeTopic, ConfigurationTopic],
@@ -172,7 +172,8 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   private startProducingTimeMessages() {
-    this._timeHandler = setInterval(() => this.sendTimeMessage(this._state.createTimeMessage()), this.interval);
+    this.sendTimeUpdate();
+    this._timeHandler = setInterval(() => this.sendTimeUpdate(), this.interval);
   }
 
   private stopProducingTimeMessages() {

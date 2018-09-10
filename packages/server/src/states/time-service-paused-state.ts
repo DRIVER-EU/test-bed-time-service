@@ -33,8 +33,7 @@ export class Paused extends TimeServiceBaseState {
       }
       case TimingControlCommand.Update: {
         if (controlMsg.trialTimeSpeed != null) {
-          this.timeService.progressTrialTime(); // progress time using old speed
-          this.timeService.trialTimeSpeed = controlMsg.trialTimeSpeed;
+          this.log.info('Received command ' + controlMsg.command + ', but cannot update trial time speed when in paused state.');
         }
         if (controlMsg.trialTime != null) {
           this.timeService.trialTime = controlMsg.trialTime;
@@ -54,11 +53,12 @@ export class Paused extends TimeServiceBaseState {
     const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
     // unlike when started, don't progress the trialtime before sending an update
     const trialTime = this.timeService.trialTime;
+    const trialTimeSpeed = this.timeService.trialTimeSpeed;
     const timeMsg = {
       updatedAt: newUpdateTime,
       trialTime: trialTime,
       timeElapsed: timeElapsed,
-      trialTimeSpeed: 0,
+      trialTimeSpeed: trialTimeSpeed
     } as ITimeMessage;
     return timeMsg;
   }

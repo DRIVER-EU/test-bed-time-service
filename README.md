@@ -38,7 +38,7 @@ Alternatively, you can install the time-service from [npmjs.com](https://npmjs.c
 
 The Test-bed Time Service acts as a state machine following the diagram below:
 
-![States](out/doc/uml/statediagram/statediagram.png)
+![States](packages/server/doc/statediagram.png)
 
 State transitions can be triggered by sending Timing Control messages via Kafka. These messages are described in AVRO, as detailed in the [avro-schema-repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-control-value.avsc).
 

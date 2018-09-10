@@ -49,7 +49,7 @@ export class TimeService extends EventEmitter implements TimeService {
       schemaRegistry: options.schemaRegistryUrl,
       fetchAllSchemas: false,
       clientId: 'TimeService',
-      autoRegisterSchemas: true,
+      autoRegisterSchemas: options.autoRegisterSchemas,
       schemaFolder: 'schemas',
       consume: [{ topic: ConfigurationTopic }],
       produce: [TimeTopic, ConfigurationTopic],

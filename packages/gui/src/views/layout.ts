@@ -2,6 +2,7 @@ import { TimeControl } from '../components/time-control';
 import m, { Vnode } from 'mithril';
 import logoUri from '../assets/logo/non-transparent-logo.png';
 import backgroundUri from '../assets/background-clock.png';
+import M from 'materialize-css';
 
 const driverLink = 'a[href=http://www.driver-project.eu][target=_blank]';
 
@@ -9,8 +10,7 @@ export const Layout = () => ({
   view: (vnode: Vnode) =>
     m('container', [
       m(
-        'ul[id=slide-out]',
-        { class: 'side-nav' },
+        'ul[id=slide-out].sidenav', { style: 'width: 350px;' }
         m('li', [
           m('.user-view', [
             m('.background', m(`img[src=${backgroundUri}]`)),
@@ -20,10 +20,11 @@ export const Layout = () => ({
         ]),
         m('li', m(TimeControl))
       ),
-      m('a.button-collapse.almost-hidden[href=#][data-activates=slide-out]', m('i.material-icons', 'menu')),
+      m('a.sidenav-trigger.almost-hidden[href=#][data-target=slide-out]', m('i.material-icons', 'menu')),
       m('section', vnode.children),
     ]),
   oncreate: () => {
-    ($('.button-collapse') as any).sideNav();
+    const elems = document.querySelectorAll('.sidenav');
+    M.Sidenav.init(elems);
   },
 });

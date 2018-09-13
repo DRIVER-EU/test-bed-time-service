@@ -7,8 +7,8 @@ state Running {
     [*] --> Started
     Started --> Paused : Pause
     Paused --> Started : Start(trialTimeSpeed?)
-    Started --> Started : Update(trialTime?, trialTimeSpeed?)
-    Paused --> Paused : Update(trialTime?, trialTimeSpeed?)
+    Started --> Started : Update(trialTimeSpeed?)
+    Paused --> Paused : Update(trialTime?)
 }
 
 note right of Running : While running, periodic Time Messages are sent

@@ -1,5 +1,6 @@
 import { TimingControlCommand, ITimingControlMessage } from './../models/timing-control-message';
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
+import { ITimeMessage } from '../models/time-message';
 import { Started } from './time-service-started-state';
 import { States } from './states';
 
@@ -24,5 +25,20 @@ export class Initialized extends TimeServiceBaseState {
         return this;
       }
     }
+  }
+
+  createTimeMessage(): ITimeMessage {
+    const newUpdateTime = Date.now();
+    const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
+    // unlike when started, don't progress the trialtime before sending an update
+    const trialTime = this.timeService.trialTime;
+    const trialTimeSpeed = this.timeService.trialTimeSpeed;
+    const timeMsg = {
+      updatedAt: newUpdateTime,
+      trialTime: trialTime,
+      timeElapsed: timeElapsed,
+      trialTimeSpeed: trialTimeSpeed
+    } as ITimeMessage;
+    return timeMsg;
   }
 }

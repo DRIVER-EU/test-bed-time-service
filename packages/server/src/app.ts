@@ -5,6 +5,7 @@ import { ITimeMessage } from './models/time-message';
 import { Application } from 'express';
 import * as express from 'express';
 import * as cors from 'cors';
+import * as path from 'path';
 import * as socketIO from 'socket.io';
 import { TimingControlCommand } from './models/timing-control-message';
 import { States } from './states/states';
@@ -22,7 +23,8 @@ export class App {
     this.port = options.port;
     this.app = express();
     this.app.use(cors());
-    this.app.use(express.static('public'));
+    var pwd = path.join(process.cwd(), "public");
+    this.app.use(express.static(pwd));
     this.server = createServer(this.app);
     this.io = socketIO(this.server);
 
@@ -78,6 +80,14 @@ export class App {
           command: TimingControlCommand.Stop,
         });
       });
+      socket.on('update', (trialTimeSpeed?: number, trialTime? : number) => {
+        console.log('[server](message): update request received.');
+        this.timeService.transition({
+          trialTimeSpeed,
+          trialTime,
+          command: TimingControlCommand.Update,
+        })
+      })
       socket.on('reset', () => {
         console.log('[server](message): reset request received.');
         this.timeService.transition({

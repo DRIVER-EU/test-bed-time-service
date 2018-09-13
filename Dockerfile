@@ -2,7 +2,7 @@ FROM rinzeb/node-python-typescript-git AS builder
 RUN mkdir -p /src
 WORKDIR /src
 COPY . /src/
-RUN npm i --production
+RUN npm i
 
 FROM node:alpine
 RUN mkdir -p /app

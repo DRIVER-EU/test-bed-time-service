@@ -3,6 +3,7 @@ RUN mkdir -p /src
 WORKDIR /src
 COPY . /src/
 RUN npm i --production
+RUN ls /src/packages/server/dist
 
 FROM node:alpine
 RUN mkdir -p /app

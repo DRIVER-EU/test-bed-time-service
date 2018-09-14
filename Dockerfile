@@ -2,10 +2,11 @@ FROM rinzeb/node-python-typescript-git AS builder
 RUN mkdir -p /src
 WORKDIR /src
 COPY . /src/
-RUN npm install -g lerna
 RUN npm i --production
-RUN ls /src/packages/server/
-RUN ls /src/
+RUN cd packages/gui
+RUN parcel build index.html --out-dir ../server/public
+RUN cd ../server/
+RUN tsc
 
 FROM node:alpine
 RUN mkdir -p /app

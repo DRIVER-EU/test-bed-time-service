@@ -1,12 +1,13 @@
-FROM rinzeb/node-python-typescript-git AS builder
+FROM node:alpine AS builder
 RUN mkdir -p /src
-WORKDIR /src
 COPY . /src/
-RUN npm i -g parcel
-RUN npm i --production
-RUN cd packages/gui
+WORKDIR /src
+RUN npm i -g typescript
+RUN npm i -g parcel-bundler
+RUN npm i
+WORKDIR /src/packages/gui
 RUN parcel build index.html --out-dir ../server/public
-RUN cd ../server/
+WORKDIR /src/packages/server
 RUN tsc
 
 FROM node:alpine

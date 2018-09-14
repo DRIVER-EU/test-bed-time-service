@@ -172,7 +172,8 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   private startProducingTimeMessages() {
-    this._timeHandler = setInterval(() => this.sendTimeMessage(this._state.createTimeMessage()), this.interval);
+    this.sendTimeUpdate();
+    this._timeHandler = setInterval(() => this.sendTimeUpdate(), this.interval);
   }
 
   private stopProducingTimeMessages() {

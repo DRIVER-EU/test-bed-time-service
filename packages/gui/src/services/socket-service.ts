@@ -25,10 +25,10 @@ const setupSocket = () => {
     SimulationState.timeElapsed = time.timeElapsed;
     window.clearInterval(handler);
     if (time.trialTimeSpeed > 0) {
-      const secDuration = 1000 / time.trialTimeSpeed;
+      const secDuration = 1000;
       handler = window.setInterval(() => {
         SimulationState.trialTime += secDuration;
-      }, secDuration);
+      }, secDuration / time.trialTimeSpeed);
     }
   });
   return socket;

@@ -13,6 +13,9 @@ const socket = SocketService.socket;
 let startTime = { h: 9, m: 0 } as ITimePickerTime;
 let startDate = new Date();
 
+let currentDate = new Date(SimulationState.trialTime);
+let currentTime = { h: currentDate.getHours(), m: currentDate.getMinutes() } as ITimePickerTime;
+
 export const TimeControl = () => ({
   oninit: () => {
     socket.on('stateUpdated', () => m.redraw());
@@ -23,7 +26,11 @@ export const TimeControl = () => ({
         case States.Idle:
           const time = startDate.setHours(startTime.h, startTime.m, 0, 0);
           return m('div.left', [
-            iconButton('timer', {}, { onclick: () => socket.emit('init', time) }),
+            iconButton(
+              'timer',
+              {},
+              { onclick: () => socket.emit('init', time) }
+            ),
             m('div.left', [
               m('label[for=tp]', 'Start time:'),
               m(TimePicker, {
@@ -43,19 +50,82 @@ export const TimeControl = () => ({
             ]),
           ]);
         case States.Initialized:
-          return m('div', [iconButton('play_arrow', {}, { onclick: () => socket.emit('start') })]);
+          return m('div', [
+            iconButton(
+              'play_arrow',
+              {},
+              { onclick: () => socket.emit('start') }
+            ),
+          ]);
         case States.Paused:
+          const newTime = currentDate.setHours(currentTime.h, currentTime.m, 0, 0);
           return m('div', [
             iconButton('stop', {}, { onclick: () => socket.emit('stop') }),
-            iconButton('play_arrow', {}, { onclick: () => socket.emit('start') }),
+            iconButton(
+              'play_arrow',
+              {},
+              { onclick: () => socket.emit('start') }
+            ),
+            iconButton(
+              'update',
+              {},
+              { onclick: () => socket.emit('update', 0, newTime) }
+            ),
+            m('div.left', [
+              m('label[for=tp]', 'Updated time:'),
+              m(TimePicker, {
+                time: currentTime,
+                tfh: true,
+                onchange: (t: ITimePickerTime) => (currentTime = t),
+              }),
+              m('label[for=dp]', 'Updated date:'),
+              m(DatePicker, {
+                weekStart: 1,
+                date: currentDate,
+                onchange: (d: Date) => (currentDate = d),
+              }),
+            ]),
           ]);
         case States.Started:
           return m('div', [
+            m(
+              'h5',
+              'Trial Time Speed Factor: ' + SimulationState.trialTimeSpeed
+            ),
+            iconButton(
+              'fast_rewind',
+              {},
+              {
+                onclick: () => {
+                  socket.emit('update', SimulationState.trialTimeSpeed / 2);
+                },
+              }
+            ),
             iconButton('stop', {}, { onclick: () => socket.emit('stop') }),
             iconButton('pause', {}, { onclick: () => socket.emit('pause') }),
+            iconButton(
+              'fast_forward',
+              {},
+              {
+                onclick: () => {
+                  socket.emit('update', SimulationState.trialTimeSpeed * 2);
+                },
+              }
+            ),
+            iconButton(
+              'restore',
+              {},
+              {
+                onclick: () => {
+                  socket.emit('update', 1);
+                },
+              }
+            ),
           ]);
         case States.Stopped:
-          return m('div', [iconButton('timer_off', {}, { onclick: () => socket.emit('reset') })]);
+          return m('div', [
+            iconButton('timer_off', {}, { onclick: () => socket.emit('reset') }),
+          ]);
       }
     };
     return m('.button-group', controls());

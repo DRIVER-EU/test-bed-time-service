@@ -38,7 +38,7 @@ Alternatively, you can install the time-service from [npmjs.com](https://npmjs.c
 
 The Test-bed Time Service acts as a state machine following the diagram below:
 
-![States](out/doc/uml/statediagram/statediagram.png)
+![States](packages/server/doc/statediagram.png)
 
 State transitions can be triggered by sending Timing Control messages via Kafka. These messages are described in AVRO, as detailed in the [avro-schema-repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-control-value.avsc).
 
@@ -69,3 +69,11 @@ This will stop the periodic transmission of Time Messages by the Time Service.
 ### Stopped to Idle
 
 Send a TimingControl message of type 'Reset'. You may now re-initialize the Time Service for a new run.
+
+### Updating Trial Time Speed while Started
+
+While running, the Trial Time Speed may be changed via an Update message containing the 'trialTimeSpeed' property that contains a speed factor applied to the real-time.
+
+### Updating Trial Time while Paused
+
+While paused, the Trial Time may be changed via an Update message containing the 'trialTime' property that contains the new time as a UTC timestamp.

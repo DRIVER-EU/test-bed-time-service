@@ -1,4 +1,8 @@
 import m, { Lifecycle } from 'mithril';
+// import M from 'materialize-css';
+
+// tslint:disable-next-line:no-console
+// console.log(M);
 
 export const compose = <F extends (d: any) => any, T>(...functions: F[]) => (data: T) =>
   functions.reduceRight((value, func) => func(value), data);

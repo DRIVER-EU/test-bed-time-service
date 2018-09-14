@@ -9,6 +9,7 @@ services:
 
 before_install:
   - npm install -g typescript
+  - npm install -g lerna
 install:
   - npm install
 script:

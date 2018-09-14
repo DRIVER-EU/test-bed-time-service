@@ -2,6 +2,7 @@ FROM rinzeb/node-python-typescript-git AS builder
 RUN mkdir -p /src
 WORKDIR /src
 COPY . /src/
+RUN npm i -g parcel
 RUN npm i --production
 RUN cd packages/gui
 RUN parcel build index.html --out-dir ../server/public

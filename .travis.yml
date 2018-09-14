@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - "8"
+  
+sudo: required
+
+services:
+  - docker
+  
+if: branch IN (master, develop)
+
+before_install:
+  - npm install -g typescript
+script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t drivereu/test-bed-time-service:develop-latest .
+  - if [ $TRAVIS_BRANCH == "master" ]; then docker tag drivereu/test-bed-time-service:develop-latest drivereu/test-bed-time-service:latest; fi
+  - if [ ! -z $TRAVIS_TAG ]; then docker tag drivereu/test-bed-time-service:develop-latest drivereu/test-bed-time-service:$TRAVIS_TAG; fi
+  - docker push drivereu/test-bed-time-service
+
+env:
+  global:
+  - secure: Gsav+qPbtRBhEThcBOb33VlxugoBO+NptHPiWMnMM74S5pPn0nn4dR+eiDcB54U8aKbkKQHnpB8r+1eijgYAAIHESa1u1JxSp4T2oyrCODQNem1aYlplnuqFEH5CgIMJbsL6QknhZlHeKusJiGzzyNoBrfqhyYVkPyk/fQVlikjh58Pt84R8hKFJbm81Jyq5/M6vHLUSntV8y5cUbTsRBHiARrnOrTEXhVqybmdxnXNwqxJits6ytoL50ruKfZD1LeKHKFA9x9q51AruAWgH5LPoTVK2oHdl5Z0wtc6oyIg/lCQqHqAzpQCdFhazu7bLzXR4VqahMgjERdfyoOs2rrrlwR8QlhnqNz6LEthxw1aomb9+fu0TSvZxIg0H57YhHiueCqPOFO+8OlvW7I7r8noizIPYKZOmznWTm6JfATo3R2EUpXRcIZ1d+qQG7S9ceEH28hIVwrl2FmwhG3apAfiU5oZ+Dn1guY/gLx2lc4ZVJchyoIGwQCWtmkxuiF6hWC8HRqgeR6eEbL8xelbQ9GHJP76cSvfepl1Q1lKoPaYPDarVmgwBgsVVkjJ6sGt+h8l3Q8c4pQBCGHyFeW9NtY0yXpmosbxNT22yYiGt/MGvL75YtXo1KO8GSJGM/lseQo5hhD2F4HGWVXaGNrhQSNp6dhJMHV5TMlqlMHS3SIY=
+  - secure: f2wkx7x3mj03+LCn0A3YJQAPqchOF45Ql6hzq0LozimLvm4SjEez6YM2wC8HUv+WKQ4bDdx/BO7ONg99u6GtNEsT0VGAP47N3TS3XzxSaJE7iZ0yKop+To5JGlED4wTdzD72v6gBGArZJ5seavc3+21BuP2R7Q/NE9NuA3vNC9dxY4RRumxxZD8ztRK5cW2QbzvULcZ9MqbkZFk8pAesZKUhLcq4aUpZEeq8fFGFGbUbz+UVIp5AnrXa6lWb7ayoMuRiiV5O9Qv1Y5VSA0xydkNmFYv4/i+p9G+LEDtMphtCmIJ2pwphul4DdtDDWv0r8kDtWHedxEQyFuy9DmTMSCo+1FFhVithAlr9Ir/iPH536cqikYItQ4neSc9OwsGOZ97uT4lNUnwIBQfedrIjZlldAIL1ADmEwsFf0mo9n0ywsEXfMikZxH2B00gPEy1kd6MjtHJPlLG8kIoInVNHr6ScKFZdvVGGEG1URbWxKkZkra8RVCaTVwC5ZZBtz/9ESnpliKD1XAvxPn0iQltv5ER231pRKwdM0yY0b+k/nvfINJQ+TCLkWtUgitzdKgfasryG6ikbofsEg5Mot5Qqc08+SRIpr0q7fYdOCk52aoxxeBJTO5raNKbEXD3QJuSSpC31ASwfJQVNcOwxcfZByTkY+hlGGgN01cdQ9dF7SmM=

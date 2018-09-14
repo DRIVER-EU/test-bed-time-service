@@ -14,9 +14,9 @@ install:
   - npm install -g typescript
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker build -t drivereu/test-bed-time-service:develop-latest .
-  - if [ $TRAVIS_BRANCH == "master" ]; then docker tag drivereu/test-bed-time-service:develop-latest drivereu/test-bed-time-service:latest; fi
-  - if [ ! -z $TRAVIS_TAG ]; then docker tag drivereu/test-bed-time-service:develop-latest drivereu/test-bed-time-service:$TRAVIS_TAG; fi
+  - docker build -t drivereu/test-bed-time-service:$TRAVIS_BRANCH-latest .
+  - if [ $TRAVIS_BRANCH == "master" ]; then docker tag drivereu/test-bed-time-service:$TRAVIS_BRANCH-latest drivereu/test-bed-time-service:latest; fi
+  - if [ ! -z $TRAVIS_TAG ]; then docker tag drivereu/test-bed-time-service:$TRAVIS_BRANCH-latest drivereu/test-bed-time-service:$TRAVIS_TAG; fi
   - docker push drivereu/test-bed-time-service
 
 env:

@@ -2,8 +2,9 @@ FROM rinzeb/node-python-typescript-git AS builder
 RUN mkdir -p /src
 WORKDIR /src
 COPY . /src/
-RUN npm i --production
-RUN ls /src/packages/server/dist
+RUN npm i --production --unsafe-perm
+RUN ls /src/packages/server/
+RUN ls /src/
 
 FROM node:alpine
 RUN mkdir -p /app

@@ -9,7 +9,8 @@ services:
   
 if: branch IN (master, develop)
 
-before_install:
+install:
+  - npm install
   - npm install -g typescript
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin

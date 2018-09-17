@@ -34,6 +34,32 @@ There are two packages, a server and a GUI, which are build and run in parallel.
 
 Alternatively, you can install the time-service from [npmjs.com](https://npmjs.com) `npm i -g time-service`.
 
+## Configuration
+
+The following properties can be configured. Either via Environment Variables, or via Command line parameters. Command line parameters will override the Environment Variables.
+
+### Environment Variable Configuration
+
+| Variable                             | Description                                                 | Default value                 |
+|--------------------------------------|-------------------------------------------------------------|-------------------------------|
+| `KAFKA_BROKER_URL=<value>`           | Kafka Broker address, e.g. localhost:3501                   | driver-testbed.eu:3501        |
+| `SCHEMA_REGISTRY_URL=<value>`        | Schema Registry URL, e.g. http://localhost:3502             | http://driver-testbed.eu:3502 |
+| `AUTO_REGISTER_SCHEMAS=<true/false>` | Automatically register all schemas in the ./schemas folder  | false                         |
+| `PORT=<value>`                       | Endpoint port, e.g. http://localhost:PORT/time              | 8100                          |
+| `INTERVAL=<value>`                   | Default time interval between time messages in msec.        | 5000                          |
+
+## Command Line Parameter Configuration
+
+| Command Line Parameter               | Description                                                 | Default value                 |
+|--------------------------------------|-------------------------------------------------------------|-------------------------------|
+| `-h` or `--help`                     | Show help text                                              |                               |
+| `-v` or `--version`                  | Show version number                                         |                               |
+| `-k` or `--kafkaHost <value>`        | Kafka Broker address, e.g. localhost:3501                   | driver-testbed.eu:3501        |
+| `-s` or `--schemaRegistryUrl <value>`| Schema Registry URL, e.g. http://localhost:3502             | http://driver-testbed.eu:3502 |
+| `-a` or `--autoRegisterSchemas`      | Automatically register all schemas in the ./schemas folder  | false                         |
+| `-p` or `--port <value>`             | Endpoint port, e.g. http://localhost:PORT/time              | 8100                          |
+| `-i` or `--interval <value>`         | Default time interval between time messages in msec.        | 5000                          |
+
 ## Usage
 
 The Test-bed Time Service acts as a state machine following the diagram below:

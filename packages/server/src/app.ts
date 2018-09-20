@@ -24,7 +24,7 @@ export class App {
     this.app = express();
     this.app.use(cors());
     var pwd = path.join(process.cwd(), "public");
-    this.app.use(express.static(pwd));
+    this.app.use('/time-service/', express.static(pwd));
     this.server = createServer(this.app);
     this.io = socketIO(this.server);
 

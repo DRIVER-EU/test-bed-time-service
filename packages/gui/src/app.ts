@@ -61,4 +61,5 @@ console.log(M);
 
 // waitForMaterialize()
   // .then(() => waitForSocketIO())
+//m.route.prefix("/time-service")
 waitForSocketIO().then(() => m.route(document.body, '/', routingTable));

@@ -10,7 +10,10 @@ const setupSocket = () => {
   if (socket) {
     return socket;
   }
-  socket = io();
+
+  socket = io({
+    path: '/time-service/socket.io'
+  })
   socket.on('connect', () => log('Connected'));
   socket.on('event', (data: any) => log(data));
   socket.on('disconnect', () => log('Disconnected'));

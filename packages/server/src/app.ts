@@ -26,7 +26,9 @@ export class App {
     var pwd = path.join(process.cwd(), "public");
     this.app.use('/time-service/', express.static(pwd));
     this.server = createServer(this.app);
-    this.io = socketIO(this.server);
+    this.io = socketIO(this.server, {
+      'path': '/time-service/socket.io'
+    });
 
     this.timeService = new TimeService(options);
     this.timeService.on('time', (time: ITimeMessage) => {

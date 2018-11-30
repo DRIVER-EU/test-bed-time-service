@@ -10,7 +10,7 @@ export const Layout = () => ({
   view: (vnode: Vnode) =>
     m('container', [
       m(
-        'ul[id=slide-out].sidenav', { style: 'width: 350px;' }
+        'ul[id=slide-out].sidenav', { style: 'width: 350px;' },
         m('li', [
           m('.user-view', [
             m('.background', m(`img[src=${backgroundUri}]`)),

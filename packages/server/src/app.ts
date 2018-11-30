@@ -23,7 +23,7 @@ export class App {
     this.port = options.port;
     this.app = express();
     this.app.use(cors());
-    var pwd = path.join(process.cwd(), "public");
+    const pwd = path.join(process.cwd(), 'public');
     this.app.use(express.static(pwd));
     this.server = createServer(this.app);
     this.io = socketIO(this.server);
@@ -80,14 +80,14 @@ export class App {
           command: TimingControlCommand.Stop,
         });
       });
-      socket.on('update', (trialTimeSpeed?: number, trialTime? : number) => {
+      socket.on('update', (trialTimeSpeed?: number, trialTime?: number) => {
         console.log('[server](message): update request received.');
         this.timeService.transition({
           trialTimeSpeed,
           trialTime,
           command: TimingControlCommand.Update,
-        })
-      })
+        });
+      });
       socket.on('reset', () => {
         console.log('[server](message): reset request received.');
         this.timeService.transition({

@@ -2,7 +2,7 @@ import m, { Component } from 'mithril';
 import { SimulationState } from '../models/sim-state';
 import { States } from '../models/states';
 import { SocketService } from '../services/socket-service';
-import { TimePicker, DatePicker, FlatButton } from 'mithril-materialized';
+import { TimePicker, DatePicker, FlatButton, ModalPanel } from 'mithril-materialized';
 import { padLeft, formatTime } from '../utils';
 
 const Controls = () => {
@@ -14,15 +14,13 @@ const Controls = () => {
           iconName: 'fast_rewind',
           ui: { onclick: () => socket.emit('update', SimulationState.trialTimeSpeed / 2), disabled: !canChangeSpeed },
         }),
-        m(FlatButton, { iconName: 'stop', ui: { onclick: () => socket.emit('stop') } }),
+        m(FlatButton, {
+          modalId: 'stopPanel',
+          iconName: 'stop',
+          ui: { disabled: SimulationState.state === States.Initialized },
+        }),
         isPaused
-          ? m(FlatButton, {
-              iconName: 'play_arrow',
-              ui: {
-                onclick: () =>
-                  SimulationState.state === States.Initialized ? socket.emit('start', 1) : socket.emit('start'),
-              },
-            })
+          ? m(FlatButton, { iconName: 'play_arrow', ui: { onclick: () => socket.emit('start') } })
           : m(FlatButton, { iconName: 'pause', ui: { onclick: () => socket.emit('pause') } }),
         m(FlatButton, {
           iconName: 'fast_forward',
@@ -97,10 +95,6 @@ export const TimeControl = () => {
             ]);
           case States.Initialized:
             return m('.row', m(Controls, { socket, isPaused: true, canChangeSpeed: false }));
-          // return m(
-          //   '.row',
-          //   m(FlatButton, { iconName: 'play_arrow', ui: { onclick: () => socket.emit('start', newTime()) } })
-          // );
           case States.Paused:
             return m('.row', [
               m(Controls, { socket, isPaused: true, canChangeSpeed: false }),
@@ -147,7 +141,7 @@ export const TimeControl = () => {
             );
         }
       };
-      return m('.button-group', controls());
+      return m('.button-group', [controls()]);
     },
   };
 };

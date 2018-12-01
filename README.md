@@ -22,9 +22,9 @@ The service may be combined with an NTP service to get the real time.
 
 This assumes you have Node.js installed, node-gyp (`npm i -g node-gyp`) and python v2.7.
 
-* Check out the repository
-* Run `npm i`
-* Run `npm start`
+- Check out the repository
+- Run `npm i`
+- Run `npm start`
 
 There are two packages, a server and a GUI, which are build and run in parallel.
 
@@ -32,7 +32,7 @@ There are two packages, a server and a GUI, which are build and run in parallel.
 
 - Run `npm run start-tno-testbed` to run a time service for the driver-testbed.eu
 - Run `npm run start-local` to run a time service for a localhost testbed.
-- OR Run `npm run start -- -k <kafka broker host:port> -s <schema registry host:port>
+- OR Run `npm run start -- -k <kafka broker host:port> -s <schema registry host:port>`
 
 Alternatively, you can install the time-service from [npmjs.com](https://npmjs.com) `npm i -g time-service`.
 

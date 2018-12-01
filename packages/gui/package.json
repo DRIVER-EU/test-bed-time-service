@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "GUI for the time service, functioning as a simple time service controller or clock.",
   "scripts": {
+    "build": "parcel build index.html --out-dir ../server/public",
     "start": "parcel watch index.html --out-dir ../server/public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

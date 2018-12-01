@@ -2,7 +2,7 @@ dependencies:
   d3-clock: 0.1.5
   materialize-css: 1.0.0
   mithril: 2.0.0-rc.1
-  mithril-materialized: 0.1.3
+  mithril-materialized: 0.1.4
   socket.io-client: 2.2.0
 devDependencies:
   '@types/materialize-css': 1.0.5
@@ -3084,10 +3084,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=
-  /mithril-materialized/0.1.3:
+  /mithril-materialized/0.1.4:
     dev: false
     resolution:
-      integrity: sha512-xe1pRN1u9QXedv3y6KlHWYsQhh4oszt/i4BkAccS8ldh1G20+6lUadkspP3n49K3gPTnMxloApkp7KGrTle2EQ==
+      integrity: sha512-pdhTLzb/uex+pmCzEpK1WBgEuaFK58MWXqP5rrJLfLiazvhio50wtx+BEkqYW6bjMHa9Epzi/Y9B6gkN4kq0bg==
   /mithril/2.0.0-rc.1:
     dev: false
     hasBin: true
@@ -5103,7 +5103,7 @@ specifiers:
   d3-clock: ^0.1.5
   materialize-css: ^1.0.0
   mithril: ^2.0.0-rc.1
-  mithril-materialized: ^0.1.3
+  mithril-materialized: ^0.1.4
   parcel-bundler: ^1.10.3
   socket.io-client: ^2.2.0
   typescript: ^3.2.1

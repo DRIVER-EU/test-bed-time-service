@@ -15,6 +15,8 @@ export class Initialized extends TimeServiceBaseState {
         if (!controlMsg.trialTimeSpeed) {
           this.log.info('Received Start command but no TrialTimeSpeed was provided. Will default to 1.0.');
           this.timeService.trialTimeSpeed = 1.0;
+        } else {
+          this.timeService.trialTimeSpeed = controlMsg.trialTimeSpeed;
         }
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Started.');
         this.timeService.startScenario();

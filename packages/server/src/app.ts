@@ -62,7 +62,7 @@ export class App {
         });
       });
       socket.on('start', (trialTimeSpeed: number) => {
-        console.log('[server](message): start request received.');
+        console.log(`[server](message): start request received (speed = ${trialTimeSpeed}).`);
         this.timeService.transition({
           trialTimeSpeed,
           command: TimingControlCommand.Start,

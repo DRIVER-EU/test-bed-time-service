@@ -3,6 +3,7 @@ import { States } from '../models/states';
 import { ITimeMessage } from '../models/time-message';
 import { SimulationState } from '../models/sim-state';
 
+// tslint:disable-next-line:no-console
 const log = console.log;
 let socket: SocketIOClient.Socket;
 

@@ -6,25 +6,29 @@ import M from 'materialize-css';
 
 const driverLink = 'a[href=http://www.driver-project.eu][target=_blank]';
 
-export const Layout = () => ({
-  view: (vnode: Vnode) =>
-    m('container', [
-      m(
-        'ul[id=slide-out].sidenav', { style: 'width: 350px;' },
-        m('li', [
-          m('.user-view', [
-            m('.background', m(`img[src=${backgroundUri}]`)),
-            m(driverLink, m(`img.circle[src=${logoUri}]`)),
-            m(driverLink, m('span.white-text.name', 'DRIVER+')),
-          ]),
+export const Layout = () =>
+  ({
+    view: (vnode: Vnode<{ theme: string }>) =>
+      m(vnode.attrs.theme, [
+        m('a.sidenav-trigger.almost-hidden[href=#][data-target=slide-out]', m('i.material-icons', 'menu')),
+        m('.container[id="main"]', [
+          m(
+            'ul[id=slide-out].sidenav',
+            { style: 'width: 350px;' },
+            m('li', [
+              m('.user-view', [
+                m('.background', m(`img[src=${backgroundUri}]`)),
+                m(driverLink, m(`img.circle[src=${logoUri}]`)),
+                m(driverLink, m('span.white-text.name', 'DRIVER+')),
+              ]),
+            ]),
+            m('li', m(TimeControl))
+          ),
+          m('.row', vnode.children),
         ]),
-        m('li', m(TimeControl))
-      ),
-      m('a.sidenav-trigger.almost-hidden[href=#][data-target=slide-out]', m('i.material-icons', 'menu')),
-      m('section', vnode.children),
-    ]),
-  oncreate: () => {
-    const elems = document.querySelectorAll('.sidenav');
-    M.Sidenav.init(elems);
-  },
-});
+      ]),
+    oncreate: () => {
+      const elems = document.querySelectorAll('.sidenav');
+      M.Sidenav.init(elems);
+    },
+  });

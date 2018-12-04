@@ -20,7 +20,7 @@ const setupSocket = () => {
   });
   let handler = -1;
   socket.on('time', (time: ITimeMessage) => {
-    log(`Time message received: ${time.trialTime}`);
+    // log(`Time message received: ${time.trialTime}`);
     SimulationState.trialTime = time.trialTime || new Date().setHours(12, 0, 0).valueOf();
     SimulationState.trialTimeSpeed = time.trialTimeSpeed;
     SimulationState.timeElapsed = time.timeElapsed;

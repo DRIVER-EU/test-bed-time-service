@@ -30,7 +30,7 @@ export class App {
 
     this.timeService = new TimeService(options);
     this.timeService.on('time', (time: ITimeMessage) => {
-      console.log(`Sending time update: ${JSON.stringify(time, null, 2)}`);
+      // console.log(`Sending time update: ${JSON.stringify(time, null, 2)}`);
       this.io.emit('time', time);
     });
     this.timeService.on('stateUpdated', (state: States) => {

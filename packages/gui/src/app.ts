@@ -33,9 +33,6 @@ const routingTable: RouteDefs = {
   },
 };
 
-// tslint:disable-next-line:no-console
-console.log(M);
-
 // waitForMaterialize()
   // .then(() => waitForSocketIO())
 waitForSocketIO().then(() => m.route(document.body, '/', routingTable));

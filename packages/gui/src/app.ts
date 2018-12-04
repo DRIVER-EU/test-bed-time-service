@@ -1,6 +1,7 @@
 import { SocketService } from './services/socket-service';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize.js';
+import 'material-icons/iconfont/material-icons.css';
 import M from 'materialize-css';
 import './styles.css';
 import m, { RouteDefs } from 'mithril';

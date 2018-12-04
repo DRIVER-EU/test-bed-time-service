@@ -1,10 +1,13 @@
 {
   "name": "test-bed-time-service-gui",
   "version": "0.0.2",
+  "sideEffects": [
+    "*.css"
+  ],
   "description": "GUI for the time service, functioning as a simple time service controller or clock.",
   "scripts": {
-    "build": "parcel build index.html --out-dir ../server/public",
-    "start": "parcel watch index.html --out-dir ../server/public",
+    "start": "webpack --watch --config scripts/webpack.dev.js",
+    "build": "webpack --optimize-minimize --config scripts/webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,7 +16,7 @@
   "dependencies": {
     "d3-clock": "^0.1.5",
     "materialize-css": "^1.0.0",
-    "mithril": "^2.0.0-rc.1",
+    "mithril": "^1.1.6",
     "mithril-materialized": "^0.1.4",
     "socket.io-client": "^2.2.0"
   },
@@ -21,8 +24,23 @@
     "@types/materialize-css": "^1.0.5",
     "@types/mithril": "^1.1.13",
     "@types/socket.io-client": "^1.4.32",
-    "autoprefixer": "^9.3.1",
-    "parcel-bundler": "^1.10.3",
-    "typescript": "^3.2.1"
+    "autoprefixer": "^9.4.2",
+    "awesome-typescript-loader": "^5.2.1",
+    "clean-webpack-plugin": "^1.0.0",
+    "css-loader": "^1.0.1",
+    "cssnano": "^4.1.7",
+    "file-loader": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "material-icons": "^0.2.3",
+    "postcss-loader": "^3.0.0",
+    "postcss-preset-env": "^6.4.0",
+    "style-loader": "^0.23.1",
+    "typescript": "^3.2.1",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.27.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.4"
   }
 }

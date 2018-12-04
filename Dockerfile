@@ -1,19 +1,19 @@
+# Creates the Test-bed-time-service, including a simple GUI / Wall clock
+#
+# You can access the container using:
+#   docker run -it test-bed-time-service sh
+# To start it stand-alone:
+#   docker run -it -p 8100:8100 test-bed-time-service
+
 FROM node:alpine AS builder
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh && \
-    npm config set unsafe-perm true && \
-    npm -g install cssnano parcel-bundler requirejs postcss@">=6" postcss-cli@latest postcss-import-url postcss-css-variables
-# RUN curl -sL https://unpkg.com/@pnpm/self-installer | node
-# RUN npm install -g parcel-bundler
 RUN mkdir -p /src
-RUN mkdir -p ~/.ssh && ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 COPY . /src/
-WORKDIR /src
-RUN npm i
-WORKDIR /src/packages/gui
-RUN npm run build
 WORKDIR /src/packages/server
-RUN npm run build
+RUN npm i && \
+    npm run build
+WORKDIR /src/packages/gui
+RUN npm i && \
+    npm run build
 
 FROM node:alpine
 RUN mkdir -p /app

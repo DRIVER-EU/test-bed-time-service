@@ -52,6 +52,11 @@ export const TimeControl = () => ({
         case States.Initialized:
           return m('div', [
             iconButton(
+              'timer_off',
+              {},
+              { onclick: () => socket.emit('reset') }
+            ),
+            iconButton(
               'play_arrow',
               {},
               { onclick: () => socket.emit('start') }

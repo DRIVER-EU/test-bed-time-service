@@ -2,6 +2,7 @@
 [*] --> Idle
 Idle -down-> Initialized : Init(trialTime?)
 Initialized -down-> Running : Start(trialTimeSpeed?)
+Initialized -up-> Idle : Reset
 
 state Running {
     [*] --> Started

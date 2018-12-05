@@ -4,7 +4,8 @@ In the test-bed, there will be one or more simulations that, together, create a 
 
 The test-bed time service can be controlled via Apache Kafka. It listens to state changes of the test-bed, e.g. scenario start and stop messages.
 
-In particular, this service will publish the fictive time, the real time, and speed of the simulation at least every 5 seconds, and after a change of the fictive time status (e.g. a speed change, or pause/stop of the simulation). The time message will be described in AVRO, as detailed in the [avro-schemas repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-value.avsc), and contain:
+In particular, this service will publish the fictive time, the real time, and speed of the simulation at least every 5 seconds, and after a change of the fictive time status (e.g. a speed change, or pause/stop of the simulation). The time message will be described in AVRO, as detailed in the [avro-schemas repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-value.avsc), and contains:
+
 - Real time (or actual UTC time without time-zones or summer-winter time)
 - Fictive time (also as UTC time)
 - Scenario duration (the time that the simulation was in play state, expressed in msec.)
@@ -12,25 +13,26 @@ In particular, this service will publish the fictive time, the real time, and sp
 
 It may also check whether there are (simulation) services that are lagging behind, e.g. by requiring a response ("I'm done"). In case a simulation cannot keep up, the whole scenario needs to be slowed down (either pause or slowdown the total simulation).
 
-The service will be combined with an NTP service to get the real time.
+The service may be combined with an NTP service to get the real time.
 
-![Alt text](./packages/server/doc/test-bed-time-service-gui.png?raw=true "Screenshot of the GUI.")
+![Screenshot of the GUI using a digital clock](./img/screenshot-digital-clock.png?raw=true "Screenshot of the GUI using a digital clock.")
+![Screenshot of the GUI using an analogue clock.](./img/screenshot-analogue-clock.png?raw=true "Screenshot of the GUI using an analogue clock.")
 
 ## Build instructions
 
 This assumes you have Node.js installed, node-gyp (`npm i -g node-gyp`) and python v2.7.
 
-* Check out the repository
-* Run `npm i`
-* Run `npm start`
+- Check out the repository
+- Run `npm i`
+- Run `npm start`
 
 There are two packages, a server and a GUI, which are build and run in parallel.
 
 ## Running
 
-* Run `npm run start-tno-testbed` to run a time service for the driver-testbed.eu
-* Run `npm run start-local` to run a time service for a localhost testbed.
-* OR Run `npm run start -- -k <kafka broker host:port> -s <schema registry host:port>
+- Run `npm run start-tno-testbed` to run a time service for the driver-testbed.eu
+- Run `npm run start-local` to run a time service for a localhost testbed.
+- OR Run `npm run start -- -k <kafka broker host:port> -s <schema registry host:port>`
 
 Alternatively, you can install the time-service from [npmjs.com](https://npmjs.com) `npm i -g time-service`.
 

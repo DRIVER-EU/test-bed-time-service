@@ -3,6 +3,7 @@ import { States } from '../models/states';
 import { ITimeMessage } from '../models/time-message';
 import { SimulationState } from '../models/sim-state';
 
+// tslint:disable-next-line:no-console
 const log = console.log;
 let socket: SocketIOClient.Socket;
 
@@ -22,7 +23,7 @@ const setupSocket = () => {
   });
   let handler = -1;
   socket.on('time', (time: ITimeMessage) => {
-    log(`Time message received: ${time.trialTime}`);
+    // log(`Time message received: ${time.trialTime}`);
     SimulationState.trialTime = time.trialTime || new Date().setHours(12, 0, 0).valueOf();
     SimulationState.trialTimeSpeed = time.trialTimeSpeed;
     SimulationState.timeElapsed = time.timeElapsed;

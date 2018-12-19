@@ -18,4 +18,17 @@ export interface ITimeMessage {
    * to the actual time. A value of 0 means a pause, 1 is as fast as real-time.
    */
   trialTimeSpeed: number;
+  /**
+   * The State of the Test-Bed Time Service.
+   */
+  state: TimingState;
 }
+
+export enum TimingState {
+  Idle = 'Idle',
+  Initialized = 'Initialized',
+  Started = 'Started',
+  Paused = 'Paused',
+  Stopped = 'Stopped',
+}
+

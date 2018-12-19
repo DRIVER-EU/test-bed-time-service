@@ -1,6 +1,6 @@
 import { TimingControlCommand, ITimingControlMessage } from './../models/timing-control-message';
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
-import { ITimeMessage } from '../models/time-message';
+import { ITimeMessage, TimingState } from '../models/time-message';
 import { Paused } from './time-service-paused-state';
 import { Stopped } from './time-service-stopped-state';
 import { States } from './states';
@@ -55,6 +55,7 @@ export class Started extends TimeServiceBaseState {
       trialTime: trialTime,
       timeElapsed: timeElapsed,
       trialTimeSpeed: this.timeService.trialTimeSpeed,
+      state: TimingState.Started
     } as ITimeMessage;
     return timeMsg;
   }

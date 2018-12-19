@@ -4,6 +4,7 @@
   "jsRules": {},
   "rules": {
     "quotemark": [true, "single"],
+    "arrow-parens": false,
     "trailing-comma": [
       true,
       {

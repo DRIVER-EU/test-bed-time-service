@@ -94,6 +94,13 @@ export class CommandLineInterface {
       - Speed factor: How much faster than realtime are we running.
       - Scenario duration: The duration that the scenario is active (from start to
         stop, expressed in real-time).
+
+      Environment variables:
+      - KAFKA_BROKER_URL
+      - SCHEMA_REGISTRY_URL
+      - AUTO_REGISTER_SCHEMAS
+      - PORT
+      - INTERVAL
       `,
     },
       {

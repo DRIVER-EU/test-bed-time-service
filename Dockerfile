@@ -1,12 +1,19 @@
+# Creates the Test-bed-time-service, including a simple GUI / Wall clock
+#
+# You can access the container using:
+#   docker run -it test-bed-time-service sh
+# To start it stand-alone:
+#   docker run -it -p 8100:8100 test-bed-time-service
+
 FROM node:alpine AS builder
 RUN mkdir -p /src
 COPY . /src/
-WORKDIR /src
-RUN npm i
-WORKDIR /src/packages/gui
-RUN npm run build
 WORKDIR /src/packages/server
-RUN npm run build
+RUN npm i && \
+    npm run build
+WORKDIR /src/packages/gui
+RUN npm i && \
+    npm run build
 
 FROM node:alpine
 RUN mkdir -p /app

@@ -1,133 +1,147 @@
-import '../../node_modules/mithril-timepicker/src/style.css';
-import '../../node_modules/mithril-datepicker/src/style.css';
+import m, { Component } from 'mithril';
 import { SimulationState } from '../models/sim-state';
 import { States } from '../models/states';
-import { iconButton } from '../utils/html';
-import m from 'mithril';
 import { SocketService } from '../services/socket-service';
-import TimePicker, { ITimePickerTime } from 'mithril-timepicker';
-import DatePicker from 'mithril-datepicker';
+import { TimePicker, DatePicker, FlatButton, ModalPanel } from 'mithril-materialized';
+import { padLeft, formatTime } from '../utils';
 
-const socket = SocketService.socket;
+const Controls = () => {
+  return {
+    view: ({ attrs }) => {
+      const { socket, isPaused, canChangeSpeed } = attrs;
+      return [
+        m(FlatButton, {
+          iconName: 'fast_rewind',
+          ui: { onclick: () => socket.emit('update', SimulationState.trialTimeSpeed / 2), disabled: !canChangeSpeed },
+        }),
+        m(FlatButton, {
+          modalId: 'stopPanel',
+          iconName: 'stop',
+          ui: { disabled: SimulationState.state === States.Initialized },
+        }),
+        isPaused
+          ? m(FlatButton, { iconName: 'play_arrow', ui: { onclick: () => socket.emit('start') } })
+          : m(FlatButton, { iconName: 'pause', ui: { onclick: () => socket.emit('pause') } }),
+        m(FlatButton, {
+          iconName: 'fast_forward',
+          ui: { onclick: () => socket.emit('update', SimulationState.trialTimeSpeed * 2), disabled: !canChangeSpeed },
+        }),
+      ];
+    },
+  } as Component<{
+    socket: SocketIOClient.Socket;
+    canChangeSpeed: boolean;
+    isPaused: boolean;
+  }>;
+};
 
-let startTime = { h: 9, m: 0 } as ITimePickerTime;
-let startDate = new Date();
+export const TimeControl = () => {
+  const socket = SocketService.socket;
 
-let currentDate = new Date(SimulationState.trialTime);
-let currentTime = { h: currentDate.getHours(), m: currentDate.getMinutes() } as ITimePickerTime;
+  let startTime = '10:00';
+  let startDate = new Date();
 
-export const TimeControl = () => ({
-  oninit: () => {
-    socket.on('stateUpdated', () => m.redraw());
-  },
-  view: () => {
-    const controls = () => {
-      switch (SimulationState.state) {
-        case States.Idle:
-          const time = startDate.setHours(startTime.h, startTime.m, 0, 0);
-          return m('div.left', [
-            iconButton(
-              'timer',
-              {},
-              { onclick: () => socket.emit('init', time) }
-            ),
-            m('div.left', [
-              m('label[for=tp]', 'Start time:'),
-              m(TimePicker, {
-                time: startTime,
-                tfh: true,
-                onchange: (t: ITimePickerTime) => {
-                  startTime = t;
-                },
+  const newTime = () => {
+    const [hours, minutes] = startTime.split(':').map(v => +v);
+    return startDate.setHours(hours, minutes, 0, 0);
+  };
+
+  const timeHasNotChanged = () => {
+    const d = new Date(SimulationState.trialTime);
+    return (
+      startTime === formatTime(d, false) &&
+      startDate.getFullYear() === d.getFullYear() &&
+      startDate.getMonth() === d.getMonth() &&
+      startDate.getDate() === d.getDate()
+    );
+  };
+
+  const onSelect = (hrs: number, min: number) => {
+    startTime = `${padLeft(hrs, 2)}:${padLeft(min, 2)}`;
+  };
+
+  return {
+    oninit: () => {
+      socket.on('stateUpdated', () => m.redraw());
+    },
+    view: () => {
+      const controls = () => {
+        switch (SimulationState.state) {
+          case States.Idle:
+            return m('.row.left', [
+              m(FlatButton, {
+                label: 'Initialise time',
+                contentClass: 'btn-flat-large',
+                iconName: 'timer',
+                iconClass: 'medium',
+                ui: { onclick: () => socket.emit('init', newTime()) },
               }),
-              m('label[for=dp]', 'Start date:'),
-              m(DatePicker, {
-                weekStart: 1,
-                onchange: (d: Date) => {
-                  startDate = d;
-                },
-              }),
-            ]),
-          ]);
-        case States.Initialized:
-          return m('div', [
-            iconButton(
-              'play_arrow',
-              {},
-              { onclick: () => socket.emit('start') }
-            ),
-          ]);
-        case States.Paused:
-          const newTime = currentDate.setHours(currentTime.h, currentTime.m, 0, 0);
-          return m('div', [
-            iconButton('stop', {}, { onclick: () => socket.emit('stop') }),
-            iconButton(
-              'play_arrow',
-              {},
-              { onclick: () => socket.emit('start') }
-            ),
-            iconButton(
-              'update',
-              {},
-              { onclick: () => socket.emit('update', 0, newTime) }
-            ),
-            m('div.left', [
-              m('label[for=tp]', 'Updated time:'),
-              m(TimePicker, {
-                time: currentTime,
-                tfh: true,
-                onchange: (t: ITimePickerTime) => (currentTime = t),
-              }),
-              m('label[for=dp]', 'Updated date:'),
-              m(DatePicker, {
-                weekStart: 1,
-                date: currentDate,
-                onchange: (d: Date) => (currentDate = d),
-              }),
-            ]),
-          ]);
-        case States.Started:
-          return m('div', [
-            m(
-              'h5',
-              'Trial Time Speed Factor: ' + SimulationState.trialTimeSpeed
-            ),
-            iconButton(
-              'fast_rewind',
-              {},
-              {
-                onclick: () => {
-                  socket.emit('update', SimulationState.trialTimeSpeed / 2);
-                },
-              }
-            ),
-            iconButton('stop', {}, { onclick: () => socket.emit('stop') }),
-            iconButton('pause', {}, { onclick: () => socket.emit('pause') }),
-            iconButton(
-              'fast_forward',
-              {},
-              {
-                onclick: () => {
-                  socket.emit('update', SimulationState.trialTimeSpeed * 2);
-                },
-              }
-            ),
-            iconButton(
-              'restore',
-              {},
-              {
-                onclick: () => {
-                  socket.emit('update', 1);
-                },
-              }
-            ),
-          ]);
-        case States.Stopped:
-          return m('div', [
-            iconButton('timer_off', {}, { onclick: () => socket.emit('reset') }),
-          ]);
-      }
-    };
-    return m('.button-group', controls());
-  },
-});
+              m('.row.left', [
+                m(TimePicker, {
+                  label: 'Start time:',
+                  container: '#main',
+                  initialValue: startTime,
+                  twelveHour: false,
+                  onSelect,
+                }),
+                m(DatePicker, {
+                  label: 'Start date:',
+                  container: document.getElementById('main') as Element,
+                  onchange: (d: Date) => {
+                    startDate = d;
+                  },
+                }),
+              ]),
+            ]);
+          case States.Initialized:
+            return m('.row', m(Controls, { socket, isPaused: true, canChangeSpeed: false }));
+          case States.Paused:
+            return m('.row', [
+              m(Controls, { socket, isPaused: true, canChangeSpeed: false }),
+              m('.row.left', [
+                m(TimePicker, {
+                  label: 'Updated time:',
+                  container: '#main',
+                  initialValue: startTime,
+                  twelveHour: false,
+                  onSelect,
+                }),
+                m(DatePicker, {
+                  label: 'Updated date:',
+                  container: document.getElementById('main') as Element,
+                  initialValue: startDate,
+                  onchange: (d: Date) => {
+                    startDate = d;
+                  },
+                }),
+                m(FlatButton, {
+                  label: 'Update time',
+                  iconName: 'update',
+                  ui: {
+                    disabled: timeHasNotChanged(),
+                    onclick: () => socket.emit('update', 0, newTime()),
+                  },
+                }),
+              ]),
+            ]);
+          case States.Started:
+            return m('.row', [
+              m(Controls, { socket, isPaused: false, canChangeSpeed: true }),
+              m('.row', [
+                m('em', 'Trial Time Speed Factor: ' + SimulationState.trialTimeSpeed),
+                SimulationState.trialTimeSpeed !== 1
+                  ? m(FlatButton, { iconName: 'restore', ui: { onclick: () => socket.emit('update', 1) } })
+                  : undefined,
+              ]),
+            ]);
+          case States.Stopped:
+            return m(
+              '.row',
+              m(FlatButton, { label: 'Reset time', iconName: 'timer_off', ui: { onclick: () => socket.emit('reset') } })
+            );
+        }
+      };
+      return m('.button-group', [controls()]);
+    },
+  };
+};

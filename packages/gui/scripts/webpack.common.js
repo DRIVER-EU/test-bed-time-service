@@ -37,7 +37,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(gif|png|jpe?g|svg|eot|woff|ttf|svg|woff2)$/i,
+        test: /\.(gif|png|jpe?g|svg|ico|eot|woff|ttf|svg|woff2)$/i,
         use: [
           'url-loader?limit=8192', // 'file-loader' is used as url-loader fallback anyways
         ],
@@ -50,6 +50,6 @@ module.exports = {
   plugins: [
     new webpack.ProgressPlugin(),
     new CleanWebpackPlugin(['dist']),
-    new HtmlWebpackPlugin({ title: title }),
+    new HtmlWebpackPlugin({ title: title, favicon: './src/assets/favicon.ico' }),
   ],
 };

@@ -15,6 +15,7 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, '../../server/public'),
+    // publicPath: 'time-service'
   },
   module: {
     rules: [

@@ -16,9 +16,8 @@ const waitForSocketIO = () =>
     const handler = window.setInterval(() => {
       // iterations++;
       const socket = SocketService.socket;
-      // console.warn(`waited ${iterations} iterations for SocketIO to path ` + socket + ` to finish loading`);
       if (socket.connected) {
-        // console.warn(`waited ${iterations} iterations for SocketIO to path ` + socket + ` to finish loading`);
+        // console.warn(`waited ${iterations} iterations for SocketIO to finish loading`);
         window.clearInterval(handler);
         resolve();
       }

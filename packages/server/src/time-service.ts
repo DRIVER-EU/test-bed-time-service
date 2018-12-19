@@ -2,7 +2,7 @@ import { TimeServiceState } from './states/time-service-states';
 import { ITimingControlMessage } from './models/timing-control-message';
 import { ICommandOptions } from './index';
 import { EventEmitter } from 'events';
-import { ProduceRequest } from 'kafka-node';
+import { ProduceRequest } from 'node-test-bed-adapter';
 import { TestBedAdapter, Logger, LogLevel, IAdapterMessage } from 'node-test-bed-adapter';
 import { ITimeMessage } from './models/time-message';
 import { Idle } from './states/time-service-idle-state';

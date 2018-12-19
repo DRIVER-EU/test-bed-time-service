@@ -23,16 +23,14 @@ export class App {
     this.port = options.port;
     this.app = express();
     this.app.use(cors());
-    var pwd = path.join(process.cwd(), "public");
-    this.app.use('/time-service/', express.static(pwd));
+    const pwd = path.join(process.cwd(), 'public');
+    this.app.use(express.static(pwd));
     this.server = createServer(this.app);
-    this.io = socketIO(this.server, {
-      'path': '/time-service/socket.io'
-    });
+    this.io = socketIO(this.server);
 
     this.timeService = new TimeService(options);
     this.timeService.on('time', (time: ITimeMessage) => {
-      console.log(`Sending time update: ${JSON.stringify(time, null, 2)}`);
+      // console.log(`Sending time update: ${JSON.stringify(time, null, 2)}`);
       this.io.emit('time', time);
     });
     this.timeService.on('stateUpdated', (state: States) => {
@@ -64,7 +62,7 @@ export class App {
         });
       });
       socket.on('start', (trialTimeSpeed: number) => {
-        console.log('[server](message): start request received.');
+        console.log(`[server](message): start request received (speed = ${trialTimeSpeed}).`);
         this.timeService.transition({
           trialTimeSpeed,
           command: TimingControlCommand.Start,
@@ -82,14 +80,14 @@ export class App {
           command: TimingControlCommand.Stop,
         });
       });
-      socket.on('update', (trialTimeSpeed?: number, trialTime? : number) => {
+      socket.on('update', (trialTimeSpeed?: number, trialTime?: number) => {
         console.log('[server](message): update request received.');
         this.timeService.transition({
           trialTimeSpeed,
           trialTime,
           command: TimingControlCommand.Update,
-        })
-      })
+        });
+      });
       socket.on('reset', () => {
         console.log('[server](message): reset request received.');
         this.timeService.transition({

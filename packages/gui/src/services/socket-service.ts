@@ -12,9 +12,7 @@ const setupSocket = () => {
     return socket;
   }
 
-  socket = io({
-    path: '/time-service/socket.io'
-  })
+  socket = io();
   socket.on('connect', () => log('Connected'));
   socket.on('event', (data: any) => log(data));
   socket.on('disconnect', () => log('Disconnected'));

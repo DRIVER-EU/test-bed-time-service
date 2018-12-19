@@ -94,7 +94,10 @@ export const TimeControl = () => {
               ]),
             ]);
           case States.Initialized:
-            return m('.row', m(Controls, { socket, isPaused: true, canChangeSpeed: false }));
+            return m('.row', [
+              m(Controls, { socket, isPaused: true, canChangeSpeed: false }),
+              m(FlatButton, { label: 'Reset time', iconName: 'timer_off', ui: { onclick: () => socket.emit('reset') } })
+            ]);
           case States.Paused:
             return m('.row', [
               m(Controls, { socket, isPaused: true, canChangeSpeed: false }),

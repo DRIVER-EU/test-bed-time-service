@@ -18,7 +18,6 @@ export class Idle extends TimeServiceBaseState {
           this.timeService.trialTime = controlMsg.trialTime!;
           this.log.info('Initialized Trial Time to: ' + controlMsg.trialTime!);
         }
-        this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Initialized.');
         return new Initialized(this.timeService);
       }

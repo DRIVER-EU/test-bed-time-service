@@ -20,13 +20,11 @@ export class Paused extends TimeServiceBaseState {
         } else {
           this.timeService.trialTimeSpeed = controlMsg.trialTimeSpeed;
         }
-        this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Started.');
         return new Started(this.timeService);
       }
       case TimingControlCommand.Stop: {
         this.timeService.progressTrialTime(); // progress time using old speed (zero)
-        this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
         this.timeService.stopScenario(); // stop sending periodic messages
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Stopped.');
         return new Stopped(this.timeService);
@@ -38,7 +36,6 @@ export class Paused extends TimeServiceBaseState {
         if (controlMsg.trialTime != null) {
           this.timeService.trialTime = controlMsg.trialTime;
         }
-        this.timeService.sendTimeUpdate(); // send updated values ASAP
         return this;
       }
       default: {

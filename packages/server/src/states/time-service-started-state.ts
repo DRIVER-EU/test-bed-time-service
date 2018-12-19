@@ -15,14 +15,12 @@ export class Started extends TimeServiceBaseState {
       case TimingControlCommand.Pause: {
         this.timeService.progressTrialTime(); // progress time using old speed
         this.timeService.trialTimeSpeed = 0; // set speed to 0 to pause
-        this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Paused.');
         return new Paused(this.timeService);
       }
       case TimingControlCommand.Stop: {
         this.timeService.progressTrialTime(); // progress time using old speed
         this.timeService.trialTimeSpeed = 0; // set speed to 0 to stop
-        this.timeService.sendTimeUpdate(); // send the time speed update message ASAP
         this.timeService.stopScenario(); // stop sending periodic messages
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Stopped.');
         return new Stopped(this.timeService);
@@ -35,7 +33,6 @@ export class Started extends TimeServiceBaseState {
         if (controlMsg.trialTime != null) {
           this.timeService.trialTime = controlMsg.trialTime;
         }
-        this.timeService.sendTimeUpdate(); // send updated values ASAP
         return this;
       }
       default: {

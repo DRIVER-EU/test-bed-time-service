@@ -2,14 +2,16 @@
 	"scripts": {
 		"start": "lerna run --parallel start",
 		"build": "lerna run --parallel build",
+		"postinstall": "lerna bootstrap",
 		"start-tno-testbed": "lerna run --parallel start-tno-testbed",
 		"start-local": "lerna run --parallel start-local",
 		"docker:build": "docker build -t test-bed-time-service .",
-    "docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service",
-    "docker:publish": "docker push drivereu/test-bed-time-service",
-    "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish"
+		"docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service",
+		"docker:publish": "docker push drivereu/test-bed-time-service",
+		"docker": "npm run docker:build && npm run docker:tag && npm run docker:publish"
 	},
 	"devDependencies": {
-		"lerna": "^3.5.1"
+		"lerna": "^3.5.1",
+		"webpack-cli": "^3.1.2"
 	}
 }

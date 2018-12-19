@@ -71,6 +71,7 @@ export class TimeService extends EventEmitter implements TimeService {
   /** Allow external services to control transitions. */
   public transition(msg: ITimingControlMessage) {
     this._state = this._state.transition(msg);
+    this.sendTimeUpdate(); // force update with new state info ASAP
     this.emit('stateUpdated', this._state.name);
   }
 
@@ -172,7 +173,6 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   private startProducingTimeMessages() {
-    this.sendTimeUpdate();
     this._timeHandler = setInterval(() => this.sendTimeUpdate(), this.interval);
   }
 

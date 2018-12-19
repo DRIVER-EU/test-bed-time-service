@@ -48,7 +48,7 @@ export class App {
     this.io.on('connect', (socket: SocketIO.Socket) => {
       console.log(`Connected client on port ${this.port}`);
       socket.emit('stateUpdated', this.timeService.state.name);
-      socket.emit('time', { trialTime: this.timeService.trialTime, trialTimeSpeed: this.timeService.trialTimeSpeed });
+      this.timeService.sendTimeUpdate();
       socket.on('message', (m: ITimeMessage) => {
         console.log('[server](message): %s', JSON.stringify(m));
         this.io.emit('message', m);

@@ -8,7 +8,7 @@ if: branch IN (master, develop)
 install:
 - npm i
 script:
-- echo "$DOCKER_PASSWORD"|docker login --username "$DOCKER_USERNAME" --password-stdin
+- echo $DOCKER_PASSWORD|docker login -u $DOCKER_USERNAME --password-stdin
 - docker build -t drivereu/test-bed-time-service:$TRAVIS_BRANCH-latest .
 - if [ $TRAVIS_BRANCH == "master" ]; then docker tag drivereu/test-bed-time-service:$TRAVIS_BRANCH-latest
   drivereu/test-bed-time-service:latest; fi

@@ -35,16 +35,11 @@ export class Initialized extends TimeServiceBaseState {
   }
 
   createTimeMessage(): ITimeMessage {
-    const newUpdateTime = Date.now();
-    const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
-    // unlike when started, don't progress the trialtime before sending an update
-    const trialTime = this.timeService.trialTime;
-    const trialTimeSpeed = this.timeService.trialTimeSpeed;
     const timeMsg = {
-      updatedAt: newUpdateTime,
-      trialTime: trialTime,
-      timeElapsed: timeElapsed,
-      trialTimeSpeed: trialTimeSpeed,
+      updatedAt: Date.now(),
+      trialTime: this.timeService.trialTime,
+      timeElapsed: 0,
+      trialTimeSpeed: this.timeService.trialTimeSpeed,
       state: TimingState.Initialized
     } as ITimeMessage;
     return timeMsg;

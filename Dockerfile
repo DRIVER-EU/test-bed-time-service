@@ -6,7 +6,8 @@
 #   docker run -it -p 8100:8100 test-bed-time-service
 
 FROM node:alpine AS builder
-RUN mkdir -p /src
+RUN mkdir -p /src && \
+    npm install webpack -g
 COPY . /src/
 WORKDIR /src
 RUN npm i && \

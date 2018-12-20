@@ -8,7 +8,7 @@
 FROM node:alpine AS builder
 RUN mkdir -p /src
 COPY . /src/
-WORKDIR /
+WORKDIR /src
 RUN npm i && \
     npm run build
 

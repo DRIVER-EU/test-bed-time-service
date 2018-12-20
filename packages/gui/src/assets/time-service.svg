@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 100 100"
+   id="svg10"
+   sodipodi:docname="time-service.svg"
+   width="100"
+   height="100"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <title
+     id="title8496">Time Service</title>
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Time Service</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     id="namedview12"
+     showgrid="true"
+     inkscape:zoom="9.9555556"
+     inkscape:cx="50"
+     inkscape:cy="49.999998"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g4">
+    <inkscape:grid
+       type="xygrid"
+       id="grid8481" />
+  </sodipodi:namedview>
+  <g
+     transform="matrix(1.1901347,0,0,1.1901347,-8.4474118,-1142.5223)"
+     id="g4">
+    <path
+       id="path2"
+       style="color:#000000;text-indent:0;text-transform:none;direction:ltr;baseline-shift:baseline;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.04418588;enable-background:accumulate"
+       d="m 49.429431,970.91724 c 1.1046,0 2,0.97628 2,2.18065 v 28.34831 c 0,0.8064 -0.4031,1.4968 -1,1.8742 -6.9068,4.3467 -13.8593,8.7252 -20.7812,13.0838 -0.9567,0.6022 -2.1977,0.2594 -2.74999,-0.7837 -0.5525,-1.043 -0.2066,-2.3622 0.74999,-2.9644 l 19.7812,-12.4703 v -27.08791 c 0,-1.20437 0.8954,-2.18065 2,-2.18065 z"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.88976383;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 50,5 A 44.999998,44.999998 0 0 0 5,50 44.999998,44.999998 0 0 0 50,95 44.999998,44.999998 0 0 0 95,50 44.999998,44.999998 0 0 0 50,5 Z m 0,5 A 40.000001,40.000001 0 0 1 90,50 40.000001,40.000001 0 0 1 50,90 40.000001,40.000001 0 0 1 10,50 40.000001,40.000001 0 0 1 50,10 Z"
+       transform="matrix(0.84024102,0,0,0.84024102,7.0978619,959.99411)"
+       id="path8491"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

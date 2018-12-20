@@ -14,6 +14,7 @@ export class Idle extends TimeServiceBaseState {
       case TimingControlCommand.Init: {
         if (!controlMsg.trialTime) {
           this.log.warn('Received Init command but no TrialTime was provided. Will default to current real-time.');
+          this.timeService.trialTime = (new Date).getTime();
         } else {
           this.timeService.trialTime = controlMsg.trialTime!;
           this.log.info('Initialized Trial Time to: ' + controlMsg.trialTime!);
@@ -31,7 +32,7 @@ export class Idle extends TimeServiceBaseState {
   createTimeMessage(): ITimeMessage {
     return {
       updatedAt: Date.now(),
-      trialTime: this.timeService.trialTime,
+      trialTime: 0,
       timeElapsed: 0,
       trialTimeSpeed: 0,
       state: TimingState.Idle

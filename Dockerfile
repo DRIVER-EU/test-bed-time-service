@@ -7,7 +7,8 @@
 
 FROM node:alpine AS builder
 RUN mkdir -p /src && \
-    npm install webpack -g
+    npm install webpack -g && \
+	npm install typescript -g
 COPY . /src/
 WORKDIR /src
 RUN npm i && \

@@ -10,6 +10,21 @@
       "name": "Launch Program",
       "program": "${workspaceFolder}/src/index.ts",
       "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch locally",
+      "program": "${workspaceFolder}/src/index.ts",
+      "outFiles": [ "${workspaceFolder}/dist/**/*.js" ],
+      "args": [
+        "-k",
+        "localhost:3501",
+        "-s",
+        "localhost:3502",
+        "-p",
+        "8101"
+      ]
     }
   ]
 }

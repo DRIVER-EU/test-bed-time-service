@@ -130,9 +130,10 @@ export class TimeService extends EventEmitter implements TimeService {
   public progressTrialTime() {
     const now = Date.now();
     const passed = now - this.lastUpdateTime!;
-    const newTrialTime = this.trialTime! + passed * this.trialTimeSpeed!;
+    const newTrialTime = Math.round(this.trialTime! + passed * this.trialTimeSpeed!);
     this.trialTime = newTrialTime;
     this._lastTrialTimeUpdate = now;
+    return newTrialTime;
   }
 
   public startScenario() {

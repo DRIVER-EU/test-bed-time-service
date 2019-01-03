@@ -45,8 +45,7 @@ export class Started extends TimeServiceBaseState {
   createTimeMessage(): ITimeMessage {
     const newUpdateTime = Date.now();
     const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
-    this.timeService.progressTrialTime();
-    const trialTime = this.timeService.trialTime;
+    const trialTime = this.timeService.progressTrialTime();
     const timeMsg = {
       updatedAt: newUpdateTime,
       trialTime: trialTime,

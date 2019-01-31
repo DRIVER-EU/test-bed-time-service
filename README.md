@@ -2,14 +2,15 @@
 
 In the test-bed, there will be one or more simulations that, together, create a virtual incident and reasonable responses of the environment. For example, there may be a flooding simulation or earthquake, after which the traffic (simulation) is disturbed too.
 
-The test-bed time service can be controlled via Apache Kafka. It listens to state changes of the test-bed, e.g. scenario start and stop messages.
+The test-bed time service can be controlled via Apache Kafka and via a GUI available at [http://localhost:8100/time-service](http://localhost:8100/time-service) (see screenshots below). It listens to state changes of the test-bed, e.g. scenario start and stop messages.
 
-In particular, this service will publish the fictive time, the real time, and speed of the simulation at least every 5 seconds, and after a change of the fictive time status (e.g. a speed change, or pause/stop of the simulation). The time message will be described in AVRO, as detailed in the [avro-schemas repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-value.avsc), and contains:
+In particular, this service will publish the fictive time, the real time, the speed of the simulation and its state at least every 5 seconds, and after a change of the fictive time status (e.g. a speed change, or pause/stop of the simulation). The time message will be described in AVRO, as detailed in the [avro-schemas repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-value.avsc), and contains:
 
 - Real time (or actual UTC time without time-zones or summer-winter time)
 - Fictive time (also as UTC time)
 - Scenario duration (the time that the simulation was in play state, expressed in msec.)
 - Scenario speed
+- Simulation state, e.g. Idle, etc.
 
 It may also check whether there are (simulation) services that are lagging behind, e.g. by requiring a response ("I'm done"). In case a simulation cannot keep up, the whole scenario needs to be slowed down (either pause or slowdown the total simulation).
 
@@ -17,6 +18,8 @@ The service may be combined with an NTP service to get the real time.
 
 ![Screenshot of the GUI using a digital clock](./img/screenshot-digital-clock.png?raw=true "Screenshot of the GUI using a digital clock.")
 ![Screenshot of the GUI using an analogue clock.](./img/screenshot-analogue-clock.png?raw=true "Screenshot of the GUI using an analogue clock.")
+
+The partially hidden menu in the top left corner can also be used to control the fictive time.
 
 ## Build instructions
 

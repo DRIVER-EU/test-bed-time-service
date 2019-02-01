@@ -163,12 +163,9 @@ export class TimeService extends EventEmitter implements TimeService {
       attributes: 1, // Gzip
     } as ProduceRequest;
 
-    this.adapter.send(payload, (err, data) => {
+    this.adapter.send(payload, (err) => {
       if (err) {
         this.log.error(err);
-      }
-      if (data) {
-        this.log.info(data);
       }
     });
   }

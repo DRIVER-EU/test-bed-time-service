@@ -5,22 +5,23 @@ This is the time-service server: it listens to control messages from Kafka, and 
 ![Alt text](./doc/test-bed-time-service-gui.png?raw=true "Screenshot of the GUI.")
 
 ```console
-test-bed-time-service, v0.1.0
+test-bed-time-service, v0.1
 
   MIT license.
 
   A time service for the test-bed, producing messages with real time, fictive
-  time and scenario duration.
+  time and elapsed time, as well as speed factor and state.
 
   The test-bed time service can be controlled via Apache Kafka. It listens to
   state changes of the test-bed, e.g. scenario start and stop messages.
-  It publishes three times:
+  It publishes:
   - Local system time: This is the same time that the NTP server should use.
   - Fictive simulation time: The time that is used in the scenario. Note that
   it may run faster than realtime.
-  - Speed factor: How much faster than realtime are we running.
-  - Scenario duration: The duration that the scenario is active (from start to
+  - Elapsed time: The duration that the scenario is active (from start to
   stop, expressed in real-time).
+  - Speed factor: How much faster than realtime are we running.
+  - Simulation state, e.g. Idle, Started, etc..
 
 Options
 

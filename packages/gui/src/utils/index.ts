@@ -14,5 +14,5 @@ export const padLeft = (n: string | number, width: number, z: string = '0') => {
 
 /** Convert a date to HH:mm */
 export const formatTime = (t: Date, includeSeconds = true) => includeSeconds
-  ? `${padLeft(t.getHours(), 2)}:${padLeft(t.getMinutes(), 2)}:${padLeft(t.getSeconds(), 2)}`
-  : `${padLeft(t.getHours(), 2)}:${padLeft(t.getMinutes(), 2)}`;
+  ? `${padLeft(t.getUTCHours(), 2)}:${padLeft(t.getUTCMinutes(), 2)}:${padLeft(t.getUTCSeconds(), 2)}`
+  : `${padLeft(t.getUTCHours(), 2)}:${padLeft(t.getUTCMinutes(), 2)}`;

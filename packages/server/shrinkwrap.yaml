@@ -4,7 +4,7 @@ dependencies:
   cors: 2.8.5
   express: 4.16.4
   http-status-codes: 1.3.0
-  node-test-bed-adapter: 0.7.2
+  node-test-bed-adapter: 0.7.3
   socketio: 1.0.0
 devDependencies:
   '@types/bluebird': 3.5.25
@@ -973,7 +973,7 @@ packages:
     dev: true
     resolution:
       integrity: sha1-esGavSl+Caf3KnFUXZUbUX5N3iw=
-  /node-test-bed-adapter/0.7.2:
+  /node-test-bed-adapter/0.7.3:
     dependencies:
       '@types/bluebird': 3.5.25
       avsc: 5.4.7
@@ -984,7 +984,7 @@ packages:
       url: 0.11.0
     dev: false
     resolution:
-      integrity: sha512-HiKeNpb9koIrhn9I9v1Wec1afqDrfSDRWmhaWm9RveglRjKVo8t48VEsJiqeCLTHu78CfNw+rc87CTgjMREupA==
+      integrity: sha512-UEWUH8ZRMB0jk2kMeKenHf7oJEAAO94LCjc9uio4xCE6g/eYrJJcJhh23d+cVcuMtu5BfNQw1PQfj6qbBaE0og==
   /node-zookeeper-client/0.2.3:
     dependencies:
       async: 0.2.10
@@ -1692,7 +1692,7 @@ specifiers:
   cors: ^2.8.5
   express: ^4.16.4
   http-status-codes: ^1.3.0
-  node-test-bed-adapter: 0.7.2
+  node-test-bed-adapter: ^0.7.3
   socketio: ^1.0.0
   tsc-watch: ^1.0.31
   typescript: ^3.2.2

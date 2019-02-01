@@ -43,16 +43,16 @@ export const TimeControl = () => {
 
   const newTime = () => {
     const [hours, minutes] = startTime.split(':').map(v => +v);
-    return startDate.setHours(hours, minutes, 0, 0);
+    return startDate.setUTCHours(hours, minutes, 0, 0);
   };
 
   const timeHasNotChanged = () => {
     const d = new Date(SimulationState.trialTime);
     return (
       startTime === formatTime(d, false) &&
-      startDate.getFullYear() === d.getFullYear() &&
-      startDate.getMonth() === d.getMonth() &&
-      startDate.getDate() === d.getDate()
+      startDate.getUTCFullYear() === d.getUTCFullYear() &&
+      startDate.getUTCMonth() === d.getUTCMonth() &&
+      startDate.getUTCDate() === d.getUTCDate()
     );
   };
 
@@ -96,7 +96,11 @@ export const TimeControl = () => {
           case States.Initialized:
             return m('.row', [
               m(Controls, { socket, isPaused: true, canChangeSpeed: false }),
-              m(FlatButton, { label: 'Reset time', iconName: 'timer_off', ui: { onclick: () => socket.emit('reset') } })
+              m(FlatButton, {
+                label: 'Reset time',
+                iconName: 'timer_off',
+                ui: { onclick: () => socket.emit('reset') },
+              }),
             ]);
           case States.Paused:
             return m('.row', [

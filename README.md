@@ -8,11 +8,9 @@ In particular, this service will publish the fictive time, the real time, the sp
 
 - Real time (or actual UTC time without time-zones or summer-winter time)
 - Fictive time (also as UTC time)
-- Scenario duration (the time that the simulation was in play state, expressed in msec.)
+- Elapsed time (the time that the simulation was in play state, expressed in msec.)
 - Scenario speed
-- Simulation state, e.g. Idle, etc.
-
-It may also check whether there are (simulation) services that are lagging behind, e.g. by requiring a response ("I'm done"). In case a simulation cannot keep up, the whole scenario needs to be slowed down (either pause or slowdown the total simulation).
+- Simulation state, e.g. Idle, Started, etc.
 
 The service may be combined with an NTP service to get the real time.
 
@@ -27,7 +25,10 @@ This assumes you have Node.js installed, node-gyp (`npm i -g node-gyp`) and pyth
 
 - Check out the repository
 - Run `npm i`
-- Run `npm start`
+
+In order to build and run it, a local version of the Test-bed must be running.
+
+- Run `npm start`, which starts the server and [GUI](http://localhost:8100/time-service) locally.
 
 There are two packages, a server and a GUI, which are build and run in parallel.
 

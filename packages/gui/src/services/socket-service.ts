@@ -13,8 +13,8 @@ const setupSocket = () => {
   }
 
   socket = io({
-    path: '/time-service/socket.io/'
-  })
+    path: '/time-service/socket.io/',
+  });
   socket.on('connect', () => log('Connected'));
   socket.on('event', (data: any) => log(data));
   socket.on('disconnect', () => log('Disconnected'));
@@ -24,7 +24,7 @@ const setupSocket = () => {
   let handler = -1;
   socket.on('time', (time: ITimeMessage) => {
     // log(`Time message received: ${time.trialTime}`);
-    SimulationState.trialTime = time.trialTime || new Date().setHours(12, 0, 0).valueOf();
+    SimulationState.trialTime = time.trialTime || new Date().setUTCHours(12, 0, 0).valueOf();
     SimulationState.trialTimeSpeed = time.trialTimeSpeed;
     SimulationState.timeElapsed = time.timeElapsed;
     window.clearInterval(handler);

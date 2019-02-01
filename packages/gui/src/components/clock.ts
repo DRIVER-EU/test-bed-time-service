@@ -1,5 +1,5 @@
-import { SimulationState } from '../models/sim-state';
 import m from 'mithril';
+import { SimulationState } from '../models/sim-state';
 import { d3clock, sbb } from 'd3-clock';
 import { SocketService } from '../services/socket-service';
 

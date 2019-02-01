@@ -6,6 +6,8 @@
 		"build": "lerna run --parallel build",
 		"start-tno-testbed": "lerna run --parallel start-tno-testbed",
 		"start-local": "lerna run --parallel start-local",
+		"patch-release": "lerna run --parallel patch-release",
+    "minor-release": "lerna run --parallel minor-release",
 		"docker:build": "docker build -t test-bed-time-service .",
 		"docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service",
 		"docker:publish": "docker push drivereu/test-bed-time-service",

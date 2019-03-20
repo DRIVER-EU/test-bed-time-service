@@ -1,4 +1,4 @@
-import { States } from './states';
+import { TimeState } from 'trial-manager-models';
 
 export const SimulationState = {
   /**
@@ -23,5 +23,5 @@ export const SimulationState = {
   /**
    * Current active state
    */
-  state: States.Idle,
+  state: TimeState.Idle,
 };

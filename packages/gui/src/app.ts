@@ -35,5 +35,5 @@ const routingTable: RouteDefs = {
 
 // waitForMaterialize()
   // .then(() => waitForSocketIO())
-//m.route.prefix("/time-service")
+// m.route.prefix("/time-service")
 waitForSocketIO().then(() => m.route(document.body, '/', routingTable));

@@ -1,3 +1,5 @@
+import { States } from './states';
+
 export interface ITimeMessage {
   /**
    * The date and time the trialTime was updated as the number of milliseconds
@@ -18,4 +20,8 @@ export interface ITimeMessage {
    * to the actual time. A value of 0 means a pause, 1 is as fast as real-time.
    */
   trialTimeSpeed: number;
+  /**
+   * The State of the Test-Bed Time Service.
+   */
+  state: States;
 }

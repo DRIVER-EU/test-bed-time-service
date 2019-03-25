@@ -1,3 +1,5 @@
+import { States } from '../states/states';
+
 export interface ITimeMessage {
   /**
    * The date and time the trialTime was updated as the number of milliseconds
@@ -21,14 +23,6 @@ export interface ITimeMessage {
   /**
    * The State of the Test-Bed Time Service.
    */
-  state: TimingState;
-}
-
-export enum TimingState {
-  Idle = 'Idle',
-  Initialized = 'Initialized',
-  Started = 'Started',
-  Paused = 'Paused',
-  Stopped = 'Stopped',
+  state: States;
 }
 

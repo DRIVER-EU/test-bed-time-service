@@ -1,4 +1,5 @@
-import { TimeState } from 'trial-manager-models';
+import { ITimeMessage } from './time-message';
+import { States } from './states';
 
 export const SimulationState = {
   /**
@@ -23,5 +24,5 @@ export const SimulationState = {
   /**
    * Current active state
    */
-  state: TimeState.Idle,
-};
+  state: States.Idle,
+} as ITimeMessage;

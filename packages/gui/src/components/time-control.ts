@@ -12,19 +12,21 @@ const Controls = () => {
       return [
         m(FlatButton, {
           iconName: 'fast_rewind',
-          ui: { onclick: () => socket.emit('update', SimulationState.trialTimeSpeed / 2), disabled: !canChangeSpeed },
+          onclick: () => socket.emit('update', SimulationState.trialTimeSpeed / 2),
+          disabled: !canChangeSpeed,
         }),
         m(FlatButton, {
           modalId: 'stopPanel',
           iconName: 'stop',
-          ui: { disabled: SimulationState.state === States.Initialized },
+          disabled: SimulationState.state === States.Initialized,
         }),
         isPaused
-          ? m(FlatButton, { iconName: 'play_arrow', ui: { onclick: () => socket.emit('start') } })
-          : m(FlatButton, { iconName: 'pause', ui: { onclick: () => socket.emit('pause') } }),
+          ? m(FlatButton, { iconName: 'play_arrow', onclick: () => socket.emit('start') })
+          : m(FlatButton, { iconName: 'pause', onclick: () => socket.emit('pause') }),
         m(FlatButton, {
           iconName: 'fast_forward',
-          ui: { onclick: () => socket.emit('update', SimulationState.trialTimeSpeed * 2), disabled: !canChangeSpeed },
+          onclick: () => socket.emit('update', SimulationState.trialTimeSpeed * 2),
+          disabled: !canChangeSpeed,
         }),
       ];
     },
@@ -74,7 +76,7 @@ export const TimeControl = () => {
                 contentClass: 'btn-flat-large',
                 iconName: 'timer',
                 iconClass: 'medium',
-                ui: { onclick: () => socket.emit('init', newTime()) },
+                onclick: () => socket.emit('init', newTime()),
               }),
               m('.row.left', [
                 m(TimePicker, {
@@ -99,7 +101,7 @@ export const TimeControl = () => {
               m(FlatButton, {
                 label: 'Reset time',
                 iconName: 'timer_off',
-                ui: { onclick: () => socket.emit('reset') },
+                onclick: () => socket.emit('reset'),
               }),
             ]);
           case States.Paused:
@@ -124,10 +126,8 @@ export const TimeControl = () => {
                 m(FlatButton, {
                   label: 'Update time',
                   iconName: 'update',
-                  ui: {
-                    disabled: timeHasNotChanged(),
-                    onclick: () => socket.emit('update', 0, newTime()),
-                  },
+                  disabled: timeHasNotChanged(),
+                  onclick: () => socket.emit('update', 0, newTime()),
                 }),
               ]),
             ]);
@@ -137,14 +137,14 @@ export const TimeControl = () => {
               m('.row', [
                 m('em', 'Trial Time Speed Factor: ' + SimulationState.trialTimeSpeed),
                 SimulationState.trialTimeSpeed !== 1
-                  ? m(FlatButton, { iconName: 'restore', ui: { onclick: () => socket.emit('update', 1) } })
+                  ? m(FlatButton, { iconName: 'restore', onclick: () => socket.emit('update', 1) })
                   : undefined,
               ]),
             ]);
           case States.Stopped:
             return m(
               '.row',
-              m(FlatButton, { label: 'Reset time', iconName: 'timer_off', ui: { onclick: () => socket.emit('reset') } })
+              m(FlatButton, { label: 'Reset time', iconName: 'timer_off', onclick: () => socket.emit('reset') })
             );
         }
       };

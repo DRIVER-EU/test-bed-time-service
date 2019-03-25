@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
-import { States } from '../models/states';
 import { ITimeMessage } from '../models/time-message';
 import { SimulationState } from '../models/sim-state';
+import { States } from '../models/states';
 
 // tslint:disable-next-line:no-console
 const log = console.log;

@@ -1,7 +1,7 @@
 export enum States {
-  Idle,
-  Initialized,
-  Started,
-  Paused,
-  Stopped,
+  Idle = 'Idle',
+  Initialized = 'Initialized',
+  Started = 'Started',
+  Paused = 'Paused',
+  Stopped = 'Stopped',
 }

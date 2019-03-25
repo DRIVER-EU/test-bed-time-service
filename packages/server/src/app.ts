@@ -51,7 +51,7 @@ export class App {
       console.log(`Connected client on port ${this.port}`);
       socket.emit('stateUpdated', this.timeService.state.name);
       socket.emit('time', this.timeService.state.createTimeMessage());
-      //this.timeService.sendTimeUpdate();
+      // this.timeService.sendTimeUpdate();
       socket.on('message', (m: ITimeMessage) => {
         console.log('[server](message): %s', JSON.stringify(m));
         this.io.emit('message', m);

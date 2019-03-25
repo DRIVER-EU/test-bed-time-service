@@ -48,7 +48,7 @@ export class TimeService extends EventEmitter implements TimeService {
       kafkaHost: options.kafkaHost,
       schemaRegistry: options.schemaRegistryUrl,
       fetchAllSchemas: false,
-      clientId: 'TimeService',
+      clientId: 'TB-TimeService',
       autoRegisterSchemas: options.autoRegisterSchemas,
       schemaFolder: 'schemas',
       consume: [{ topic: ConfigurationTopic }],

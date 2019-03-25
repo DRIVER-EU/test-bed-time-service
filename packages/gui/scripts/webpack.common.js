@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack'); //to access built-in plugins
 
 //new webpack.HotModuleReplacementPlugin()
@@ -50,7 +49,6 @@ module.exports = {
   },
   plugins: [
     new webpack.ProgressPlugin(),
-    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({ title: title, favicon: './src/assets/favicon.ico' }),
   ],
 };

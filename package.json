@@ -14,6 +14,6 @@
 		"docker": "npm run docker:build && npm run docker:tag && npm run docker:publish"
 	},
 	"devDependencies": {
-		"lerna": "^3.6.0"
+		"lerna": "^3.13.1"
 	}
 }

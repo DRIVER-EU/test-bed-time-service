@@ -1,31 +1,29 @@
-import { TimingControlCommand, ITimingControlMessage } from './../models/timing-control-message';
+import { ITiming, ITimingControl, TimeState, TimeCommand } from 'node-test-bed-adapter';
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
-import { ITimeMessage } from '../models/time-message';
 import { Paused } from './time-service-paused-state';
 import { Stopped } from './time-service-stopped-state';
-import { States } from './states';
 
 export class Started extends TimeServiceBaseState {
   public get name() {
-    return States.Started;
+    return TimeState.Started;
   }
 
-  public transition(controlMsg: ITimingControlMessage): TimeServiceState {
+  public transition(controlMsg: ITimingControl): TimeServiceState {
     switch (controlMsg.command) {
-      case TimingControlCommand.Pause: {
+      case TimeCommand.Pause: {
         this.timeService.progressTrialTime(); // progress time using old speed
         this.timeService.trialTimeSpeed = 0; // set speed to 0 to pause
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Paused.');
         return new Paused(this.timeService);
       }
-      case TimingControlCommand.Stop: {
+      case TimeCommand.Stop: {
         this.timeService.progressTrialTime(); // progress time using old speed
         this.timeService.trialTimeSpeed = 0; // set speed to 0 to stop
         this.timeService.stopScenario(); // stop sending periodic messages
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Stopped.');
         return new Stopped(this.timeService);
       }
-      case TimingControlCommand.Update: {
+      case TimeCommand.Update: {
         if (controlMsg.trialTimeSpeed != null) {
           this.timeService.progressTrialTime(); // progress time using old speed
           this.timeService.trialTimeSpeed = controlMsg.trialTimeSpeed;
@@ -42,7 +40,7 @@ export class Started extends TimeServiceBaseState {
     }
   }
 
-  createTimeMessage(): ITimeMessage {
+  createTimeMessage(): ITiming {
     const newUpdateTime = Date.now();
     const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
     const trialTime = this.timeService.progressTrialTime();
@@ -51,8 +49,8 @@ export class Started extends TimeServiceBaseState {
       trialTime: trialTime,
       timeElapsed: timeElapsed,
       trialTimeSpeed: this.timeService.trialTimeSpeed,
-      state: States.Started
-    } as ITimeMessage;
+      state: TimeState.Started
+    } as ITiming;
     return timeMsg;
   }
 }

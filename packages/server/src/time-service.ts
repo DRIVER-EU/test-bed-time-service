@@ -1,19 +1,25 @@
 import { TimeServiceState } from './states/time-service-states';
-import { ITimingControlMessage } from './models/timing-control-message';
 import { ICommandOptions } from './index';
 import { EventEmitter } from 'events';
 import { ProduceRequest } from 'node-test-bed-adapter';
-import { TestBedAdapter, Logger, LogLevel, IAdapterMessage } from 'node-test-bed-adapter';
-import { ITimeMessage } from './models/time-message';
+import {
+  TestBedAdapter,
+  Logger,
+  LogLevel,
+  IAdapterMessage,
+  TimeState,
+  ITiming,
+  ITimingControl,
+  TimeTopic,
+  TimeControlTopic,
+  HeartbeatTopic,
+  LogTopic,
+} from 'node-test-bed-adapter';
 import { Idle } from './states/time-service-idle-state';
-import { States } from './states/states';
-
-const ConfigurationTopic = 'system_timing_control';
-const TimeTopic = 'system_timing';
 
 export interface TimeService {
-  on(event: 'stateUpdated', listener: (state: States) => void): this;
-  on(event: 'time', listener: (time: ITimeMessage) => void): this;
+  on(event: 'stateUpdated', listener: (state: TimeState) => void): this;
+  on(event: 'time', listener: (time: ITiming) => void): this;
 }
 
 export class TimeService extends EventEmitter implements TimeService {
@@ -51,8 +57,12 @@ export class TimeService extends EventEmitter implements TimeService {
       clientId: 'TB-TimeService',
       autoRegisterSchemas: options.autoRegisterSchemas,
       schemaFolder: 'schemas',
-      consume: [{ topic: ConfigurationTopic }],
-      produce: [TimeTopic, ConfigurationTopic],
+      autoRegisterDefaultSchemas: false,
+      consume: [{ topic: TimeControlTopic }],
+      produce: [HeartbeatTopic, LogTopic, TimeControlTopic],
+      fromOffset: false,
+      // consume: [{ topic: TimeControlTopic }],
+      // produce: [TimeTopic, TimeControlTopic],
       logging: {
         logToConsole: LogLevel.Info,
         logToKafka: LogLevel.Warn,
@@ -69,26 +79,29 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   /** Allow external services to control transitions. */
-  public transition(msg: ITimingControlMessage) {
+  public transition(msg: ITimingControl) {
     this._state = this._state.transition(msg);
     this.sendTimeUpdate(); // force update with new state info ASAP
     this.emit('stateUpdated', this._state.name);
   }
 
   private subscribe() {
-    this.adapter.on('message', (message) => this.handleMessage(message));
-    this.adapter.on('error', (err) => this.log.error(`Consumer received an error: ${err}`));
-    this.adapter.on('offsetOutOfRange', (err) => this.log.error(`Consumer received an offsetOutOfRange error: ${err}`));
+    this.adapter.on('message', message => this.handleMessage(message));
+    this.adapter.on('error', err => this.log.error(`Consumer received an error: ${err}`));
+    this.adapter.on('offsetOutOfRange', err => {
+      this.log.error(`Consumer received an offsetOutOfRange error on topic ${err.topic}.`);
+    });
   }
 
   private handleMessage(message: IAdapterMessage) {
     switch (message.topic) {
-      case ConfigurationTopic:
-        const controlMsg = message.value as ITimingControlMessage;
+      case TimeControlTopic:
+        this.log.info(`${TimeControlTopic} message:\n` + JSON.stringify(message, null, 2));
+        const controlMsg = message.value as ITimingControl;
         this.transition(controlMsg);
         break;
       default:
-        console.log('Unhandled message: ' + message.value);
+        this.log.warn('Unhandled message: ' + JSON.stringify(message));
         break;
     }
   }
@@ -154,7 +167,7 @@ export class TimeService extends EventEmitter implements TimeService {
     this.sendTimeMessage(this.state.createTimeMessage());
   }
 
-  public sendTimeMessage(timeMsg: ITimeMessage) {
+  public sendTimeMessage(timeMsg: ITiming) {
     this.emit('time', timeMsg);
 
     const payload = {
@@ -163,7 +176,7 @@ export class TimeService extends EventEmitter implements TimeService {
       attributes: 1, // Gzip
     } as ProduceRequest;
 
-    this.adapter.send(payload, (err) => {
+    this.adapter.send(payload, err => {
       if (err) {
         this.log.error(err);
       }

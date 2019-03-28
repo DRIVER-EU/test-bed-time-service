@@ -1,17 +1,15 @@
-import { TimingControlCommand, ITimingControlMessage } from './../models/timing-control-message';
+import { ITiming, ITimingControl, TimeState, TimeCommand } from 'node-test-bed-adapter';
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
-import { ITimeMessage } from '../models/time-message';
 import { Idle } from './time-service-idle-state';
-import { States } from './states';
 
 export class Stopped extends TimeServiceBaseState {
   public get name() {
-    return States.Stopped;
+    return TimeState.Stopped;
   }
 
-  public transition(controlMsg: ITimingControlMessage): TimeServiceState {
+  public transition(controlMsg: ITimingControl): TimeServiceState {
     switch (controlMsg.command) {
-      case TimingControlCommand.Reset: {
+      case TimeCommand.Reset: {
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Idle.');
         return new Idle(this.timeService);
       }
@@ -22,7 +20,7 @@ export class Stopped extends TimeServiceBaseState {
     }
   }
 
-  createTimeMessage(): ITimeMessage {
+  createTimeMessage(): ITiming {
     const newUpdateTime = Date.now();
     const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
     // unlike when started, don't progress the trialtime before sending an update
@@ -32,8 +30,8 @@ export class Stopped extends TimeServiceBaseState {
       trialTime: trialTime,
       timeElapsed: timeElapsed,
       trialTimeSpeed: 0,
-      state: States.Stopped
-    } as ITimeMessage;
+      state: TimeState.Stopped
+    } as ITiming;
     return timeMsg;
   }
 }

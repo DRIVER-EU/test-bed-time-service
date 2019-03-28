@@ -1,18 +1,16 @@
-import { TimingControlCommand, ITimingControlMessage } from './../models/timing-control-message';
+import { ITiming, ITimingControl, TimeState, TimeCommand } from 'node-test-bed-adapter';
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
-import { ITimeMessage } from '../models/time-message';
 import { Stopped } from './time-service-stopped-state';
 import { Started } from './time-service-started-state';
-import { States } from './states';
 
 export class Paused extends TimeServiceBaseState {
   public get name() {
-    return States.Paused;
+    return TimeState.Paused;
   }
 
-  public transition(controlMsg: ITimingControlMessage): TimeServiceState {
+  public transition(controlMsg: ITimingControl): TimeServiceState {
     switch (controlMsg.command) {
-      case TimingControlCommand.Start: {
+      case TimeCommand.Start: {
         this.timeService.progressTrialTime(); // progress time using old speed (zero)
         if (controlMsg.trialTimeSpeed == null) {
           this.log.warn('No Trial Time Speed provided when resuming the Time Service. Defaulting to 1.0');
@@ -23,13 +21,13 @@ export class Paused extends TimeServiceBaseState {
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Started.');
         return new Started(this.timeService);
       }
-      case TimingControlCommand.Stop: {
+      case TimeCommand.Stop: {
         this.timeService.progressTrialTime(); // progress time using old speed (zero)
         this.timeService.stopScenario(); // stop sending periodic messages
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Stopped.');
         return new Stopped(this.timeService);
       }
-      case TimingControlCommand.Update: {
+      case TimeCommand.Update: {
         if (controlMsg.trialTimeSpeed != null) {
           this.log.info('Received command ' + controlMsg.command + ', but cannot update trial time speed when in paused state.');
         }
@@ -45,7 +43,7 @@ export class Paused extends TimeServiceBaseState {
     }
   }
 
-  createTimeMessage(): ITimeMessage {
+  createTimeMessage(): ITiming {
     const newUpdateTime = Date.now();
     const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
     // unlike when started, don't progress the trialtime before sending an update
@@ -56,8 +54,8 @@ export class Paused extends TimeServiceBaseState {
       trialTime: trialTime,
       timeElapsed: timeElapsed,
       trialTimeSpeed: trialTimeSpeed,
-      state: States.Paused
-    } as ITimeMessage;
+      state: TimeState.Paused
+    } as ITiming;
     return timeMsg;
   }
 }

@@ -1,23 +1,21 @@
-import { TimingControlCommand, ITimingControlMessage } from './../models/timing-control-message';
+import { ITiming, ITimingControl, TimeState, TimeCommand } from 'node-test-bed-adapter';
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
 import { Initialized } from './time-service-initialized-state';
-import { States } from './states';
-import { ITimeMessage } from '../models/time-message';
 
 export class Idle extends TimeServiceBaseState {
   public get name() {
-    return States.Idle;
+    return TimeState.Idle;
   }
 
-  public transition(controlMsg: ITimingControlMessage): TimeServiceState {
+  public transition(controlMsg: ITimingControl): TimeServiceState {
     switch (controlMsg.command) {
-      case TimingControlCommand.Init: {
+      case TimeCommand.Init: {
         if (!controlMsg.trialTime) {
           this.log.warn('Received Init command but no TrialTime was provided. Will default to current real-time.');
           this.timeService.trialTime = (new Date).getTime();
         } else {
           this.timeService.trialTime = controlMsg.trialTime!;
-          this.log.info('Initialized Trial Time to: ' + controlMsg.trialTime!);
+          this.log.info('Initialized Trial Time to UTC: ' + new Date(controlMsg.trialTime).toUTCString());
         }
         this.log.info('Received command ' + controlMsg.command + '. Transitioning to Initialized.');
         return new Initialized(this.timeService);
@@ -29,14 +27,14 @@ export class Idle extends TimeServiceBaseState {
     }
   }
 
-  createTimeMessage(): ITimeMessage {
+  createTimeMessage(): ITiming {
     return {
       updatedAt: Date.now(),
       trialTime: 0,
       timeElapsed: 0,
       trialTimeSpeed: 0,
-      state: States.Idle
-    } as ITimeMessage;
+      state: TimeState.Idle
+    } as ITiming;
   }
 
 }

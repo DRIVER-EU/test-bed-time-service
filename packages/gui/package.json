@@ -13,6 +13,10 @@
   "keywords": [],
   "author": "Erik Vullings <erik.vullings@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DRIVER-EU/test-bed-time-service.git"
+  },
   "dependencies": {
     "d3-clock": "^0.1.5",
     "materialize-css": "^1.0.0",

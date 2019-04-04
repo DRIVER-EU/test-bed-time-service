@@ -1,19 +1,23 @@
 {
-	"private": true,
-	"scripts": {
-		"postinstall": "lerna bootstrap",
-		"start": "lerna run --parallel start",
-		"build": "lerna run --parallel build",
-		"start-tno-testbed": "lerna run --parallel start-tno-testbed",
-		"start-local": "lerna run --parallel start-local",
-		"patch-release": "lerna run --parallel patch-release",
+  "private": true,
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "start": "lerna run --parallel start",
+    "build": "lerna run --parallel build",
+    "start-tno-testbed": "lerna run --parallel start-tno-testbed",
+    "start-local": "lerna run --parallel start-local",
+    "patch-release": "lerna run --parallel patch-release",
     "minor-release": "lerna run --parallel minor-release",
-		"docker:build": "docker build -t test-bed-time-service .",
-		"docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service",
-		"docker:publish": "docker push drivereu/test-bed-time-service",
-		"docker": "npm run docker:build && npm run docker:tag && npm run docker:publish"
-	},
-	"devDependencies": {
-		"lerna": "^3.13.1"
-	}
+    "docker:build": "docker build -t test-bed-time-service .",
+    "docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service",
+    "docker:publish": "docker push drivereu/test-bed-time-service",
+    "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish"
+  },
+  "devDependencies": {
+    "lerna": "^3.13.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DRIVER-EU/test-bed-time-service.git"
+  }
 }

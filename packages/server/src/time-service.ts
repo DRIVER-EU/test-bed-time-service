@@ -59,7 +59,7 @@ export class TimeService extends EventEmitter implements TimeService {
       schemaFolder: 'schemas',
       autoRegisterDefaultSchemas: false,
       consume: [{ topic: TimeControlTopic }],
-      produce: [HeartbeatTopic, LogTopic, TimeControlTopic],
+      produce: [HeartbeatTopic, LogTopic, TimeControlTopic, TimeTopic],
       fromOffset: false,
       // consume: [{ topic: TimeControlTopic }],
       // produce: [TimeTopic, TimeControlTopic],

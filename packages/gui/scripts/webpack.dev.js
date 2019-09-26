@@ -9,7 +9,7 @@ module.exports = merge(common, {
     splitChunks: {
       chunks: 'all',
     },
-  },
+  }
   // devServer: {
   //   contentBase: '../../server/public/',
   //   historyApiFallback: true,

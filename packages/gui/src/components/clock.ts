@@ -16,7 +16,7 @@ export const Clock = () => {
         width,
         date: () => SimulationState.trialTime,
         // Time zone offset
-        TZOffset: { hours: 0 },
+        // TZOffset: { hours: 0 },
         // Clock face, e.g. sbb, braun, modern, or classic, must be imported
         face: sbb,
       });

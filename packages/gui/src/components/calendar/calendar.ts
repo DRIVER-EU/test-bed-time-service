@@ -23,9 +23,9 @@ export const Calendar = () => {
   return {
     view: () => {
       const trialTime = new Date(SimulationState.trialTime);
-      const month = monthNames[trialTime.getUTCMonth()];
-      const date = trialTime.getUTCDate();
-      const day = dayNames[trialTime.getUTCDay()];
+      const month = monthNames[trialTime.getMonth()];
+      const date = trialTime.getDate();
+      const day = dayNames[trialTime.getDay()];
       return m('.cal.anim04c[id=calendar]', [
         m('.cal-signboard.cal-outer', [
           m('.cal-signboard.cal-front.cal-inner.anim04c', [

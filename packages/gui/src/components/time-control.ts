@@ -45,16 +45,16 @@ export const TimeControl = () => {
 
   const newTime = () => {
     const [hours, minutes] = startTime.split(':').map(v => +v);
-    return startDate.setUTCHours(hours, minutes, 0, 0);
+    return startDate.setHours(hours, minutes, 0, 0);
   };
 
   const timeHasNotChanged = () => {
     const d = new Date(SimulationState.trialTime);
     return (
       startTime === formatTime(d, false) &&
-      startDate.getUTCFullYear() === d.getUTCFullYear() &&
-      startDate.getUTCMonth() === d.getUTCMonth() &&
-      startDate.getUTCDate() === d.getUTCDate()
+      startDate.getFullYear() === d.getFullYear() &&
+      startDate.getMonth() === d.getMonth() &&
+      startDate.getDate() === d.getDate()
     );
   };
 

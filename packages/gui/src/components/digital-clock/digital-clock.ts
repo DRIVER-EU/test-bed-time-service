@@ -22,14 +22,14 @@ export const DigitalClock = () => {
   };
   return {
     oncreate: () => {
-      state.handler = setInterval(updateSimTime, interval());
+      state.handler = window.setInterval(updateSimTime, interval());
       SocketService.socket.on('time', () => {
         const oldSpeed = state.speed;
         state.time = new Date(SimulationState.trialTime);
         state.speed = SimulationState.trialTimeSpeed;
         if (state.speed === oldSpeed) { return; }
         clearInterval(state.handler);
-        state.handler = setInterval(updateSimTime, interval());
+        state.handler = window.setInterval(updateSimTime, interval());
       });
     },
     onremove: () => {

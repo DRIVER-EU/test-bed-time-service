@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "postinstall": "lerna bootstrap",
+    "watch": "lerna run --parallel watch",
     "start": "lerna run --parallel start",
     "build": "lerna run --parallel build",
     "start-tno-testbed": "lerna run --parallel start-tno-testbed",
@@ -14,7 +15,7 @@
     "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish"
   },
   "devDependencies": {
-    "lerna": "^3.13.1"
+    "lerna": "^3.16.4"
   },
   "repository": {
     "type": "git",

@@ -5,10 +5,7 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   background: #eee;
   color: #666;
-}
-body {
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .black-theme {
@@ -57,4 +54,22 @@ body {
 }
 .almost-hidden:hover {
   opacity: 1;
+}
+
+#billboard {
+  margin-top: -2rem;
+  position: relative;
+  font-size: 4rem;
+  width: 100vw;
+  height: 100vh;
+}
+#billboard .message {
+  position: absolute;
+  display: inline-block;
+  bottom: 0rem;
+  margin: 0 2rem;
+}
+.center {
+  width: 100%;
+  text-align: center;
 }

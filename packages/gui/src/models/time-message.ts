@@ -1,4 +1,5 @@
 import { States } from './states';
+import { IRolePlayerMessage } from './role-player-message';
 
 export interface ITimeMessage {
   /**
@@ -24,4 +25,6 @@ export interface ITimeMessage {
    * The State of the Test-Bed Time Service.
    */
   state: States;
+  /** Queue with role player messages for the billboard */
+  messageQueue: IRolePlayerMessage[];
 }

@@ -4,6 +4,7 @@ import { States } from '../models/states';
 import { SocketService } from '../services/socket-service';
 import { TimePicker, DatePicker, FlatButton, ModalPanel } from 'mithril-materialized';
 import { padLeft, formatTime } from '../utils';
+import { SocketChannels } from '../models/socket-channels';
 
 const Controls = () => {
   return {
@@ -64,7 +65,7 @@ export const TimeControl = () => {
 
   return {
     oninit: () => {
-      socket.on('stateUpdated', () => m.redraw());
+      socket.on(SocketChannels.STATE_UPDATED, () => m.redraw());
     },
     view: () => {
       const controls = () => {

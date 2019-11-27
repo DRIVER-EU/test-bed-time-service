@@ -2,6 +2,7 @@ import m from 'mithril';
 import { SimulationState } from '../models/sim-state';
 import { d3clock, sbb } from 'd3-clock';
 import { SocketService } from '../services/socket-service';
+import { SocketChannels } from '../models/socket-channels';
 
 export const Clock = () => {
   return {
@@ -9,7 +10,7 @@ export const Clock = () => {
     oncreate: () => {
       const el = document.getElementById('clock');
       const width = el ? Math.min(el.clientHeight, el.clientWidth) : 600;
-      SocketService.socket.on('time', () => m.redraw());
+      SocketService.socket.on(SocketChannels.TIME, () => m.redraw());
       d3clock({
         // Parent div to put the clock in
         target: '#clock',

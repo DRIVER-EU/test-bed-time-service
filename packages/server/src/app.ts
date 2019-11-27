@@ -6,7 +6,8 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as path from 'path';
 import * as socketIO from 'socket.io';
-import { ITiming, TimeState, TimeCommand } from 'node-test-bed-adapter';
+import { ITiming, TimeState, TimeCommand, IRolePlayerMessage } from 'node-test-bed-adapter';
+import { SocketChannels } from './models/socket-channels';
 
 /** Main application */
 export class App {
@@ -28,14 +29,19 @@ export class App {
       'path': '/time-service/socket.io/'
     });
 
+    console.table(options);
     this.timeService = new TimeService(options);
-    this.timeService.on('time', (time: ITiming) => {
+    this.timeService.on(SocketChannels.TIME, (time: ITiming) => {
       // console.log(`Sending time update: ${JSON.stringify(time, null, 2)}`);
-      this.io.emit('time', time);
+      this.io.emit(SocketChannels.TIME, time);
     });
-    this.timeService.on('stateUpdated', (state: TimeState) => {
+    this.timeService.on(SocketChannels.STATE_UPDATED, (state: TimeState) => {
       console.log(`Sending state update: ${state}`);
-      this.io.emit('stateUpdated', state);
+      this.io.emit(SocketChannels.STATE_UPDATED, state);
+    });
+    this.timeService.on(SocketChannels.BILLBOARD, (msg: IRolePlayerMessage) => {
+      console.log(`Sending billboard msg: ${msg}`);
+      this.io.emit(SocketChannels.BILLBOARD, msg);
     });
     this.timeService.connect().then(() => this.listen());
   }
@@ -47,8 +53,8 @@ export class App {
 
     this.io.on('connect', (socket: SocketIO.Socket) => {
       console.log(`Connected client on port ${this.port}`);
-      socket.emit('stateUpdated', this.timeService.state.name);
-      socket.emit('time', this.timeService.state.createTimeMessage());
+      socket.emit(SocketChannels.STATE_UPDATED, this.timeService.state.name);
+      socket.emit(SocketChannels.TIME, this.timeService.state.createTimeMessage());
       // this.timeService.sendTimeUpdate();
       socket.on('message', (m: ITiming) => {
         console.log('[server](message): %s', JSON.stringify(m));

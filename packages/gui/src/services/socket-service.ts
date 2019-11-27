@@ -2,6 +2,8 @@ import io from 'socket.io-client';
 import { ITimeMessage } from '../models/time-message';
 import { SimulationState } from '../models/sim-state';
 import { States } from '../models/states';
+import { SocketChannels } from '../models/socket-channels';
+import { IRolePlayerMessage } from '../models/role-player-message';
 
 // tslint:disable-next-line:no-console
 const log = console.log;
@@ -22,11 +24,11 @@ const setupSocket = () => {
     }
   });
   socket.on('disconnect', () => log('Disconnected'));
-  socket.on('stateUpdated', (state: States) => {
+  socket.on(SocketChannels.STATE_UPDATED, (state: States) => {
     SimulationState.state = state;
   });
   let handler = -1;
-  socket.on('time', (time: ITimeMessage) => {
+  socket.on(SocketChannels.TIME, (time: ITimeMessage) => {
     // log(`Time message received: ${time.trialTime}`);
     SimulationState.trialTime = time.trialTime || new Date().setHours(12, 0, 0).valueOf();
     SimulationState.trialTimeSpeed = time.trialTimeSpeed;
@@ -38,6 +40,9 @@ const setupSocket = () => {
         SimulationState.trialTime += secDuration;
       }, secDuration / time.trialTimeSpeed);
     }
+  });
+  socket.on(SocketChannels.BILLBOARD, (msg: IRolePlayerMessage) => {
+    SimulationState.messageQueue.push(msg);
   });
   return socket;
 };

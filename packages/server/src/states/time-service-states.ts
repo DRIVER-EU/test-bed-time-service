@@ -1,6 +1,5 @@
 import { Logger, ITiming, ITimingControl, TimeState } from 'node-test-bed-adapter';
 import { TimeService } from './../time-service';
-import { TimeServiceState } from './time-service-states';
 
 export interface TimeServiceState {
   name: TimeState;

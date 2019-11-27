@@ -1,30 +1,35 @@
 import { TimeServiceState } from './states/time-service-states';
 import { ICommandOptions } from './index';
 import { EventEmitter } from 'events';
-import { ProduceRequest } from 'node-test-bed-adapter';
 import {
   TestBedAdapter,
   Logger,
   LogLevel,
+  ProduceRequest,
   IAdapterMessage,
   TimeState,
   ITiming,
   ITimingControl,
+  IRolePlayerMessage,
   TimeTopic,
   TimeControlTopic,
+  TrialManagementRolePlayerTopic,
   HeartbeatTopic,
   LogTopic,
 } from 'node-test-bed-adapter';
 import { Idle } from './states/time-service-idle-state';
+import { SocketChannels } from './models/socket-channels';
 
 export interface TimeService {
-  on(event: 'stateUpdated', listener: (state: TimeState) => void): this;
-  on(event: 'time', listener: (time: ITiming) => void): this;
+  on(event: SocketChannels.STATE_UPDATED, listener: (state: TimeState) => void): this;
+  on(event: SocketChannels.TIME, listener: (time: ITiming) => void): this;
+  on(event: SocketChannels.BILLBOARD, listener: (msg: IRolePlayerMessage) => void): this;
 }
 
 export class TimeService extends EventEmitter implements TimeService {
   private adapter: TestBedAdapter;
   private log = Logger.instance;
+  private billboard?: string;
 
   /** Can be used in clearInterval to reset the timer */
   private _timeHandler?: NodeJS.Timer;
@@ -46,23 +51,27 @@ export class TimeService extends EventEmitter implements TimeService {
 
   constructor(options: ICommandOptions) {
     super();
-    this.interval = options.interval;
+    const { interval, billboard, kafkaHost, schemaRegistryUrl, autoRegisterSchemas } = options;
+    this.billboard = billboard ? billboard.toLowerCase() : undefined;
+    this.interval = interval;
     this._trialTimeSpeed = 0;
     this._state = new Idle(this);
 
+    const consume = billboard
+      ? [{ topic: TimeControlTopic }, { topic: TrialManagementRolePlayerTopic }]
+      : [{ topic: TimeControlTopic }];
+
     this.adapter = new TestBedAdapter({
-      kafkaHost: options.kafkaHost,
-      schemaRegistry: options.schemaRegistryUrl,
+      kafkaHost: kafkaHost,
+      schemaRegistry: schemaRegistryUrl,
       fetchAllSchemas: false,
       clientId: 'TB-TimeService',
-      autoRegisterSchemas: options.autoRegisterSchemas,
+      autoRegisterSchemas: autoRegisterSchemas,
       schemaFolder: 'schemas',
       autoRegisterDefaultSchemas: false,
-      consume: [{ topic: TimeControlTopic }],
+      consume,
       produce: [HeartbeatTopic, LogTopic, TimeControlTopic, TimeTopic],
       fromOffset: false,
-      // consume: [{ topic: TimeControlTopic }],
-      // produce: [TimeTopic, TimeControlTopic],
       logging: {
         logToConsole: LogLevel.Info,
         logToKafka: LogLevel.Warn,
@@ -82,7 +91,7 @@ export class TimeService extends EventEmitter implements TimeService {
   public transition(msg: ITimingControl) {
     this._state = this._state.transition(msg);
     this.sendTimeUpdate(); // force update with new state info ASAP
-    this.emit('stateUpdated', this._state.name);
+    this.emit(SocketChannels.STATE_UPDATED, this._state.name);
   }
 
   private subscribe() {
@@ -99,6 +108,19 @@ export class TimeService extends EventEmitter implements TimeService {
         this.log.info(`${TimeControlTopic} message:\n` + JSON.stringify(message, null, 2));
         const controlMsg = message.value as ITimingControl;
         this.transition(controlMsg);
+        break;
+      case TrialManagementRolePlayerTopic:
+        const msg = message.value as IRolePlayerMessage;
+        console.log('TrialManagementRolePlayerTopic received');
+        console.table(msg);
+        if (
+          msg &&
+          msg.participantNames &&
+          msg.participantNames.filter(pn => pn.toLowerCase() === this.billboard).length > 0
+        ) {
+          this.emit(SocketChannels.BILLBOARD, msg);
+          console.log('TrialManagementRolePlayerTopic emitted');
+        }
         break;
       default:
         this.log.warn('Unhandled message: ' + JSON.stringify(message));
@@ -168,7 +190,7 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   public sendTimeMessage(timeMsg: ITiming) {
-    this.emit('time', timeMsg);
+    this.emit(SocketChannels.TIME, timeMsg);
 
     const payload = {
       topic: TimeTopic,

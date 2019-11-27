@@ -2,6 +2,7 @@ import './calendar.css';
 import { SimulationState } from '../../models/sim-state';
 import m from 'mithril';
 import { SocketService } from '../../services/socket-service';
+import { SocketChannels } from '../../models/socket-channels';
 
 const monthNames = [
   'January',
@@ -41,7 +42,7 @@ export const Calendar = () => {
       ]);
     },
     oncreate: () => {
-      SocketService.socket.on('time', () => m.redraw());
+      SocketService.socket.on(SocketChannels.TIME, () => m.redraw());
     },
   };
 };

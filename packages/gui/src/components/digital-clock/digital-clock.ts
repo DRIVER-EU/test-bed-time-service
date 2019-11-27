@@ -3,6 +3,7 @@ import './digital-clock.css';
 import { SimulationState } from '../../models/sim-state';
 import { SocketService } from '../../services/socket-service';
 import { formatTime } from '../../utils';
+import { SocketChannels } from '../../models/socket-channels';
 
 export const DigitalClock = () => {
   const updateSimTime = () => {
@@ -11,7 +12,7 @@ export const DigitalClock = () => {
     state.updated = now;
     const oldTime = state.time;
     state.time = new Date(state.time.valueOf() + delta);
-    if (state.time !== oldTime) { m.redraw(); }
+    if (state.time && oldTime && state.time.valueOf() !== oldTime.valueOf()) { m.redraw(); }
   };
   const interval = () => 500 / (state.speed || 1);
   const state = {
@@ -23,7 +24,7 @@ export const DigitalClock = () => {
   return {
     oncreate: () => {
       state.handler = window.setInterval(updateSimTime, interval());
-      SocketService.socket.on('time', () => {
+      SocketService.socket.on(SocketChannels.TIME, () => {
         const oldSpeed = state.speed;
         state.time = new Date(SimulationState.trialTime);
         state.speed = SimulationState.trialTimeSpeed;

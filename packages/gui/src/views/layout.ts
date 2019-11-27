@@ -12,7 +12,7 @@ export const Layout = () => ({
   view: (vnode: Vnode<{ theme: string }>) =>
     m(vnode.attrs.theme, [
       m('a.sidenav-trigger.almost-hidden[href=#][data-target=slide-out]', m('i.material-icons', 'menu')),
-      m('.container[id="main"]', [
+      m('[id="main"]', [
         m(
           'ul[id=slide-out].sidenav',
           { style: 'width: 350px;' },
@@ -25,7 +25,7 @@ export const Layout = () => ({
           ]),
           m('li', m(TimeControl))
         ),
-        m('.row', vnode.children),
+        m('div', vnode.children),
         m(ModalPanel, {
           id: 'stopPanel',
           title: 'Are you certain you want to stop?',

@@ -25,4 +25,6 @@ export const SimulationState = {
    * Current active state
    */
   state: States.Idle,
+  /** Queue with role player messages for the billboard */
+  messageQueue: [],
 } as ITimeMessage;

@@ -10,6 +10,7 @@ export interface ICommandOptions {
   kafkaHost: string;
   schemaRegistryUrl: string;
   autoRegisterSchemas: boolean;
+  billboard?: string;
   help?: boolean;
   version?: boolean;
 }
@@ -76,6 +77,13 @@ export class CommandLineInterface {
       typeLabel: '[Number]',
       description: 'Default time interval between time messages in msec.',
     },
+    {
+      name: 'billboard',
+      alias: 'b',
+      type: String,
+      typeLabel: '[String]',
+      description: 'If set, listen to role player messages addressed to `billboard`.',
+    },
   ];
 
   static sections = [
@@ -101,6 +109,7 @@ export class CommandLineInterface {
       - AUTO_REGISTER_SCHEMAS
       - PORT
       - INTERVAL
+      - BILLBOARD
       `,
     },
       {

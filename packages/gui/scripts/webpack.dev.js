@@ -10,15 +10,4 @@ module.exports = merge(common, {
       chunks: 'all',
     },
   }
-  // devServer: {
-  //   contentBase: '../../server/public/',
-  //   historyApiFallback: true,
-  //   // hot: true,
-  //   inline: true,
-  //   port: 8081,
-  //   progress: true,
-  //   stats: {
-  //     cached: false,
-  //   },
-  // },
 });

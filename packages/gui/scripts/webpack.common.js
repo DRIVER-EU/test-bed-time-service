@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
-const webpack = require('webpack'); //to access built-in plugins
 
 //new webpack.HotModuleReplacementPlugin()
 const title = 'Test-bed time service';
@@ -48,7 +47,6 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   plugins: [
-    new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({ title: title, favicon: './src/assets/favicon.ico' }),
   ],
 };

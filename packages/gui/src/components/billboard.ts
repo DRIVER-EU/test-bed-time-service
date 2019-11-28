@@ -19,7 +19,7 @@ export const Billboard = () => {
               description: '',
             } as IRolePlayerMessage);
       const { headline, description } = msg;
-      const className = description ? '' : 'center';
+      const className = 'center';
       return m('.billboard[id=billboard]', m('.message', { className }, [m('h1', headline), m('div', description)]));
     },
   };

@@ -15,12 +15,11 @@ export const Billboard = () => {
         messageQueue.length > 0
           ? messageQueue[messageQueue.length - 1]
           : ({
-              headline: 'headline',
-              description: 'blsjlas sd s fsdk fsdfk skfh ksdhfjkhsf hsfhjksjklf sdhf sdfk',
+              headline: '',
+              description: '',
             } as IRolePlayerMessage);
       const { headline, description } = msg;
       const className = description ? '' : 'center';
-      console.log(msg);
       return m('.billboard[id=billboard]', m('.message', { className }, [m('h1', headline), m('div', description)]));
     },
   };

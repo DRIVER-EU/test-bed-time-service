@@ -65,6 +65,7 @@ The following properties can be configured. Either via Environment Variables, or
 | `-a` or `--autoRegisterSchemas`      | Automatically register all schemas in the ./schemas folder  | false                         |
 | `-p` or `--port <value>`             | Endpoint port, e.g. http://localhost:PORT/time              | 8100                          |
 | `-i` or `--interval <value>`         | Default time interval between time messages in msec.        | 5000                          |
+| `-b` or `--billboard <PARTICIPANT_NAME>` | Displays role-player messages of type `message` to `billboard` participant | |
 
 ## Usage
 
@@ -109,3 +110,7 @@ While running, the Trial Time Speed may be changed via an Update message contain
 ### Updating Trial Time while Paused
 
 While paused, the Trial Time may be changed via an Update message containing the 'trialTime' property that contains the new time as a UTC timestamp.
+
+### Billboard messages
+
+The time server GUI can also act as a simple billboard for messages that are sent as RolePlayerMessages (of type `message`) to the participant with the same name. So if you have started the service using `-b BILLBOARD`, all role player messages to the `Billboard` (case-insensitive) participant will be displayed in the GUI. This makes it easy to send out messages to all participants that watch the time.

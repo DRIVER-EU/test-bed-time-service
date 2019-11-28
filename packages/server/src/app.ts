@@ -29,7 +29,9 @@ export class App {
       'path': '/time-service/socket.io/'
     });
 
+    console.log('Start-up options');
     console.table(options);
+
     this.timeService = new TimeService(options);
     this.timeService.on(SocketChannels.TIME, (time: ITiming) => {
       // console.log(`Sending time update: ${JSON.stringify(time, null, 2)}`);

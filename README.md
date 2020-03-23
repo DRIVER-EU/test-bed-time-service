@@ -2,7 +2,7 @@
 
 In the test-bed, there will be one or more simulations that, together, create a virtual incident and reasonable responses of the environment. For example, there may be a flooding simulation or earthquake, after which the traffic (simulation) is disturbed too.
 
-UingThe test-bed time service can be controlled via Apache Kafka and via a GUI available at [http://localhost:8100/time-service](http://localhost:8100) (see screenshots below). It listens to state changes of the test-bed, e.g. scenario start and stop messages.
+The test-bed time service can be controlled via Apache Kafka and via a GUI available at [http://localhost:8100/time-service](http://localhost:8100) (see screenshots below). It listens to state changes of the test-bed, e.g. scenario start and stop messages.
 
 In particular, this service will publish the fictive time, the real time, the speed of the simulation and its state at least every 5 seconds, and after a change of the fictive time status (e.g. a speed change, or pause/stop of the simulation). The time message will be described in AVRO, as detailed in the [avro-schemas repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-value.avsc), and contains:
 
@@ -10,7 +10,7 @@ In particular, this service will publish the fictive time, the real time, the sp
 - Fictive time (also as UTC time)
 - Elapsed time (the time that the simulation was in play state, expressed in msec.)
 - Scenario speed
-- Simulation state, e.g. Idle, Started, etc.
+- Simulation state, e.g. Reset, Started, etc.
 
 The service may be combined with an NTP service to get the real time.
 
@@ -75,7 +75,7 @@ The Test-bed Time Service acts as a state machine following the diagram below:
 
 State transitions can be triggered by sending Time Control messages via Kafka. These messages are described in AVRO, as detailed in the [avro-schema-repository](https://github.com/DRIVER-EU/avro-schemas/blob/master/core/time/connect-status-time-control-value.avsc).
 
-### Idle to Initialized
+### Reset to Initialized
 
 Send a TimeControl message of type 'Init'. Optionally provide the 'simulationTime' which will be the fictive starting time. If not provided this will default to the current real-time upon transitioning to the 'Started' state.
 
@@ -99,7 +99,7 @@ Send a TimeControl message of type 'Stop'.
 
 This will stop the periodic transmission of Time Messages by the Time Service.
 
-### Stopped to Idle
+### Stopped to Reset
 
 Send a TimeControl message of type 'Reset'. You may now re-initialize the Time Service for a new run.
 

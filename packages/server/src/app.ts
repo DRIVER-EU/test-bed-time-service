@@ -6,7 +6,7 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as path from 'path';
 import * as socketIO from 'socket.io';
-import { ITimeManagement, TimeState, Command as TimeCommand, IRolePlayerMessage } from 'node-test-bed-adapter';
+import { ITimeManagement, TimeState, TimeCommand, IRolePlayerMessage } from 'node-test-bed-adapter';
 import { SocketChannels } from './models/socket-channels';
 
 /** Main application */

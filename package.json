@@ -10,8 +10,8 @@
     "patch-release": "lerna run --parallel patch-release",
     "minor-release": "lerna run --parallel minor-release",
     "docker:build": "docker build -t test-bed-time-service .",
-    "docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service:v2.0.1",
-    "docker:publish": "docker push drivereu/test-bed-time-service:v2.0.1",
+    "docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service:v2.0.7",
+    "docker:publish": "docker push drivereu/test-bed-time-service:v2.0.7",
     "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish"
   },
   "devDependencies": {

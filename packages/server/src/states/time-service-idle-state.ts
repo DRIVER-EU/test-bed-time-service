@@ -1,4 +1,4 @@
-import { ITimeManagement, ITimeControl, TimeState, Command as TimeCommand } from 'node-test-bed-adapter';
+import { ITimeManagement, ITimeControl, TimeState, TimeCommand } from 'node-test-bed-adapter';
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
 import { Initialized } from './time-service-initialized-state';
 

@@ -18,9 +18,11 @@ RUN npm i && \
 FROM node:alpine
 RUN mkdir -p /app
 COPY --from=builder /src/packages/server/package.json /app/package.json
+COPY --from=builder /src/packages/server/LICENSE /app/LICENSE
 COPY --from=builder /src/packages/server/dist /app/dist
-COPY --from=builder /src/packages/server/node_modules /app/node_modules
 COPY --from=builder /src/packages/server/public /app/public
-COPY --from=builder /src/packages/server/schemas  /app/schemas
+COPY --from=builder /src/packages/server/schemas /app/schemas
+# COPY --from=builder /src/packages/server/node_modules /app/node_modules
 WORKDIR /app
+RUN npm i --only=prod
 CMD ["node", "./dist/index.js"]

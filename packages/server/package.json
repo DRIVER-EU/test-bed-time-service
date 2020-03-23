@@ -6,14 +6,15 @@
   "typings": "./dist/index.d.ts",
   "bin": "./bin/run.js",
   "scripts": {
+    "clean": "rimraf dist",
     "start-tno-testbed": "node ./dist/index.js -- -k driver-testbed.eu:3501 -s driver-testbed.eu:3502",
     "start-local": "node ./dist/index.js -- -k localhost:3501 -s localhost:3502 --autoRegisterSchemas",
     "build": "tsc",
     "watch": "tsc -w",
     "start:tb3": "tsc-watch --onSuccess \"node ./dist/index.js -p 2345 -k tb3.driver-testbed.eu:3531 -s tb3.driver-testbed.eu:3532 \"",
     "start": "tsc-watch --onSuccess \"node ./dist/index.js -p 2345 -k localhost:3501 -s localhost:3502 --billboard billboard \"",
-    "patch-release": "npm version patch && npm publish && git push --follow-tags",
-    "minor-release": "npm version minor && npm publish && git push --follow-tags",
+    "patch-release": "npm run clean && npm run build && npm version patch && npm publish && git push --follow-tags",
+    "minor-release": "npm run clean && npm run build && npm version minor && npm publish && git push --follow-tags",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -40,7 +41,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "http-status-codes": "^1.4.0",
-    "node-test-bed-adapter": "^2.0.3",
+    "node-test-bed-adapter": "^2.0.6",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
@@ -51,6 +52,7 @@
     "@types/node": "^13.9.3",
     "@types/socket.io": "^2.1.4",
     "tsc-watch": "^4.2.3",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "rimraf": "3.0.2"
   }
 }

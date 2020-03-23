@@ -95,6 +95,7 @@ export class CommandLineInterface {
 
       The test-bed time service can be controlled via Apache Kafka. It listens to
       state changes of the test-bed, e.g. scenario start and stop messages.
+
       It publishes three times:
       - Local system time: This is the same time that the NTP server should use.
       - Fictive simulation time: The time that is used in the scenario. Note that
@@ -112,10 +113,10 @@ export class CommandLineInterface {
       - BILLBOARD
       `,
     },
-      {
-        header: 'Options',
-        optionList: CommandLineInterface.optionDefinitions,
-      },
+    {
+      header: 'Options',
+      optionList: CommandLineInterface.optionDefinitions,
+    },
     {
       header: 'Examples',
       content: [

@@ -8,8 +8,8 @@ import {
   ProduceRequest,
   IAdapterMessage,
   TimeState,
-  ITiming,
-  ITimingControl,
+  ITimeControl,
+  ITimeManagement,
   IRolePlayerMessage,
   TimeTopic,
   TimeControlTopic,
@@ -22,7 +22,7 @@ import { SocketChannels } from './models/socket-channels';
 
 export interface TimeService {
   on(event: SocketChannels.STATE_UPDATED, listener: (state: TimeState) => void): this;
-  on(event: SocketChannels.TIME, listener: (time: ITiming) => void): this;
+  on(event: SocketChannels.TIME, listener: (time: ITimeManagement) => void): this;
   on(event: SocketChannels.BILLBOARD, listener: (msg: IRolePlayerMessage) => void): this;
 }
 
@@ -51,22 +51,23 @@ export class TimeService extends EventEmitter implements TimeService {
 
   constructor(options: ICommandOptions) {
     super();
-    const { interval, billboard, kafkaHost, schemaRegistryUrl, autoRegisterSchemas } = options;
+    const { interval, billboard, kafkaHost, schemaRegistryUrl: schemaRegistry, autoRegisterSchemas } = options;
     this.billboard = billboard ? billboard.toLowerCase() : undefined;
     this.interval = interval;
     this._trialTimeSpeed = 0;
     this._state = new Idle(this);
 
-    const consume = billboard
-      ? [{ topic: TimeControlTopic }, { topic: TrialManagementRolePlayerTopic }]
-      : [{ topic: TimeControlTopic }];
+    const consume = [{ topic: TimeControlTopic }];
+    if (billboard) {
+      consume.push({ topic: TrialManagementRolePlayerTopic });
+    }
 
     this.adapter = new TestBedAdapter({
-      kafkaHost: kafkaHost,
-      schemaRegistry: schemaRegistryUrl,
+      kafkaHost,
+      schemaRegistry,
       fetchAllSchemas: false,
       clientId: 'TB-TimeService',
-      autoRegisterSchemas: autoRegisterSchemas,
+      autoRegisterSchemas,
       schemaFolder: 'schemas',
       autoRegisterDefaultSchemas: false,
       consume,
@@ -88,7 +89,7 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   /** Allow external services to control transitions. */
-  public transition(msg: ITimingControl) {
+  public transition(msg: ITimeControl) {
     this._state = this._state.transition(msg);
     this.sendTimeUpdate(); // force update with new state info ASAP
     this.emit(SocketChannels.STATE_UPDATED, this._state.name);
@@ -106,7 +107,7 @@ export class TimeService extends EventEmitter implements TimeService {
     switch (message.topic) {
       case TimeControlTopic:
         this.log.info(`${TimeControlTopic} message:\n` + JSON.stringify(message, null, 2));
-        const controlMsg = message.value as ITimingControl;
+        const controlMsg = message.value as ITimeControl;
         this.transition(controlMsg);
         break;
       case TrialManagementRolePlayerTopic:
@@ -132,21 +133,21 @@ export class TimeService extends EventEmitter implements TimeService {
     return this._state;
   }
 
-  get trialTime() {
+  get simulationTime() {
     return this._trialTime;
   }
 
-  set trialTime(val) {
+  set simulationTime(val) {
     // keep track of last time trial time was updated to allow correct computation of trial time based on speed
     this._lastTrialTimeUpdate = Date.now();
     this._trialTime = val;
   }
 
-  get trialTimeSpeed() {
+  get simulationSpeed() {
     return this._trialTimeSpeed;
   }
 
-  set trialTimeSpeed(val) {
+  set simulationSpeed(val) {
     this._trialTimeSpeed = val;
   }
 
@@ -159,23 +160,23 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   /**
-   * Computes the new Trial Time using the amount of time that has passed since the previous computation of TrialTime
-   * and the TrialTimeSpeed. Updates the Trial Time accordingly.
+   * Computes the new Trial Time using the amount of time that has passed since the previous computation of simulationTime
+   * and the simulationSpeed. Updates the Trial Time accordingly.
    */
   public progressTrialTime() {
     const now = Date.now();
     const passed = now - this.lastUpdateTime!;
-    const newTrialTime = Math.round(this.trialTime! + passed * this.trialTimeSpeed!);
-    this.trialTime = newTrialTime;
+    const newTrialTime = Math.round(this.simulationTime! + passed * this.simulationSpeed!);
+    this.simulationTime = newTrialTime;
     this._lastTrialTimeUpdate = now;
     return newTrialTime;
   }
 
   public startScenario() {
     this._realStartTime = Date.now();
-    if (this.trialTime === null) {
+    if (this.simulationTime === null) {
       this.log.warn('No trial time provided upon scenario start. Defaulting Trial Time to current Real-time');
-      this.trialTime = this.realStartTime;
+      this.simulationTime = this.realStartTime;
     }
     this._lastTrialTimeUpdate = this.realStartTime;
     this.startProducingTimeMessages();
@@ -189,7 +190,7 @@ export class TimeService extends EventEmitter implements TimeService {
     this.sendTimeMessage(this.state.createTimeMessage());
   }
 
-  public sendTimeMessage(timeMsg: ITiming) {
+  public sendTimeMessage(timeMsg: ITimeManagement) {
     this.emit(SocketChannels.TIME, timeMsg);
 
     const payload = {

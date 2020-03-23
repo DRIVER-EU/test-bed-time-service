@@ -1,4 +1,4 @@
-import { ITiming, ITimingControl, TimeState, TimeCommand } from 'node-test-bed-adapter';
+import { ITimeManagement, ITimeControl, TimeState, Command as TimeCommand } from 'node-test-bed-adapter';
 import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
 import { Stopped } from './time-service-stopped-state';
 import { Started } from './time-service-started-state';
@@ -8,54 +8,57 @@ export class Paused extends TimeServiceBaseState {
     return TimeState.Paused;
   }
 
-  public transition(controlMsg: ITimingControl): TimeServiceState {
+  public transition(controlMsg: ITimeControl): TimeServiceState {
     switch (controlMsg.command) {
       case TimeCommand.Start: {
         this.timeService.progressTrialTime(); // progress time using old speed (zero)
-        if (controlMsg.trialTimeSpeed == null) {
-          this.log.warn('No Trial Time Speed provided when resuming the Time Service. Defaulting to 1.0');
-          this.timeService.trialTimeSpeed = 1.0;
+        if (controlMsg.simulationSpeed == null) {
+          this.log.info('No Trial Time Speed provided when resuming the Time Service. Defaulting to 1.0');
+          this.timeService.simulationSpeed = 1.0;
         } else {
-          this.timeService.trialTimeSpeed = controlMsg.trialTimeSpeed;
+          this.timeService.simulationSpeed = controlMsg.simulationSpeed;
         }
-        this.log.info('Received command ' + controlMsg.command + '. Transitioning to Started.');
-        return new Started(this.timeService);
+        const newState = new Started(this.timeService);
+        this.log.info(`Received command ${controlMsg.command}. Transitioning to $${newState.name}.`);
+        return newState;
       }
       case TimeCommand.Stop: {
         this.timeService.progressTrialTime(); // progress time using old speed (zero)
         this.timeService.stopScenario(); // stop sending periodic messages
-        this.log.info('Received command ' + controlMsg.command + '. Transitioning to Stopped.');
-        return new Stopped(this.timeService);
+        const newState = new Stopped(this.timeService);
+        this.log.info(`Received command ${controlMsg.command}. Transitioning to $${newState.name}.`);
+        return newState;
       }
       case TimeCommand.Update: {
-        if (controlMsg.trialTimeSpeed != null) {
-          this.log.info('Received command ' + controlMsg.command + ', but cannot update trial time speed when in paused state.');
+        if (controlMsg.simulationSpeed != null) {
+          this.log.info(
+            'Received command ' + controlMsg.command + ', but cannot update trial time speed when in paused state.'
+          );
         }
-        if (controlMsg.trialTime != null) {
-          this.timeService.trialTime = controlMsg.trialTime;
+        if (controlMsg.simulationTime != null) {
+          this.timeService.simulationTime = controlMsg.simulationTime;
         }
         return this;
       }
       default: {
-        this.log.warn('Received command ' + controlMsg.command + ' while in Paused state. Doing nothing!');
+        this.log.warn(`Received command ${controlMsg.command} while in ${this.name} state. Doing nothing!`);
         return this;
       }
     }
   }
 
-  createTimeMessage(): ITiming {
-    const newUpdateTime = Date.now();
-    const timeElapsed = newUpdateTime - this.timeService.realStartTime!;
-    // unlike when started, don't progress the trialtime before sending an update
-    const trialTime = this.timeService.trialTime;
-    const trialTimeSpeed = this.timeService.trialTimeSpeed;
-    const timeMsg = {
-      updatedAt: newUpdateTime,
-      trialTime: trialTime,
-      timeElapsed: timeElapsed,
-      trialTimeSpeed: trialTimeSpeed,
-      state: TimeState.Paused
-    } as ITiming;
-    return timeMsg;
+  createTimeMessage() {
+    const updatedAt = Date.now();
+    const timeElapsed = (updatedAt - this.timeService.realStartTime!).toString();
+    // unlike when started, don't progress the simulationTime before sending an update
+    const simulationTime = this.timeService.simulationTime;
+    const simulationSpeed = this.timeService.simulationSpeed;
+    return {
+      updatedAt,
+      simulationTime,
+      simulationSpeed,
+      state: TimeState.Paused,
+      tags: { timeElapsed },
+    } as ITimeManagement;
   }
 }

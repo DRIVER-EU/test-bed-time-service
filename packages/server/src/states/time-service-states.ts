@@ -1,10 +1,10 @@
-import { Logger, ITiming, ITimingControl, TimeState } from 'node-test-bed-adapter';
+import { Logger, ITimeManagement, ITimeControl, TimeState } from 'node-test-bed-adapter';
 import { TimeService } from './../time-service';
 
 export interface TimeServiceState {
   name: TimeState;
-  createTimeMessage(): ITiming;
-  transition(controlMsg: ITimingControl): TimeServiceState;
+  createTimeMessage(): ITimeManagement;
+  transition(controlMsg: ITimeControl): TimeServiceState;
 }
 
 export abstract class TimeServiceBaseState implements TimeServiceState {
@@ -16,14 +16,14 @@ export abstract class TimeServiceBaseState implements TimeServiceState {
   }
 
   public get name() {
-    return TimeState.Idle;
+    return TimeState.Reset;
   }
 
-  public createTimeMessage(): ITiming {
+  public createTimeMessage(): ITimeManagement {
     throw new Error('Method createTimeMessage not implemented by concrete TimeServiceState.');
   }
 
-  public transition(_controlMsg: ITimingControl): TimeServiceState {
+  public transition(_controlMsg: ITimeControl): TimeServiceState {
     throw new Error('Method transition not implemented by concrete TimeServiceState.');
   }
 }

@@ -57,17 +57,17 @@ body {
 }
 
 #billboard {
-  margin-top: -2rem;
   position: relative;
   font-size: 4rem;
   width: 100vw;
   height: 100vh;
 }
 #billboard .message {
+  font-size: 3rem;
   position: absolute;
   display: inline-block;
   bottom: 0rem;
-  margin: 0 2rem;
+  margin: -3rem 0 5rem 0;
 }
 .center {
   width: 100%;

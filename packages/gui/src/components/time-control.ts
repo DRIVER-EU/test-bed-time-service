@@ -13,20 +13,20 @@ const Controls = () => {
       return [
         m(FlatButton, {
           iconName: 'fast_rewind',
-          onclick: () => socket.emit('update', SimulationState.trialTimeSpeed / 2),
+          onclick: () => socket.emit('update', SimulationState.simulationSpeed / 2),
           disabled: !canChangeSpeed,
         }),
         m(FlatButton, {
           modalId: 'stopPanel',
           iconName: 'stop',
-          disabled: SimulationState.state === States.Initialized,
+          disabled: SimulationState.state === States.Initialization,
         }),
         isPaused
           ? m(FlatButton, { iconName: 'play_arrow', onclick: () => socket.emit('start') })
           : m(FlatButton, { iconName: 'pause', onclick: () => socket.emit('pause') }),
         m(FlatButton, {
           iconName: 'fast_forward',
-          onclick: () => socket.emit('update', SimulationState.trialTimeSpeed * 2),
+          onclick: () => socket.emit('update', SimulationState.simulationSpeed * 2),
           disabled: !canChangeSpeed,
         }),
       ];
@@ -50,7 +50,7 @@ export const TimeControl = () => {
   };
 
   const timeHasNotChanged = () => {
-    const d = new Date(SimulationState.trialTime);
+    const d = new Date(SimulationState.simulationTime);
     return (
       startTime === formatTime(d, false) &&
       startDate.getFullYear() === d.getFullYear() &&
@@ -70,7 +70,7 @@ export const TimeControl = () => {
     view: () => {
       const controls = () => {
         switch (SimulationState.state) {
-          case States.Idle:
+          case States.Reset:
             return m('.row.left', [
               m(FlatButton, {
                 label: 'Initialise time',
@@ -96,7 +96,7 @@ export const TimeControl = () => {
                 }),
               ]),
             ]);
-          case States.Initialized:
+          case States.Initialization:
             return m('.row', [
               m(Controls, { socket, isPaused: true, canChangeSpeed: false }),
               m(FlatButton, {
@@ -136,8 +136,8 @@ export const TimeControl = () => {
             return m('.row', [
               m(Controls, { socket, isPaused: false, canChangeSpeed: true }),
               m('.row', [
-                m('em', 'Trial Time Speed Factor: ' + SimulationState.trialTimeSpeed),
-                SimulationState.trialTimeSpeed !== 1
+                m('em', 'Trial Time Speed Factor: ' + SimulationState.simulationSpeed),
+                SimulationState.simulationSpeed !== 1
                   ? m(FlatButton, { iconName: 'restore', onclick: () => socket.emit('update', 1) })
                   : undefined,
               ]),

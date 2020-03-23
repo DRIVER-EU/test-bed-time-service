@@ -15,7 +15,7 @@ const setupSocket = () => {
   }
 
   socket = io({
-    path: '/time-service/socket.io/',
+    path: '/socket.io/',
   });
   socket.on('connect', () => log('Connected'));
   socket.on('event', (data: any) => {
@@ -29,16 +29,16 @@ const setupSocket = () => {
   });
   let handler = -1;
   socket.on(SocketChannels.TIME, (time: ITimeMessage) => {
-    // log(`Time message received: ${time.trialTime}`);
-    SimulationState.trialTime = time.trialTime || new Date().setHours(12, 0, 0).valueOf();
-    SimulationState.trialTimeSpeed = time.trialTimeSpeed;
+    // log(`Time message received: ${time.simulationTime}`);
+    SimulationState.simulationTime = time.simulationTime || new Date().setHours(12, 0, 0).valueOf();
+    SimulationState.simulationSpeed = time.simulationSpeed;
     SimulationState.timeElapsed = time.timeElapsed;
     window.clearInterval(handler);
-    if (time.trialTimeSpeed > 0) {
+    if (time.simulationSpeed > 0) {
       const secDuration = 1000;
       handler = window.setInterval(() => {
-        SimulationState.trialTime += secDuration;
-      }, secDuration / time.trialTimeSpeed);
+        SimulationState.simulationTime += secDuration;
+      }, secDuration / time.simulationSpeed);
     }
   });
   socket.on(SocketChannels.BILLBOARD, (msg: IRolePlayerMessage) => {

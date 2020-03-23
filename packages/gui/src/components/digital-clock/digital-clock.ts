@@ -12,7 +12,9 @@ export const DigitalClock = () => {
     state.updated = now;
     const oldTime = state.time;
     state.time = new Date(state.time.valueOf() + delta);
-    if (state.time && oldTime && state.time.valueOf() !== oldTime.valueOf()) { m.redraw(); }
+    if (state.time && oldTime && state.time.valueOf() !== oldTime.valueOf()) {
+      m.redraw();
+    }
   };
   const interval = () => 500 / (state.speed || 1);
   const state = {
@@ -21,14 +23,17 @@ export const DigitalClock = () => {
     speed: 1,
     handler: -1,
   };
+
   return {
     oncreate: () => {
       state.handler = window.setInterval(updateSimTime, interval());
       SocketService.socket.on(SocketChannels.TIME, () => {
         const oldSpeed = state.speed;
-        state.time = new Date(SimulationState.trialTime);
-        state.speed = SimulationState.trialTimeSpeed;
-        if (state.speed === oldSpeed) { return; }
+        state.time = new Date(SimulationState.simulationTime);
+        state.speed = SimulationState.simulationSpeed;
+        if (state.speed === oldSpeed) {
+          return;
+        }
         clearInterval(state.handler);
         state.handler = window.setInterval(updateSimTime, interval());
       });

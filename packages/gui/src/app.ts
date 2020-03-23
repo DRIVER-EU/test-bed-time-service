@@ -11,7 +11,7 @@ import { Calendar } from './components/calendar/calendar';
 import { Billboard } from './components/billboard';
 
 const waitForSocketIO = () =>
-  new Promise((resolve) => {
+  new Promise(resolve => {
     // let iterations = 0;
     const handler = window.setInterval(() => {
       // iterations++;
@@ -33,7 +33,4 @@ const routingTable: RouteDefs = {
   },
 };
 
-// waitForMaterialize()
-  // .then(() => waitForSocketIO())
-// m.route.prefix("/time-service")
 waitForSocketIO().then(() => m.route(document.body, '/', routingTable));

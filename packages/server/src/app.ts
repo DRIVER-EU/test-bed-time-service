@@ -6,7 +6,7 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as path from 'path';
 import * as socketIO from 'socket.io';
-import { ITiming, TimeState, TimeCommand, IRolePlayerMessage } from 'node-test-bed-adapter';
+import { ITimeManagement, TimeState, Command as TimeCommand, IRolePlayerMessage } from 'node-test-bed-adapter';
 import { SocketChannels } from './models/socket-channels';
 
 /** Main application */
@@ -23,17 +23,17 @@ export class App {
     this.app = express();
     this.app.use(cors());
     const pwd = path.join(process.cwd(), 'public');
-    this.app.use('/time-service/', express.static(pwd));
+    this.app.use('/', express.static(pwd));
     this.server = createServer(this.app);
     this.io = socketIO(this.server, {
-      'path': '/time-service/socket.io/'
+      path: '/socket.io/',
     });
 
     console.log('Start-up options');
     console.table(options);
 
     this.timeService = new TimeService(options);
-    this.timeService.on(SocketChannels.TIME, (time: ITiming) => {
+    this.timeService.on(SocketChannels.TIME, (time: ITimeManagement) => {
       // console.log(`Sending time update: ${JSON.stringify(time, null, 2)}`);
       this.io.emit(SocketChannels.TIME, time);
     });
@@ -58,22 +58,22 @@ export class App {
       socket.emit(SocketChannels.STATE_UPDATED, this.timeService.state.name);
       socket.emit(SocketChannels.TIME, this.timeService.state.createTimeMessage());
       // this.timeService.sendTimeUpdate();
-      socket.on('message', (m: ITiming) => {
+      socket.on('message', (m: ITimeManagement) => {
         console.log('[server](message): %s', JSON.stringify(m));
         this.io.emit('message', m);
       });
 
-      socket.on('init', (trialTime?: number) => {
+      socket.on('init', (simulationTime?: number) => {
         console.log('[server](message): init request received.');
         this.timeService.transition({
-          trialTime,
+          simulationTime,
           command: TimeCommand.Init,
         });
       });
-      socket.on('start', (trialTimeSpeed: number) => {
-        console.log(`[server](message): start request received (speed = ${trialTimeSpeed}).`);
+      socket.on('start', (simulationSpeed: number) => {
+        console.log(`[server](message): start request received (speed = ${simulationSpeed}).`);
         this.timeService.transition({
-          trialTimeSpeed,
+          simulationSpeed,
           command: TimeCommand.Start,
         });
       });
@@ -89,11 +89,11 @@ export class App {
           command: TimeCommand.Stop,
         });
       });
-      socket.on('update', (trialTimeSpeed?: number, trialTime?: number) => {
+      socket.on('update', (simulationSpeed?: number, simulationTime?: number) => {
         console.log('[server](message): update request received.');
         this.timeService.transition({
-          trialTimeSpeed,
-          trialTime,
+          simulationSpeed,
+          simulationTime,
           command: TimeCommand.Update,
         });
       });

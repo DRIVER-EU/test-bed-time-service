@@ -1,6 +1,6 @@
 import { TimeControl } from '../components/time-control';
 import { ModalPanel } from 'mithril-materialized';
-import m, { Vnode } from 'mithril';
+import m, { Vnode, FactoryComponent } from 'mithril';
 import logoUri from '../assets/logo/non-transparent-logo.png';
 import backgroundUri from '../assets/background-clock.png';
 import M from 'materialize-css';
@@ -8,13 +8,13 @@ import { SocketService } from '../services/socket-service';
 
 const driverLink = 'a[href=http://www.driver-project.eu][target=_blank]';
 
-export const Layout = () => ({
+export const Layout: FactoryComponent<{ theme: string }> = () => ({
   view: (vnode: Vnode<{ theme: string }>) =>
     m(vnode.attrs.theme, [
-      m('a.sidenav-trigger.almost-hidden[href=#][data-target=slide-out]', m('i.material-icons', 'menu')),
-      m('[id="main"]', [
+      m('a.sidenav-trigger.almost-hidden[href=/][data-target=slide-out]', m('i.material-icons', 'menu')),
+      m('#main', [
         m(
-          'ul[id=slide-out].sidenav',
+          'ul#slide-out.sidenav',
           { style: 'width: 350px;' },
           m('li', [
             m('.user-view', [

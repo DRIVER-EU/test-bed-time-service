@@ -1,15 +1,15 @@
 @startuml
 [*] --> Idle
-Idle -down-> Initialized : Init(trialTime?)
-Initialized -down-> Running : Start(trialTimeSpeed?)
+Idle -down-> Initialized : Init(simulationTime?)
+Initialized -down-> Running : Start(simulationSpeed?)
 Initialized -up-> Idle : Reset
 
 state Running {
     [*] --> Started
     Started --> Paused : Pause
-    Paused --> Started : Start(trialTimeSpeed?)
-    Started --> Started : Update(trialTimeSpeed?)
-    Paused --> Paused : Update(trialTime?)
+    Paused --> Started : Start(simulationSpeed?)
+    Started --> Started : Update(simulationSpeed?)
+    Paused --> Paused : Update(simulationTime?)
 }
 
 note right of Running : While running, periodic Time Messages are sent

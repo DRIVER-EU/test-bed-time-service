@@ -1,9 +1,8 @@
 import m from 'mithril';
 import './digital-clock.css';
-import { SimulationState } from '../../models/sim-state';
+import { SimulationState, SocketChannels } from '../../models';
 import { SocketService } from '../../services/socket-service';
 import { formatTime } from '../../utils';
-import { SocketChannels } from '../../models/socket-channels';
 
 export const DigitalClock = () => {
   const updateSimTime = () => {

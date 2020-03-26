@@ -1,8 +1,6 @@
 import m from 'mithril';
-import { SimulationState } from '../models/sim-state';
+import { IRolePlayerMessage, SimulationState, SocketChannels } from '../models';
 import { SocketService } from '../services/socket-service';
-import { SocketChannels } from '../models/socket-channels';
-import { IRolePlayerMessage } from '../models/role-player-message';
 
 export const Billboard = () => {
   return {

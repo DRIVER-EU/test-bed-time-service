@@ -1,9 +1,5 @@
 import io from 'socket.io-client';
-import { ITimeMessage } from '../models/time-message';
-import { SimulationState } from '../models/sim-state';
-import { States } from '../models/states';
-import { SocketChannels } from '../models/socket-channels';
-import { IRolePlayerMessage } from '../models/role-player-message';
+import { IRolePlayerMessage, ITimeMessage, TimeState, SimulationState, SocketChannels } from '../models';
 
 // tslint:disable-next-line:no-console
 const log = console.log;
@@ -24,15 +20,17 @@ const setupSocket = () => {
     }
   });
   socket.on('disconnect', () => log('Disconnected'));
-  socket.on(SocketChannels.STATE_UPDATED, (state: States) => {
+  socket.on(SocketChannels.STATE_UPDATED, (state: TimeState) => {
     SimulationState.state = state;
   });
   let handler = -1;
   socket.on(SocketChannels.TIME, (time: ITimeMessage) => {
-    // log(`Time message received: ${time.simulationTime}`);
+    log(`Time message received: ${JSON.stringify(time, null, 2)}`);
     SimulationState.simulationTime = time.simulationTime || new Date().setHours(12, 0, 0).valueOf();
     SimulationState.simulationSpeed = time.simulationSpeed;
-    SimulationState.timeElapsed = time.timeElapsed;
+    if (time.tags && time.tags.timeElapsed) {
+      SimulationState.tags!.timeElapsed = time.tags.timeElapsed;
+    }
     window.clearInterval(handler);
     if (time.simulationSpeed > 0) {
       const secDuration = 1000;

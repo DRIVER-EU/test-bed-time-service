@@ -48,13 +48,13 @@ export class Paused extends TimeServiceBaseState {
   }
 
   createTimeMessage() {
-    const updatedAt = Date.now();
-    const timeElapsed = (updatedAt - this.timeService.realStartTime!).toString();
+    const timestamp = Date.now();
+    const timeElapsed = (timestamp - this.timeService.realStartTime!).toString();
     // unlike when started, don't progress the simulationTime before sending an update
     const simulationTime = this.timeService.simulationTime;
     const simulationSpeed = this.timeService.simulationSpeed;
     return {
-      updatedAt,
+      timestamp,
       simulationTime,
       simulationSpeed,
       state: TimeState.Paused,

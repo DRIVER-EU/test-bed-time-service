@@ -37,7 +37,7 @@ export class TimeService extends EventEmitter implements TimeService {
   /** Real-time when the scenario is started */
   private _realStartTime?: number;
   /** Real-time of last update */
-  private _lastTrialTimeUpdate?: number;
+  private _lastUpdateTime?: number;
   /**  The fictive date and time of the simulation / trial as the number of milliseconds
    * from the UNIX epoch, 1 January 1970 00:00:00.000 UTC. */
   private _trialTime?: number;
@@ -139,7 +139,7 @@ export class TimeService extends EventEmitter implements TimeService {
 
   set simulationTime(val) {
     // keep track of last time trial time was updated to allow correct computation of trial time based on speed
-    this._lastTrialTimeUpdate = Date.now();
+    this._lastUpdateTime = Date.now();
     this._trialTime = val;
   }
 
@@ -152,10 +152,13 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   get lastUpdateTime() {
-    return this._lastTrialTimeUpdate;
+    return this._lastUpdateTime;
   }
 
   get realStartTime() {
+    if (!this._realStartTime) {
+      this._realStartTime = Date.now();
+    }
     return this._realStartTime;
   }
 
@@ -168,17 +171,18 @@ export class TimeService extends EventEmitter implements TimeService {
     const passed = now - this.lastUpdateTime!;
     const newTrialTime = Math.round(this.simulationTime! + passed * this.simulationSpeed!);
     this.simulationTime = newTrialTime;
-    this._lastTrialTimeUpdate = now;
+    this._lastUpdateTime = now;
     return newTrialTime;
   }
 
   public startScenario() {
+    this.log.info('Starting scenario');
     this._realStartTime = Date.now();
     if (this.simulationTime === null) {
-      this.log.warn('No trial time provided upon scenario start. Defaulting Trial Time to current Real-time');
+      this.log.info('No simulation time provided upon scenario start. Defaulting to current time.');
       this.simulationTime = this.realStartTime;
     }
-    this._lastTrialTimeUpdate = this.realStartTime;
+    this._lastUpdateTime = this.realStartTime;
     this.startProducingTimeMessages();
   }
 

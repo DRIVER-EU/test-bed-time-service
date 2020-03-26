@@ -19,6 +19,7 @@ export class Initialized extends TimeServiceBaseState {
         }
         const newState = new Started(this.timeService);
         this.log.info(`Received command ${controlMsg.command}. Transitioning to $${newState.name}.`);
+        this.timeService.startScenario();
         return newState;
       }
       case TimeCommand.Reset: {
@@ -35,7 +36,7 @@ export class Initialized extends TimeServiceBaseState {
 
   createTimeMessage() {
     return {
-      updatedAt: Date.now(),
+      timestamp: Date.now(),
       simulationTime: this.timeService.simulationTime,
       simulationSpeed: this.timeService.simulationSpeed,
       state: TimeState.Initialization,

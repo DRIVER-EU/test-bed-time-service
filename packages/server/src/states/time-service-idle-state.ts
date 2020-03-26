@@ -15,7 +15,7 @@ export class Idle extends TimeServiceBaseState {
           this.timeService.simulationTime = new Date().getTime();
         } else {
           this.timeService.simulationTime = controlMsg.simulationTime!;
-          this.log.info('Initialized Trial Time to UTC: ' + new Date(controlMsg.simulationTime).toUTCString());
+          this.log.info('Initialized simulation time to UTC: ' + new Date(controlMsg.simulationTime).toUTCString());
         }
         const newState = new Initialized(this.timeService);
         this.log.info(`Received command ${controlMsg.command}. Transitioning to $${newState.name}.`);
@@ -30,7 +30,7 @@ export class Idle extends TimeServiceBaseState {
 
   createTimeMessage() {
     return {
-      updatedAt: Date.now(),
+      timestamp: Date.now(),
       simulationTime: 0,
       simulationSpeed: 0,
       state: TimeState.Reset,

@@ -1,5 +1,5 @@
 import m, { FactoryComponent } from 'mithril';
-import { SimulationState } from '../models/sim-state';
+import { SimulationState } from '../models';
 import { d3clock, sbb } from 'd3-clock';
 import { SocketService } from '../services/socket-service';
 import { SocketChannels } from '../models/socket-channels';

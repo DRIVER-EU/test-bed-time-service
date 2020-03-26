@@ -1,10 +1,8 @@
 import m, { Component } from 'mithril';
-import { SimulationState } from '../models/sim-state';
-import { States } from '../models/states';
 import { SocketService } from '../services/socket-service';
-import { TimePicker, DatePicker, FlatButton, ModalPanel } from 'mithril-materialized';
+import { TimePicker, DatePicker, FlatButton } from 'mithril-materialized';
 import { padLeft, formatTime } from '../utils';
-import { SocketChannels } from '../models/socket-channels';
+import { SimulationState, SocketChannels, TimeState } from '../models';
 
 const Controls = () => {
   return {
@@ -19,7 +17,7 @@ const Controls = () => {
         m(FlatButton, {
           modalId: 'stopPanel',
           iconName: 'stop',
-          disabled: SimulationState.state === States.Initialization,
+          disabled: SimulationState.state === TimeState.Initialization,
         }),
         isPaused
           ? m(FlatButton, { iconName: 'play_arrow', onclick: () => socket.emit('start') })
@@ -70,7 +68,7 @@ export const TimeControl = () => {
     view: () => {
       const controls = () => {
         switch (SimulationState.state) {
-          case States.Reset:
+          case TimeState.Reset:
             return m('.row.left', [
               m(FlatButton, {
                 label: 'Initialise time',
@@ -96,7 +94,7 @@ export const TimeControl = () => {
                 }),
               ]),
             ]);
-          case States.Initialization:
+          case TimeState.Initialization:
             return m('.row', [
               m(Controls, { socket, isPaused: true, canChangeSpeed: false }),
               m(FlatButton, {
@@ -105,7 +103,7 @@ export const TimeControl = () => {
                 onclick: () => socket.emit('reset'),
               }),
             ]);
-          case States.Paused:
+          case TimeState.Paused:
             return m('.row', [
               m(Controls, { socket, isPaused: true, canChangeSpeed: false }),
               m('.row.left', [
@@ -132,7 +130,7 @@ export const TimeControl = () => {
                 }),
               ]),
             ]);
-          case States.Started:
+          case TimeState.Started:
             return m('.row', [
               m(Controls, { socket, isPaused: false, canChangeSpeed: true }),
               m('.row', [
@@ -142,7 +140,7 @@ export const TimeControl = () => {
                   : undefined,
               ]),
             ]);
-          case States.Stopped:
+          case TimeState.Stopped:
             return m(
               '.row',
               m(FlatButton, { label: 'Reset time', iconName: 'timer_off', onclick: () => socket.emit('reset') })

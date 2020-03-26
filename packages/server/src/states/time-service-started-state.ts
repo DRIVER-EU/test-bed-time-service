@@ -43,11 +43,11 @@ export class Started extends TimeServiceBaseState {
   }
 
   createTimeMessage() {
-    const updatedAt = Date.now();
-    const timeElapsed = (updatedAt - this.timeService.realStartTime!).toString();
+    const timestamp = Date.now();
+    const timeElapsed = (timestamp - this.timeService.realStartTime!).toString();
     const simulationTime = this.timeService.progressTrialTime();
     return {
-      updatedAt,
+      timestamp,
       simulationTime,
       simulationSpeed: this.timeService.simulationSpeed,
       state: TimeState.Started,

@@ -29,7 +29,7 @@
     "@types/materialize-css": "^1.0.7",
     "@types/mithril": "^2.0.2",
     "@types/socket.io-client": "^1.4.32",
-    "autoprefixer": "^9.7.4",
+    "autoprefixer": "^9.7.5",
     "css-loader": "^3.4.2",
     "cssnano": "^4.1.10",
     "file-loader": "^6.0.0",
@@ -43,7 +43,7 @@
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
     "url-loader": "^4.0.0",
-    "webpack": "^4.42.0",
+    "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"

@@ -1,6 +1,4 @@
-language: node_js
-node_js:
-- '12'
+language: minimal
 sudo: required
 services:
 - docker

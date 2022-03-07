@@ -15,6 +15,12 @@ module.exports = {
     path: path.resolve(__dirname, '../../server/public'),
     // publicPath: 'time-service'
   },
+  externals: [
+      {
+        'utf-8-validate': 'commonjs utf-8-validate',
+        bufferutil: 'commonjs bufferutil',
+      },
+    ],
   module: {
     rules: [
       {
@@ -22,19 +28,33 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+	  {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+	  /*
       {
-        test: /\.css$/,
+        test: /\.css$/i,
         use: [
-          'style-loader',
+          "style-loader",
+          "css-loader",
           {
-            loader: 'css-loader',
+            loader: "postcss-loader",
             options: {
-              importLoaders: 1, // 0 => no loaders (default); 1 => postcss-loader; 2 => postcss-loader, sass-loader
+              postcssOptions: {
+                plugins: [
+                  [
+                    "postcss-preset-env",
+                    {
+                      // Options
+                    },
+                  ],
+                ],
+              },
             },
           },
-          'postcss-loader',
         ],
-      },
+      },*/
       {
         test: /\.(gif|png|jpe?g|svg|ico|eot|woff|ttf|svg|woff2)$/i,
         use: [

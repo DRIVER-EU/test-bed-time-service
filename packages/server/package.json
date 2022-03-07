@@ -12,7 +12,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "start:tb3": "tsc-watch --onSuccess \"node ./dist/index.js -p 2345 -k tb3.driver-testbed.eu:3531 -s tb3.driver-testbed.eu:3532 \"",
-    "start": "tsc-watch --onSuccess \"node ./dist/index.js -p 2345 -k localhost:3501 -s localhost:3502 --billboard billboard \"",
+    "start": "tsc-watch --onSuccess \"node ./dist/index.js -p 2347 -k localhost:3501 -s localhost:3502 --billboard billboard \"",
     "patch-release": "npm run clean && npm run build && npm version patch && npm publish && git push --follow-tags",
     "minor-release": "npm run clean && npm run build && npm version minor && npm publish && git push --follow-tags",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -36,23 +36,22 @@
   },
   "homepage": "https://github.com/DRIVER-EU/test-bed-time-service#readme",
   "dependencies": {
-    "command-line-args": "^5.1.1",
-    "command-line-usage": "^6.1.0",
+    "@types/express": "^4.17.13",
+    "command-line-args": "^5.2.1",
+    "command-line-usage": "^6.1.1",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "http-status-codes": "^1.4.0",
-    "node-test-bed-adapter": "^2.0.8",
-    "socket.io": "^2.3.0"
+    "express": "^4.17.3",
+    "http-status-codes": "^2.2.0",
+    "node-test-bed-adapter": "^2.2.3",
+    "socket.io": "^4.4.1"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.30",
-    "@types/command-line-args": "^5.0.0",
-    "@types/cors": "^2.8.6",
-    "@types/express": "^4.17.3",
-    "@types/node": "^13.9.4",
-    "@types/socket.io": "^2.1.4",
+    "@types/bluebird": "^3.5.36",
+    "@types/command-line-args": "^5.2.0",
+    "@types/cors": "^2.8.12",
+    "@types/node": "^17.0.21",
     "rimraf": "3.0.2",
-    "tsc-watch": "^4.2.3",
-    "typescript": "^3.8.3"
+    "tsc-watch": "^4.6.0",
+    "typescript": "^4.6.2"
   }
 }

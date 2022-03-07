@@ -30,7 +30,7 @@ const Controls = () => {
       ];
     },
   } as Component<{
-    socket: SocketIOClient.Socket;
+    socket: any;
     canChangeSpeed: boolean;
     isPaused: boolean;
   }>;

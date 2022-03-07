@@ -2,8 +2,9 @@ import io from 'socket.io-client';
 import { IRolePlayerMessage, ITimeMessage, TimeState, SimulationState, SocketChannels } from '../models';
 
 // tslint:disable-next-line:no-console
+
 const log = console.log;
-let socket: SocketIOClient.Socket;
+let socket: any;
 
 const setupSocket = () => {
   if (socket) {
@@ -11,7 +12,8 @@ const setupSocket = () => {
   }
 
   socket = io({
-    path: '/socket.io/',
+    path: '/time/socket.io',
+	transports: ["websocket", "polling"] // use WebSocket first, if available
   });
   socket.on('connect', () => log('Connected'));
   socket.on('event', (data: any) => {

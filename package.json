@@ -17,10 +17,15 @@
     "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish && npm run docker:tag:latest && npm run docker:publish:latest"
   },
   "devDependencies": {
-    "lerna": "^3.20.2"
+    "lerna": "^4.0.0",
+    "postcss": "^8.4.7",
+    "postcss-loader": "^6.2.1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DRIVER-EU/test-bed-time-service.git"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.13"
   }
 }

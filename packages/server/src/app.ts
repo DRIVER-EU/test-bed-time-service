@@ -15,7 +15,7 @@ export class App {
   private readonly port: number;
   private app: express.Application;
   private server: Server;
-  private io: SocketIO.Server;
+  private io: socketIO.Server;
   private timeService: TimeService;
 
   constructor(options: ICommandOptions) {
@@ -25,8 +25,10 @@ export class App {
     const pwd = path.join(process.cwd(), 'public');
     this.app.use('/', express.static(pwd));
     this.server = createServer(this.app);
-    this.io = socketIO(this.server, {
-      path: '/socket.io/',
+	const { Server } = require("socket.io");
+
+    this.io = new Server(this.server, {
+      path: '/time/socket.io',
     });
 
     console.log('Start-up options');
@@ -53,7 +55,7 @@ export class App {
       console.log(`Running server on port ${this.port}.`);
     });
 
-    this.io.on('connect', (socket: SocketIO.Socket) => {
+    this.io.on('connect', (socket) => {
       console.log(`Connected client on port ${this.port}`);
       socket.emit(SocketChannels.STATE_UPDATED, this.timeService.state.name);
       socket.emit(SocketChannels.TIME, this.timeService.state.createTimeMessage());

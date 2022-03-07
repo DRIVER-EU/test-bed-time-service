@@ -12,6 +12,7 @@ import { Billboard } from './components/billboard';
 
 const waitForSocketIO = () =>
   new Promise(resolve => {
+	  console.log("Starting....");
     // let iterations = 0;
     const handler = window.setInterval(() => {
       // iterations++;
@@ -19,7 +20,7 @@ const waitForSocketIO = () =>
       if (socket.connected) {
         // console.warn(`waited ${iterations} iterations for SocketIO to finish loading`);
         window.clearInterval(handler);
-        resolve();
+        resolve(socket);
       }
     }, 1);
   });

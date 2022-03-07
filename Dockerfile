@@ -5,7 +5,7 @@
 # To start it stand-alone:
 #   docker run -it -p 8100:8100 test-bed-time-service
 
-FROM node:alpine AS builder
+FROM node:16-alpine3.15 AS builder
 RUN mkdir -p /src
 COPY . /src/
 WORKDIR /src/packages/server
@@ -15,7 +15,7 @@ WORKDIR /src/packages/gui
 RUN npm i && \
     npm run build
 
-FROM node:alpine
+FROM node:16-alpine3.15
 RUN mkdir -p /app
 COPY --from=builder /src/packages/server/package.json /app/package.json
 COPY --from=builder /src/packages/server/LICENSE /app/LICENSE

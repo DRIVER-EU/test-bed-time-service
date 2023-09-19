@@ -29,32 +29,18 @@ module.exports = {
         exclude: /node_modules/,
       },
 	  {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-	  /*
-      {
-        test: /\.css$/i,
+        test: /\.css$/,
         use: [
-          "style-loader",
-          "css-loader",
+          'style-loader',
           {
-            loader: "postcss-loader",
+            loader: 'css-loader',
             options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    "postcss-preset-env",
-                    {
-                      // Options
+              importLoaders: 1, // 0 => no loaders (default); 1 => postcss-loader; 2 => postcss-loader, sass-loader
+            },
                     },
-                  ],
+          'postcss-loader',
                 ],
               },
-            },
-          },
-        ],
-      },*/
       {
         test: /\.(gif|png|jpe?g|svg|ico|eot|woff|ttf|svg|woff2)$/i,
         use: [

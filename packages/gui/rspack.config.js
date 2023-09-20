@@ -1,0 +1,67 @@
+const path = require('path');
+const devMode = process.env.NODE_ENV === 'development';
+const outputPath = path.resolve(__dirname, devMode ? 'dist' : '../../server/public');
+
+console.log(`Working in ${devMode ? 'development' : 'production'} mode.`);
+
+module.exports = {
+  mode: devMode ? 'development' : 'production',
+  entry: {
+    main: './src/app.ts',
+  },
+  devServer: {
+    port: 8100,
+  },
+  builtins: {
+    define: {
+      'process.env.NODE_ENV': "'development'",
+    },
+    html: [
+      {
+        title: 'Scenario Spark',
+        publicPath: devMode ? undefined : 'time',
+        scriptLoading: 'defer',
+        minify: !devMode,
+        favicon: './src/assets/favicon.ico',
+        meta: {
+          viewport: 'width=device-width, initial-scale=1',
+          'og:title': 'Scenario Spark',
+          'og:description': 'Generate consistent threat scenarios for your organisation.',
+          'og:url': 'https://tno.github.io/scenario-spark/',
+          'og:site_name': 'Scenario Spark',
+          'og:image:alt': 'Scenario Spark',
+          'og:image': './src/assets/logo.svg',
+          'og:image:type': 'image/svg',
+          'og:image:width': '200',
+          'og:image:height': '200',
+        },
+      },
+    ],
+    minifyOptions: devMode
+      ? undefined
+      : {
+          passes: 3,
+          dropConsole: false,
+        },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /^BUILD_ID$/,
+        type: 'asset/source',
+      },
+    ],
+  },
+  output: {
+    filename: 'main.js',
+    path: outputPath,
+  },
+};

@@ -1,6 +1,6 @@
 const path = require('path');
 const devMode = process.env.NODE_ENV === 'development';
-const outputPath = path.resolve(__dirname, devMode ? 'dist' : '../../server/public');
+const outputPath = path.resolve(__dirname, devMode ? 'dist' : '../server/public');
 
 console.log(`Working in ${devMode ? 'development' : 'production'} mode.`);
 
@@ -14,24 +14,26 @@ module.exports = {
   },
   builtins: {
     define: {
-      'process.env.NODE_ENV': "'development'",
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      SOCKET_IO_SERVER: JSON.stringify(devMode ? 'localhost:2347' : ''),
     },
     html: [
       {
-        title: 'Scenario Spark',
-        publicPath: devMode ? undefined : 'time',
+        title: 'Time service',
+        publicPath: '',
         scriptLoading: 'defer',
         minify: !devMode,
         favicon: './src/assets/favicon.ico',
         meta: {
           viewport: 'width=device-width, initial-scale=1',
-          'og:title': 'Scenario Spark',
-          'og:description': 'Generate consistent threat scenarios for your organisation.',
-          'og:url': 'https://tno.github.io/scenario-spark/',
-          'og:site_name': 'Scenario Spark',
-          'og:image:alt': 'Scenario Spark',
-          'og:image': './src/assets/logo.svg',
-          'og:image:type': 'image/svg',
+          'og:title': 'Time service',
+          'og:description':
+            'Control and display the simulation time. Can also be used to show billboard messages, or play video.',
+          'og:url': 'https://github.com/DRIVER-EU/test-bed-time-service',
+          'og:site_name': 'Time Service',
+          'og:image:alt': 'Time Service',
+          'og:image': './src/assets/logo/logo.png',
+          'og:image:type': 'image/png',
           'og:image:width': '200',
           'og:image:height': '200',
         },

@@ -1,8 +1,7 @@
-import io from 'socket.io-client';
+import io, { ManagerOptions, SocketOptions } from 'socket.io-client';
 import { IRolePlayerMessage, ITimeMessage, TimeState, SimulationState, SocketChannels } from '../models';
 
 // tslint:disable-next-line:no-console
-
 const log = console.log;
 let socket: any;
 
@@ -10,11 +9,12 @@ const setupSocket = () => {
   if (socket) {
     return socket;
   }
-
-  socket = io({
+  const ioConfig: Partial<ManagerOptions & SocketOptions> = {
     path: '/time/socket.io',
-	transports: ["websocket", "polling"] // use WebSocket first, if available
-  });
+    transports: ['websocket', 'polling'],
+  };
+
+  socket = io(SOCKET_IO_SERVER, ioConfig);
   socket.on('connect', () => log('Connected'));
   socket.on('event', (data: any) => {
     if (typeof data === 'object' && Object.keys(data).length > 0) {

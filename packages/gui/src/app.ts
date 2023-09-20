@@ -1,7 +1,7 @@
 import { SocketService } from './services/socket-service';
 import 'materialize-css/dist/css/materialize.min.css';
-import 'materialize-css/dist/js/materialize.js';
-import 'material-icons/iconfont/material-icons.css';
+import 'materialize-css/dist/js/materialize.min.js';
+// import 'material-icons/iconfont/material-icons.css';
 import './styles.css';
 import m, { RouteDefs } from 'mithril';
 import { Layout } from './views/layout';
@@ -11,8 +11,8 @@ import { Calendar } from './components/calendar/calendar';
 import { Billboard } from './components/billboard';
 
 const waitForSocketIO = () =>
-  new Promise(resolve => {
-	  console.log("Starting....");
+  new Promise((resolve) => {
+    console.log('Starting....');
     // let iterations = 0;
     const handler = window.setInterval(() => {
       // iterations++;
@@ -22,7 +22,7 @@ const waitForSocketIO = () =>
         window.clearInterval(handler);
         resolve(socket);
       }
-    }, 1);
+    }, 100);
   });
 
 const routingTable: RouteDefs = {

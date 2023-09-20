@@ -1,5 +1,5 @@
-import { Logger, ITimeManagement, ITimeControl, TimeState } from 'node-test-bed-adapter';
-import { TimeService } from './../time-service';
+import { ITimeManagement, ITimeControl, TimeState, AdapterLogger } from 'node-test-bed-adapter';
+import { TimeService } from './../time-service.js';
 
 export interface TimeServiceState {
   name: TimeState;
@@ -8,7 +8,7 @@ export interface TimeServiceState {
 }
 
 export abstract class TimeServiceBaseState implements TimeServiceState {
-  protected log = Logger.instance;
+  protected log = AdapterLogger.instance;
   protected timeService: TimeService;
 
   constructor(timeService: TimeService) {

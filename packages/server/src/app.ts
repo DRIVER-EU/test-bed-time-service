@@ -1,13 +1,13 @@
-import { TimeService } from './time-service';
 import { ICommandOptions } from './';
 import { createServer, Server } from 'http';
 import { Application } from 'express';
-import * as express from 'express';
-import * as cors from 'cors';
-import * as path from 'path';
-import * as socketIO from 'socket.io';
+import express from 'express';
+import cors from 'cors';
+import socketIO, { Server as SocketIoServer } from 'socket.io';
 import { ITimeManagement, TimeState, TimeCommand, IRolePlayerMessage } from 'node-test-bed-adapter';
 import { SocketChannels } from './models/socket-channels';
+import { join } from 'path';
+import { TimeService } from './time-service.js';
 
 /** Main application */
 export class App {
@@ -22,13 +22,12 @@ export class App {
     this.port = options.port;
     this.app = express();
     this.app.use(cors());
-    const pwd = path.join(process.cwd(), 'public');
+    const pwd = join(process.cwd(), 'public');
     this.app.use('/time', express.static(pwd));
 
     this.server = createServer(this.app);
-	const { Server } = require("socket.io");
 
-    this.io = new Server(this.server, {
+    this.io = new SocketIoServer(this.server, {
       path: '/time/socket.io',
     });
 

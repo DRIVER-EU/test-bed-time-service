@@ -1,7 +1,7 @@
 import { ITimeManagement, ITimeControl, TimeState, TimeCommand } from 'node-test-bed-adapter';
-import { TimeServiceBaseState, TimeServiceState } from './time-service-states';
-import { Stopped } from './time-service-stopped-state';
-import { Started } from './time-service-started-state';
+import { TimeServiceBaseState, TimeServiceState } from './time-service-states.js';
+import { Stopped } from './time-service-stopped-state.js';
+import { Started } from './time-service-started-state.js';
 
 export class Paused extends TimeServiceBaseState {
   public get name() {

@@ -1,12 +1,8 @@
-import { TimeServiceState } from './states/time-service-states';
-import { ICommandOptions } from './index';
 import { EventEmitter } from 'events';
 import {
   TestBedAdapter,
-  Logger,
+  AdapterLogger,
   LogLevel,
-  ProduceRequest,
-  IAdapterMessage,
   TimeState,
   ITimeControl,
   ITimeManagement,
@@ -16,9 +12,13 @@ import {
   TrialManagementRolePlayerTopic,
   HeartbeatTopic,
   LogTopic,
+  AdapterMessage,
+  AdapterProducerRecord,
 } from 'node-test-bed-adapter';
-import { Idle } from './states/time-service-idle-state';
-import { SocketChannels } from './models/socket-channels';
+import { TimeServiceState } from './states/time-service-states.js';
+import { ICommandOptions } from './index.js';
+import { Idle } from './states/time-service-idle-state.js';
+import { SocketChannels } from './models/socket-channels.js';
 
 export interface TimeService {
   on(event: SocketChannels.STATE_UPDATED, listener: (state: TimeState) => void): this;
@@ -28,11 +28,11 @@ export interface TimeService {
 
 export class TimeService extends EventEmitter implements TimeService {
   private adapter: TestBedAdapter;
-  private log = Logger.instance;
+  private log = AdapterLogger.instance;
   private billboard?: string;
 
   /** Can be used in clearInterval to reset the timer */
-  private _timeHandler?: NodeJS.Timer;
+  private _timeHandler?: NodeJS.Timeout;
 
   /** Real-time when the scenario is started */
   private _realStartTime?: number;
@@ -57,22 +57,22 @@ export class TimeService extends EventEmitter implements TimeService {
     this._trialTimeSpeed = 0;
     this._state = new Idle(this);
 
-    const consume = [{ topic: TimeControlTopic }];
+    const consume = [TimeControlTopic];
     if (billboard) {
-      consume.push({ topic: TrialManagementRolePlayerTopic });
+      consume.push(TrialManagementRolePlayerTopic);
     }
 
     this.adapter = new TestBedAdapter({
       kafkaHost,
       schemaRegistry,
       fetchAllSchemas: false,
-      clientId: 'TB-TimeService',
+      groupId: options.groupId || 'TimeService',
       autoRegisterSchemas,
       schemaFolder: 'schemas',
       autoRegisterDefaultSchemas: false,
       consume,
       produce: [HeartbeatTopic, LogTopic, TimeControlTopic, TimeTopic],
-      fromOffset: false,
+      fromOffset: 'latest',
       logging: {
         logToConsole: LogLevel.Info,
         logToKafka: LogLevel.Warn,
@@ -96,14 +96,14 @@ export class TimeService extends EventEmitter implements TimeService {
   }
 
   private subscribe() {
-    this.adapter.on('message', message => this.handleMessage(message));
-    this.adapter.on('error', err => this.log.error(`Consumer received an error: ${err}`));
-    this.adapter.on('offsetOutOfRange', err => {
+    this.adapter.on('message', (message) => this.handleMessage(message));
+    this.adapter.on('error', (err) => this.log.error(`Consumer received an error: ${err}`));
+    this.adapter.on('offsetOutOfRange', (err) => {
       this.log.error(`Consumer received an offsetOutOfRange error on topic ${err.topic}.`);
     });
   }
 
-  private handleMessage(message: IAdapterMessage) {
+  private handleMessage(message: AdapterMessage) {
     switch (message.topic) {
       case TimeControlTopic:
         this.log.info(`${TimeControlTopic} message:\n` + JSON.stringify(message, null, 2));
@@ -117,7 +117,7 @@ export class TimeService extends EventEmitter implements TimeService {
         if (
           msg &&
           msg.participantNames &&
-          msg.participantNames.filter(pn => pn.toLowerCase() === this.billboard).length > 0
+          msg.participantNames.filter((pn) => pn.toLowerCase() === this.billboard).length > 0
         ) {
           this.emit(SocketChannels.BILLBOARD, msg);
           console.log('TrialManagementRolePlayerTopic emitted');
@@ -199,14 +199,14 @@ export class TimeService extends EventEmitter implements TimeService {
 
     const payload = {
       topic: TimeTopic,
-      messages: timeMsg,
+      messages: [{ value: timeMsg }],
       attributes: 1, // Gzip
-    } as ProduceRequest;
+    } as AdapterProducerRecord;
 
     this.adapter.send(payload, (err: Error) => {
       if (err) {
         const msg = `Error received for topic '${payload.topic}': ${err.message}.`;
-        Logger.instance.error(msg);
+        AdapterLogger.instance.error(msg);
         this.log.error(msg);
         console.table(timeMsg);
       }

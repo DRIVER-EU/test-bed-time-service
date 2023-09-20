@@ -1,12 +1,19 @@
-import { App } from './app';
-import * as commandLineArgs from 'command-line-args';
+import commandLineArgs from 'command-line-args';
 import { OptionDefinition } from 'command-line-args';
-import * as npmPackage from '../package.json';
+// import npmPackage from '../package.json';
 import { Application } from 'express';
+import { App } from './app.js';
+// import npmPackage from '../package.json';
+
+const npmPackage = {
+  name: process.env.npm_package_name,
+  version: process.env.npm_package_version,
+};
 
 export interface ICommandOptions {
   port: number;
   interval: number;
+  groupId: string;
   kafkaHost: string;
   schemaRegistryUrl: string;
   autoRegisterSchemas: boolean;
@@ -40,7 +47,7 @@ export class CommandLineInterface {
       name: 'kafkaHost',
       alias: 'k',
       type: String,
-      defaultValue: process.env.KAFKA_BROKER_URL || 'driver-testbed.eu:3501',
+      defaultValue: process.env.KAFKA_BROKER_URL || 'localhost:3501',
       typeLabel: '[String]',
       description: 'Kafka Broker address, e.g. localhost:3501',
     },
@@ -48,7 +55,7 @@ export class CommandLineInterface {
       name: 'schemaRegistryUrl',
       alias: 's',
       type: String,
-      defaultValue: process.env.SCHEMA_REGISTRY_URL || 'http://driver-testbed.eu:3502',
+      defaultValue: process.env.SCHEMA_REGISTRY_URL || 'http://localhost:3502',
       typeLabel: '[String]',
       description: 'Schema Registry URL, e.g. http://localhost:3502',
     },
@@ -67,6 +74,14 @@ export class CommandLineInterface {
       defaultValue: process.env.PORT || 8100,
       typeLabel: '[Number]',
       description: 'Endpoint port, e.g. http://localhost:PORT/time',
+    },
+    {
+      name: 'groupId',
+      alias: 'g',
+      type: Number,
+      defaultValue: process.env.GROUP_ID || process.env.CLIENT_ID || 'TimeService',
+      typeLabel: '[String]',
+      description: 'Group ID, e.g. TimeService',
     },
     {
       name: 'interval',
@@ -89,9 +104,9 @@ export class CommandLineInterface {
   static sections = [
     {
       header: `${npmPackage.name}, v${npmPackage.version}`,
-      content: `${npmPackage.license} license.
+      content: `MIT license.
 
-      ${npmPackage.description}
+      A time service for the test-bed, producing messages with real time, fictive time and scenario duration.
 
       The test-bed time service can be controlled via Apache Kafka. It listens to
       state changes of the test-bed, e.g. scenario start and stop messages.

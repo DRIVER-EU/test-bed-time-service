@@ -1,14 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "postinstall": "lerna bootstrap",
-    "watch": "lerna run --parallel watch",
-    "start": "lerna run --parallel start",
-    "build": "lerna run --parallel build",
-    "start-tno-testbed": "lerna run --parallel start-tno-testbed",
-    "start-local": "lerna run --parallel start-local",
-    "patch-release": "lerna run --parallel patch-release",
-    "minor-release": "lerna run --parallel minor-release",
+    "clean": "pnpm --parallel run cleanup",
+    "start": "pnpm --parallel run dev",
+    "build": "pnpm recursive run build",
+    "patch-release": "pnpm run --parallel patch-release",
+    "minor-release": "pnpm run --parallel minor-release",
     "docker:build": "docker build -t test-bed-time-service .",
     "docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service:2.0.8",
     "docker:tag:latest": "docker tag test-bed-time-service drivereu/test-bed-time-service:latest",
@@ -17,15 +14,11 @@
     "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish && npm run docker:tag:latest && npm run docker:publish:latest"
   },
   "devDependencies": {
-    "lerna": "^4.0.0",
-    "postcss": "^8.4.7",
-    "postcss-loader": "^6.2.1"
+    "@rspack/cli": "^0.3.4",
+    "pnpm": "^8.7.6"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DRIVER-EU/test-bed-time-service.git"
-  },
-  "dependencies": {
-    "@types/express": "^4.17.13"
   }
 }

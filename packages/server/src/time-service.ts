@@ -18,14 +18,17 @@ import { TimeServiceState } from './states/time-service-states.js';
 import { ICommandOptions } from './index.js';
 import { Idle } from './states/time-service-idle-state.js';
 import { SocketChannels } from './models/socket-channels.js';
+import { InfoMsg, InfoMsgType } from './models/info-message.js';
 
 export interface TimeService {
   on(event: SocketChannels.STATE_UPDATED, listener: (state: TimeState) => void): this;
   on(event: SocketChannels.TIME, listener: (time: ITimeManagement) => void): this;
-  on(event: SocketChannels.BILLBOARD, listener: (msg: IRolePlayerMessage) => void): this;
+  on(event: SocketChannels.BILLBOARD, listener: (msg: InfoMsg) => void): this;
+  on(event: SocketChannels.VIDEO, listener: (msg: InfoMsg) => void): this;
 }
 
 const InformativeMessage = 'system_tm_info_msg';
+
 export class TimeService extends EventEmitter implements TimeService {
   private adapter: TestBedAdapter;
   private log = AdapterLogger.instance;
@@ -111,10 +114,10 @@ export class TimeService extends EventEmitter implements TimeService {
         this.transition(controlMsg);
         break;
       case InformativeMessage:
-        const { value } = message;
-        this.emit(SocketChannels.BILLBOARD, value);
+        const msg = message.value as InfoMsg;
+        this.emit(msg.type === InfoMsgType.BILLBOARD ? SocketChannels.BILLBOARD : SocketChannels.VIDEO, msg);
         console.log('Informative billboard message emitted:');
-        console.table(value);
+        console.table(msg);
         break;
       default:
         this.log.warn('Unhandled message: ' + JSON.stringify(message));

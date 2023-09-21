@@ -9,7 +9,7 @@ export const Billboard = () => {
   return {
     oninit: () => {
       SocketService.socket.on(SocketChannels.BILLBOARD, (msg: InfoMsg) => {
-        headline = msg.headline;
+        headline = msg.headline || msg.title;
         description = msg.description;
         m.redraw();
       });

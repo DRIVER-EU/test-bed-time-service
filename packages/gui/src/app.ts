@@ -1,12 +1,14 @@
 import { SocketService } from './services/socket-service';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize.min.js';
-// import 'material-icons/iconfont/material-icons.css';
+import 'material-icons/iconfont/filled.css';
 import './styles.css';
 import m, { RouteDefs } from 'mithril';
 import { Layout } from './views/layout';
 import { Clock } from './components/clock';
 import { VideoPlayer, DigitalClock, Calendar, Billboard } from './components';
+
+document.documentElement.setAttribute('lang', 'en-UK');
 
 const waitForSocketIO = () =>
   new Promise((resolve) => {

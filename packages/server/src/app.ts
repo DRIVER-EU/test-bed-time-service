@@ -9,6 +9,7 @@ import { SocketChannels } from './models/socket-channels';
 import { join } from 'path';
 import { TimeService } from './time-service.js';
 import { cwd } from 'process';
+import { InfoMsg } from './models/info-message';
 
 /** Main application */
 export class App {
@@ -45,9 +46,13 @@ export class App {
       console.log(`Sending state update: ${state}`);
       this.io.emit(SocketChannels.STATE_UPDATED, state);
     });
-    this.timeService.on(SocketChannels.BILLBOARD, (msg: IRolePlayerMessage) => {
+    this.timeService.on(SocketChannels.BILLBOARD, (msg: InfoMsg) => {
       console.log(`Sending billboard msg: ${msg}`);
       this.io.emit(SocketChannels.BILLBOARD, msg);
+    });
+    this.timeService.on(SocketChannels.VIDEO, (msg: InfoMsg) => {
+      console.log(`Sending video msg: ${msg}`);
+      this.io.emit(SocketChannels.VIDEO, msg);
     });
     this.timeService.connect().then(() => this.listen());
   }

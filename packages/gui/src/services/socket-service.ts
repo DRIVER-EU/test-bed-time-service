@@ -6,6 +6,7 @@ const log = console.log;
 let socket: any;
 
 const setupSocket = () => {
+  console.log('Setup socket called');
   if (socket) {
     return socket;
   }

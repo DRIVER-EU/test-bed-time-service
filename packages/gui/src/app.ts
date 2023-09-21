@@ -6,9 +6,7 @@ import './styles.css';
 import m, { RouteDefs } from 'mithril';
 import { Layout } from './views/layout';
 import { Clock } from './components/clock';
-import { DigitalClock } from './components/digital-clock';
-import { Calendar } from './components/calendar/calendar';
-import { Billboard } from './components/billboard';
+import { VideoPlayer, DigitalClock, Calendar, Billboard } from './components';
 
 const waitForSocketIO = () =>
   new Promise((resolve) => {
@@ -27,7 +25,7 @@ const waitForSocketIO = () =>
 
 const routingTable: RouteDefs = {
   '/': {
-    render: () => m(Layout, { theme: '.black-theme' }, [m(DigitalClock), m(Calendar), m(Billboard)]),
+    render: () => m(Layout, { theme: '.black-theme' }, [m(DigitalClock), m(Calendar), m(Billboard), m(VideoPlayer)]),
   },
   '/analog': {
     render: () => m(Layout, { theme: '.white-theme' }, [m(Clock), m(Calendar)]),

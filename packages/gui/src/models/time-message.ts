@@ -1,5 +1,3 @@
-import { IRolePlayerMessage } from './role-player-message';
-
 /**
  * Initialization – preparing for the actual start of the simulation time; Started
  * – the simulation time is started; Paused – the simulation time is paused;
@@ -55,6 +53,4 @@ export interface ITimeMessage extends ITimeManagement {
   simulationTime: number;
   simulationSpeed: number;
   tags: { timeElapsed: string };
-  /** Queue with role player messages for the billboard */
-  messageQueue: IRolePlayerMessage[];
 }

@@ -1,9 +1,10 @@
 import commandLineArgs from 'command-line-args';
 import { OptionDefinition } from 'command-line-args';
-// import npmPackage from '../package.json';
 import { Application } from 'express';
 import { App } from './app.js';
-// import npmPackage from '../package.json';
+import { existsSync, mkdirSync } from 'fs';
+import { join } from 'path';
+import { cwd } from 'process';
 
 const npmPackage = {
   name: process.env.npm_package_name,
@@ -17,9 +18,12 @@ export interface ICommandOptions {
   kafkaHost: string;
   schemaRegistryUrl: string;
   autoRegisterSchemas: boolean;
-  billboard?: string;
+  /** Show informative messages, such as billboard and videos, on the screen */
+  billboard?: boolean;
   help?: boolean;
   version?: boolean;
+  /** Path to video folder - no CLI option, hardcoded */
+  videos: string;
 }
 
 export interface IOptionDefinition extends OptionDefinition {
@@ -95,9 +99,9 @@ export class CommandLineInterface {
     {
       name: 'billboard',
       alias: 'b',
-      type: String,
-      typeLabel: '[String]',
-      description: 'If set, listen to role player messages addressed to `billboard`.',
+      type: Boolean,
+      typeLabel: '[Boolean]',
+      description: 'If set, listen to billboard and video messages.',
     },
   ];
 
@@ -106,10 +110,14 @@ export class CommandLineInterface {
       header: `${npmPackage.name}, v${npmPackage.version}`,
       content: `MIT license.
 
-      A time service for the test-bed, producing messages with real time, fictive time and scenario duration.
+      A time service for the test-bed, producing messages with real time, fictive
+      time and scenario duration.
 
       The test-bed time service can be controlled via Apache Kafka. It listens to
-      state changes of the test-bed, e.g. scenario start and stop messages.
+      state changes of the test-bed, e.g. scenario start and stop messages. Also,
+      it can receive RolePlayerMessages that are displayed in the billboard, and
+      videos (NOTE: Videos need to be stored in the 'videos' folder, which can be
+      mounted in Docker).
 
       It publishes three times:
       - Local system time: This is the same time that the NTP server should use.
@@ -167,5 +175,10 @@ if (options.help) {
   console.log(usage);
   process.exit(0);
 }
+
+const videos = join(cwd(), 'videos');
+if (!existsSync(videos)) mkdirSync(videos, { recursive: true });
+options.videos = videos;
+
 const app: Application = new App(options).getApp();
 export { app };

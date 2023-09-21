@@ -9,11 +9,11 @@
   "scripts": {
     "clean": "rimraf dist",
     "start-tno-testbed": "node ./dist/index.js -- -k driver-testbed.eu:3501 -s driver-testbed.eu:3502",
-    "start-local": "node ./dist/index.js -- -k localhost:3501 -s localhost:3502 --billboard billboard --autoRegisterSchemas",
+    "start-local": "node ./dist/index.js -- -k localhost:3501 -s localhost:3502 --billboard --autoRegisterSchemas",
     "build": "tsc -b",
     "watch": "tsc -w",
     "start:tb3": "tsc-watch --onSuccess \"node ./dist/index.js -p 2345 -k tb3.driver-testbed.eu:3531 -s tb3.driver-testbed.eu:3532 \"",
-    "dev": "tsc-watch --onSuccess \"node ./dist/index.js -p 2347 -k localhost:3501 -s localhost:3502 --billboard billboard \"",
+    "dev": "tsc-watch --onSuccess \"node ./dist/index.js -p 2347 -k localhost:3501 -s localhost:3502 -b \"",
     "start": "npm run dev",
     "patch-release": "npm run clean && npm run build && npm version patch && npm publish && git push --follow-tags",
     "minor-release": "npm run clean && npm run build && npm version minor && npm publish && git push --follow-tags",

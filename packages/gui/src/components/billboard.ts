@@ -1,24 +1,24 @@
 import m from 'mithril';
-import { IRolePlayerMessage, SimulationState, SocketChannels } from '../models';
+import { InfoMsg, SocketChannels } from '../models';
 import { SocketService } from '../services/socket-service';
 
 export const Billboard = () => {
+  let headline: string = '';
+  let description: string = '';
+
   return {
     oninit: () => {
-      SocketService.socket.on(SocketChannels.BILLBOARD, () => m.redraw());
+      SocketService.socket.on(SocketChannels.BILLBOARD, (msg: InfoMsg) => {
+        headline = msg.headline;
+        description = msg.description;
+        m.redraw();
+      });
     },
     view: () => {
-      const { messageQueue } = SimulationState;
-      const msg =
-        messageQueue.length > 0
-          ? messageQueue[messageQueue.length - 1]
-          : ({
-              headline: '',
-              description: '',
-            } as IRolePlayerMessage);
-      const { headline, description } = msg;
-      const className = 'center';
-      return m('.billboard[id=billboard]', m('.message', { className }, [m('h1', headline), m('div', description)]));
+      return m(
+        '#billboard.billboard',
+        m('.message', { className: 'center' }, [m('h1', headline), m('div', description)])
+      );
     },
   };
 };

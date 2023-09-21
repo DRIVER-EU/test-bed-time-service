@@ -8,6 +8,7 @@ import { ITimeManagement, TimeState, TimeCommand, IRolePlayerMessage } from 'nod
 import { SocketChannels } from './models/socket-channels';
 import { join } from 'path';
 import { TimeService } from './time-service.js';
+import { cwd } from 'process';
 
 /** Main application */
 export class App {
@@ -22,8 +23,9 @@ export class App {
     this.port = options.port;
     this.app = express();
     this.app.use(cors());
-    const pwd = join(process.cwd(), 'public');
+    const pwd = join(cwd(), 'public');
     this.app.use('/time', express.static(pwd));
+    this.app.use('/time/videos', express.static(options.videos));
 
     this.server = createServer(this.app);
 

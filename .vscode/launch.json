@@ -8,19 +8,10 @@
       "type": "node",
       "request": "launch",
       "name": "Launch server",
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/packages/server",
       "program": "${workspaceFolder}/packages/server/dist/index.js",
-      "args": [
-        "-p",
-        "2345",
-        "-k",
-        "localhost:3501",
-        "-s",
-        "localhost:3502",
-      ],
-      "outFiles": [
-        "${workspaceFolder}/**/*"
-      ],
+      "args": ["-p", "2347", "-k", "localhost:3501", "-s", "localhost:3502", "-b"],
+      "outFiles": ["${workspaceFolder}/**/*"],
       "console": "integratedTerminal"
     },
     {
@@ -29,18 +20,9 @@
       "name": "Launch tb3",
       "cwd": "${workspaceFolder}",
       "program": "${workspaceFolder}/packages/server/dist/index.js",
-      "args": [
-        "-p",
-        "2345",
-        "-k",
-        "tb3.driver-testbed.eu:3531",
-        "-s",
-        "tb3.driver-testbed.eu:3532",
-      ],
-      "outFiles": [
-        "${workspaceFolder}/**/*"
-      ],
+      "args": ["-p", "2345", "-k", "tb3.driver-testbed.eu:3531", "-s", "tb3.driver-testbed.eu:3532"],
+      "outFiles": ["${workspaceFolder}/**/*"],
       "console": "integratedTerminal"
-    },
+    }
   ]
 }

@@ -1,5 +1,5 @@
 import io, { ManagerOptions, SocketOptions } from 'socket.io-client';
-import { IRolePlayerMessage, ITimeMessage, TimeState, SimulationState, SocketChannels } from '../models';
+import { ITimeMessage, TimeState, SimulationState, SocketChannels } from '../models';
 
 // tslint:disable-next-line:no-console
 const log = console.log;
@@ -40,9 +40,6 @@ const setupSocket = () => {
         SimulationState.simulationTime += secDuration;
       }, secDuration / time.simulationSpeed);
     }
-  });
-  socket.on(SocketChannels.BILLBOARD, (msg: IRolePlayerMessage) => {
-    SimulationState.messageQueue.push(msg);
   });
   return socket;
 };

@@ -9,7 +9,6 @@ import {
   IRolePlayerMessage,
   TimeTopic,
   TimeControlTopic,
-  TrialManagementRolePlayerTopic,
   HeartbeatTopic,
   LogTopic,
   AdapterMessage,
@@ -26,10 +25,11 @@ export interface TimeService {
   on(event: SocketChannels.BILLBOARD, listener: (msg: IRolePlayerMessage) => void): this;
 }
 
+const InformativeMessage = 'system_tm_info_msg';
 export class TimeService extends EventEmitter implements TimeService {
   private adapter: TestBedAdapter;
   private log = AdapterLogger.instance;
-  private billboard?: string;
+  private billboard = false;
 
   /** Can be used in clearInterval to reset the timer */
   private _timeHandler?: NodeJS.Timeout;
@@ -52,14 +52,14 @@ export class TimeService extends EventEmitter implements TimeService {
   constructor(options: ICommandOptions) {
     super();
     const { interval, billboard, kafkaHost, schemaRegistryUrl: schemaRegistry, autoRegisterSchemas } = options;
-    this.billboard = billboard ? billboard.toLowerCase() : undefined;
+    this.billboard = typeof billboard !== 'undefined' && billboard;
     this.interval = interval;
     this._trialTimeSpeed = 0;
     this._state = new Idle(this);
 
     const consume = [TimeControlTopic];
     if (billboard) {
-      consume.push(TrialManagementRolePlayerTopic);
+      consume.push(InformativeMessage);
     }
 
     this.adapter = new TestBedAdapter({
@@ -110,18 +110,11 @@ export class TimeService extends EventEmitter implements TimeService {
         const controlMsg = message.value as ITimeControl;
         this.transition(controlMsg);
         break;
-      case TrialManagementRolePlayerTopic:
-        const msg = message.value as IRolePlayerMessage;
-        console.log('TrialManagementRolePlayerTopic received');
-        console.table(msg);
-        if (
-          msg &&
-          msg.participantNames &&
-          msg.participantNames.filter((pn) => pn.toLowerCase() === this.billboard).length > 0
-        ) {
-          this.emit(SocketChannels.BILLBOARD, msg);
-          console.log('TrialManagementRolePlayerTopic emitted');
-        }
+      case InformativeMessage:
+        const { value } = message;
+        this.emit(SocketChannels.BILLBOARD, value);
+        console.log('Informative billboard message emitted:');
+        console.table(value);
         break;
       default:
         this.log.warn('Unhandled message: ' + JSON.stringify(message));

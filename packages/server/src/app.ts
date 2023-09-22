@@ -62,6 +62,17 @@ export class App {
       console.log(`Running server on port ${this.port}.`);
     });
 
+    /** Return last informative message */
+    this.app.get('/time/info_msg', (_req, res) => {
+      const last = this.timeService.infoMsgs.length - 1;
+      res.json(last < 0 ? {} : this.timeService.infoMsgs[last]);
+    });
+
+    /** Return all informative messages */
+    this.app.get('/time/info_msgs', (_req, res) => {
+      res.json(this.timeService.infoMsgs);
+    });
+
     this.io.on('connect', (socket) => {
       console.log(`Connected client on port ${this.port}`);
       socket.emit(SocketChannels.STATE_UPDATED, this.timeService.state.name);

@@ -5,15 +5,19 @@ This is the time-service server: it listens to control messages from Kafka, and 
 ![Alt text](./doc/test-bed-time-service-gui.png?raw=true "Screenshot of the GUI.")
 
 ```console
-test-bed-time-service, v0.1
+Test-bed-time-service
 
   MIT license.
 
   A time service for the test-bed, producing messages with real time, fictive
-  time and elapsed time, as well as speed factor and state.
+  time and scenario duration.
 
   The test-bed time service can be controlled via Apache Kafka. It listens to
-  state changes of the test-bed, e.g. scenario start and stop messages.
+  state changes of the test-bed, e.g. scenario start and stop messages. Also,
+  it can receive RolePlayerMessages that are displayed in the billboard, and
+  videos (NOTE: Videos need to be stored in the 'videos' folder, which can be
+  mounted in Docker).
+
   It publishes:
   - Local system time: This is the same time that the NTP server should use.
   - Fictive simulation time: The time that is used in the scenario. Note that
@@ -22,6 +26,12 @@ test-bed-time-service, v0.1
   stop, expressed in real-time).
   - Speed factor: How much faster than realtime are we running.
   - Simulation state, e.g. Idle, Started, etc..
+
+  It can show:
+  - The simulation (or actual) time.
+  - The simulation (or actual) date.
+  - Billboard messages (header and/or description)
+  - Videos: in the menu, you can specify whether you want to play them muted (default)
 
 Options
 
@@ -45,4 +55,8 @@ Examples
   03. Start the service on port 8080.        $ test-bed-time-service - 8080
   04. Start the service specifying kafka host   $ test-bed-time-service -k localhost:3501
   and schema registry.                          -s localhost:3502
+
+URLs:
+  - /time/info_msg    Get the last informative message (billboard or video)
+  - /time/info_msgs   Gets all informative messages (billboard or video)
 ```

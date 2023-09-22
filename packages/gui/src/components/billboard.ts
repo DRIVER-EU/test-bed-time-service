@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { InfoMsg, SocketChannels } from '../models';
+import { InfoMsg, InfoMsgType, SocketChannels } from '../models';
 import { SocketService } from '../services/socket-service';
 
 export const Billboard = () => {
@@ -9,8 +9,14 @@ export const Billboard = () => {
   return {
     oninit: () => {
       SocketService.socket.on(SocketChannels.BILLBOARD, (msg: InfoMsg) => {
-        headline = msg.headline || msg.title;
-        description = msg.description;
+        console.log(msg);
+        if (msg.type === InfoMsgType.CLEAR) {
+          headline = '';
+          description = '';
+        } else {
+          headline = msg.headline;
+          description = msg.description;
+        }
         m.redraw();
       });
     },

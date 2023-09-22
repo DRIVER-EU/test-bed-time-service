@@ -1,7 +1,8 @@
 import m, { FactoryComponent } from 'mithril';
 import './video-player.css';
-import { InfoMsg, SocketChannels } from '../../models';
+import { InfoMsg, InfoMsgType, SocketChannels } from '../../models';
 import { SocketService } from '../../services/socket-service';
+import { TIME_SERVICE_MUTED } from '../../views/layout';
 
 export const VideoPlayer: FactoryComponent = () => {
   let videoEl: HTMLVideoElement;
@@ -10,28 +11,34 @@ export const VideoPlayer: FactoryComponent = () => {
 
   const setVideo = (v: InfoMsg) => {
     console.log(v);
-    if (!v || !v.filename) return;
-    // Define a mapping of common video extensions to MIME types
-    const videoExtensions: { [key: string]: string } = {
-      mp4: 'video/mp4',
-      webm: 'video/webm',
-      ogv: 'video/ogg',
-      avi: 'video/x-msvideo',
-      mkv: 'video/x-matroska',
-      flv: 'video/x-flv',
-      wmv: 'video/x-ms-wmv',
-      '3gp': 'video/3gpp',
-      mov: 'video/quicktime',
-      mpeg: 'video/mpeg',
-      mpg: 'video/mpeg',
-    };
-    const ext = v.filename.split('.').pop()?.toLowerCase();
-    if (!ext) return;
-    videoType = videoExtensions[ext];
-    if (!videoType) return;
-    video = v.filename;
-    console.table({ video, videoType });
-    videoEl.setAttribute('style', 'display: block');
+    if (!v) return;
+    if (v.type === InfoMsgType.CLEAR) {
+      videoEl.setAttribute('style', 'display: none');
+      video = '';
+      videoType = '';
+    } else if (v.filename) {
+      // Define a mapping of common video extensions to MIME types
+      const videoExtensions: { [key: string]: string } = {
+        mp4: 'video/mp4',
+        webm: 'video/webm',
+        ogv: 'video/ogg',
+        avi: 'video/x-msvideo',
+        mkv: 'video/x-matroska',
+        flv: 'video/x-flv',
+        wmv: 'video/x-ms-wmv',
+        '3gp': 'video/3gpp',
+        mov: 'video/quicktime',
+        mpeg: 'video/mpeg',
+        mpg: 'video/mpeg',
+      };
+      const ext = v.filename.split('.').pop()?.toLowerCase();
+      if (!ext) return;
+      videoType = videoExtensions[ext];
+      if (!videoType) return;
+      video = v.filename;
+      console.table({ video, videoType });
+      videoEl.setAttribute('style', 'display: block');
+    }
     m.redraw();
   };
 
@@ -41,11 +48,12 @@ export const VideoPlayer: FactoryComponent = () => {
       SocketService.socket.on(SocketChannels.VIDEO, (msg: InfoMsg) => setVideo(msg));
     },
     view: () => {
+      const muted = localStorage.getItem(TIME_SERVICE_MUTED) === '1';
       return m(
         'video#video_player',
         {
           autoplay: true,
-          muted: true,
+          muted,
           controls: true,
           width: '100%',
           height: '100%',

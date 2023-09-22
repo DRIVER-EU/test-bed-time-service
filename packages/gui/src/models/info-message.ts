@@ -1,4 +1,5 @@
-export declare enum InfoMsgType {
+export enum InfoMsgType {
+  CLEAR = 'CLEAR',
   BILLBOARD = 'BILLBOARD',
   TV_BROADCAST = 'TV_BROADCAST',
   RADIO_BROADCAST = 'RADIO_BROADCAST',

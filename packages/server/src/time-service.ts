@@ -32,7 +32,6 @@ const InformativeMessage = 'system_tm_info_msg';
 export class TimeService extends EventEmitter implements TimeService {
   private adapter: TestBedAdapter;
   private log = AdapterLogger.instance;
-  private billboard = false;
 
   /** Can be used in clearInterval to reset the timer */
   private _timeHandler?: NodeJS.Timeout;
@@ -52,16 +51,18 @@ export class TimeService extends EventEmitter implements TimeService {
   /** Interval to send messages to Kafka and browser clients (via Socket.io.). */
   private readonly interval: number;
 
+  public infoMsgs: InfoMsg[] = [];
+
   constructor(options: ICommandOptions) {
     super();
     const { interval, billboard, kafkaHost, schemaRegistryUrl: schemaRegistry, autoRegisterSchemas } = options;
-    this.billboard = typeof billboard !== 'undefined' && billboard;
     this.interval = interval;
     this._trialTimeSpeed = 0;
     this._state = new Idle(this);
 
     const consume = [TimeControlTopic];
-    if (billboard) {
+    const useBillboard = typeof billboard !== 'undefined' && billboard;
+    if (useBillboard) {
       consume.push(InformativeMessage);
     }
 
@@ -115,7 +116,15 @@ export class TimeService extends EventEmitter implements TimeService {
         break;
       case InformativeMessage:
         const msg = message.value as InfoMsg;
-        this.emit(msg.type === InfoMsgType.BILLBOARD ? SocketChannels.BILLBOARD : SocketChannels.VIDEO, msg);
+        this.infoMsgs.push(msg);
+        if (msg.type === InfoMsgType.BILLBOARD) {
+          this.emit(SocketChannels.BILLBOARD, msg);
+        } else if (msg.type === InfoMsgType.CLEAR) {
+          this.emit(SocketChannels.BILLBOARD, msg);
+          this.emit(SocketChannels.VIDEO, msg);
+        } else {
+          this.emit(SocketChannels.VIDEO, msg);
+        }
         console.log('Informative billboard message emitted:');
         console.table(msg);
         break;

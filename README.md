@@ -44,15 +44,20 @@ Alternatively, you can install the time-service from [npmjs.com](https://npmjs.c
 
 The following properties can be configured. Either via Environment Variables, or via Command line parameters. Command line parameters will override the Environment Variables.
 
+### Billboard messages
+
+You can send billboard messages to `system_tm_info_msg` that will be shown beneath the time. In case you wish to send a video, make sure the video is already copied to the `videos` folder. For Docker, mount the `/app/videos` folder.
+
 ### Environment Variable Configuration
 
-| Variable                             | Description                                                | Default value                 |
-| ------------------------------------ | ---------------------------------------------------------- | ----------------------------- |
-| `KAFKA_BROKER_URL=<value>`           | Kafka Broker address, e.g. localhost:3501                  | driver-testbed.eu:3501        |
-| `SCHEMA_REGISTRY_URL=<value>`        | Schema Registry URL, e.g. http://localhost:3502            | http://driver-testbed.eu:3502 |
-| `AUTO_REGISTER_SCHEMAS=<true/false>` | Automatically register all schemas in the ./schemas folder | false                         |
-| `PORT=<value>`                       | Endpoint port, e.g. http://localhost:PORT/time             | 8100                          |
-| `INTERVAL=<value>`                   | Default time interval between time messages in msec.       | 5000                          |
+| Variable                             | Description                                                | Default value  |
+| ------------------------------------ | ---------------------------------------------------------- | -------------- |
+| `KAFKA_BROKER_URL=<value>`           | Kafka Broker address, e.g. localhost:3501                  | localhost:3501 |
+| `SCHEMA_REGISTRY_URL=<value>`        | Schema Registry URL, e.g. localhost:3502                   | localhost:3502 |
+| `AUTO_REGISTER_SCHEMAS=<true/false>` | Automatically register all schemas in the ./schemas folder | false          |
+| `PORT=<value>`                       | Endpoint port, e.g. localhost:PORT/time                    | 8100           |
+| `INTERVAL=<value>`                   | Default time interval between time messages in msec.       | 5000           |
+| `BILLBOARD=<value>`                  | Listen to billboard messages, topic `system_tm_info_msg`   | "false"        |
 
 ## Command Line Parameter Configuration
 

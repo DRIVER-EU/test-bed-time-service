@@ -100,8 +100,9 @@ export class CommandLineInterface {
       name: 'billboard',
       alias: 'b',
       type: Boolean,
+      defaultValue: process.env.BILLBOARD || 'false',
       typeLabel: '[Boolean]',
-      description: 'If set, listen to billboard and video messages.',
+      description: 'If set, default false, listen to billboard and video messages.',
     },
   ];
 

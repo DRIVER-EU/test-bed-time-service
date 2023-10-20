@@ -6,16 +6,16 @@
     "build": "pnpm recursive run build",
     "patch-release": "pnpm run --parallel patch-release",
     "minor-release": "pnpm run --parallel minor-release",
-    "docker:build": "docker build -t test-bed-time-service .",
-    "docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service:2.0.8",
+    "docker:build": "docker buildx build -t test-bed-time-service .",
+    "docker:tag": "docker tag test-bed-time-service drivereu/test-bed-time-service:2.0.9",
     "docker:tag:latest": "docker tag test-bed-time-service drivereu/test-bed-time-service:latest",
-    "docker:publish": "docker push drivereu/test-bed-time-service:2.0.8",
+    "docker:publish": "docker push drivereu/test-bed-time-service:2.0.9",
     "docker:publish:latest": "docker push drivereu/test-bed-time-service:latest",
     "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish && npm run docker:tag:latest && npm run docker:publish:latest"
   },
   "devDependencies": {
-    "@rspack/cli": "^0.3.4",
-    "pnpm": "^8.7.6"
+    "@rspack/cli": "^0.3.7",
+    "pnpm": "^8.9.2"
   },
   "repository": {
     "type": "git",

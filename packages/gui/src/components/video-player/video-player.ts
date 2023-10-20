@@ -69,7 +69,7 @@ export const VideoPlayer: FactoryComponent = () => {
             };
           },
         },
-        video && m('source', { src: 'http://' + SOCKET_IO_SERVER + '/time/videos/' + video, type: videoType }),
+        video && m('source', { src: `/time/videos/${video}`, type: videoType }),
         'Your browser does not support HTML5 video.'
       );
     },

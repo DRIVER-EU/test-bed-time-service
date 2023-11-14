@@ -6,12 +6,12 @@ const log = console.log;
 let socket: any;
 
 const setupSocket = () => {
-  console.log('Setup socket called');
+  console.log(`Setup socket called, connecting to ${SOCKET_IO_SERVER}${SOCKET_IO_PATH}.`);
   if (socket) {
     return socket;
   }
   const ioConfig: Partial<ManagerOptions & SocketOptions> = {
-    path: '/socket.io',
+    path: SOCKET_IO_PATH,
     transports: ['websocket', 'polling'],
   };
 

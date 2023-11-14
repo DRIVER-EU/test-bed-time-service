@@ -11,7 +11,17 @@
     "docker:tag:latest": "docker tag test-bed-time-service drivereu/test-bed-time-service:latest",
     "docker:publish": "docker push drivereu/test-bed-time-service:2.0.9",
     "docker:publish:latest": "docker push drivereu/test-bed-time-service:latest",
-    "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish && npm run docker:tag:latest && npm run docker:publish:latest"
+    "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish && npm run docker:tag:latest && npm run docker:publish:latest",
+    "docker:sh": "docker run --rm -it drivereu/test-bed-time-service:latest sh",
+    "docker:run": "docker run --rm -it -p 8080:8080 drivereu/test-bed-time-service:latest",
+    "build-docker": "npm run build2 && npm run tag-docker",
+    "build2": "docker buildx build --build-arg GIT_COMMIT=$(git rev-parse HEAD) -t drivereu/test-bed-time-service:latest .",
+    "tag-docker": "npm run tag-latest && npm run tag-commit",
+    "tag-latest": "docker tag drivereu/test-bed-time-service:latest drivereu/test-bed-time-service:latest",
+    "tag-commit": "docker tag drivereu/test-bed-time-service:latest drivereu/test-bed-time-service:$(git rev-parse HEAD)",
+    "push-docker": "npm run push-latest && npm run push-commit",
+    "push-latest": "docker push drivereu/test-bed-time-service:latest",
+    "push-commit": "docker push drivereu/test-bed-time-service:$(git rev-parse HEAD)"
   },
   "devDependencies": {
     "@rspack/cli": "^0.3.8",

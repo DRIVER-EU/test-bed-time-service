@@ -10,18 +10,14 @@ export const VideoPlayer: FactoryComponent = () => {
   let videoType: string = '';
 
   const setVideo = (v: InfoMsg) => {
-    console.log(v);
+    resetVideo();
     if (!v) return;
+    console.log(v);
     if (v.type === InfoMsgType.CLEAR) {
       videoEl.setAttribute('style', 'display: none');
       video = '';
       videoType = '';
-    } else if (v.filename) {
-      if (videoEl) {
-        videoEl.pause();
-        videoEl.currentTime = 0;
-        videoEl.play();
-      }
+    } else if (videoEl && v.filename) {
       // Define a mapping of common video extensions to MIME types
       const videoExtensions: { [key: string]: string } = {
         mp4: 'video/mp4',
@@ -43,14 +39,30 @@ export const VideoPlayer: FactoryComponent = () => {
       video = v.filename;
       console.table({ video, videoType });
       videoEl.setAttribute('style', 'display: block');
+      videoEl.src = videoToSrc(video);
+      videoEl.play();
     }
     m.redraw();
   };
+
+  const resetVideo = () => {
+    if (videoEl) {
+      videoEl.pause();
+      videoEl.currentTime = 0;
+    }
+  }
+
+  const videoToSrc = (video: string) => `${process.env.SERVER_URL}/videos/${video}`;
 
   return {
     oninit: () => {
       console.log('Initializing video');
       SocketService.socket.on(SocketChannels.VIDEO, (msg: InfoMsg) => setVideo(msg));
+      SocketService.socket.on(SocketChannels.BILLBOARD, (msg: InfoMsg) => {
+        if (msg.type !== InfoMsgType.CLEAR) return;
+        resetVideo();
+        m.redraw();
+      });
     },
     view: () => {
       const muted = localStorage.getItem(TIME_SERVICE_MUTED) === '1';
@@ -74,9 +86,10 @@ export const VideoPlayer: FactoryComponent = () => {
             };
           },
         },
-        video && m('source', { src: `${process.env.SERVER_URL}/videos/${video}`, type: videoType }),
+        video && m('source', { src: videoToSrc(video), type: videoType }),
         'Your browser does not support HTML5 video.'
       );
     },
+    onremove: () => resetVideo(),
   };
 };

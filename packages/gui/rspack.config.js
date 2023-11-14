@@ -15,8 +15,9 @@ module.exports = {
   builtins: {
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'process.env.SERVER_URL': `"${devMode ? 'http://localhost:2347' : ''}"`,
-      SOCKET_IO_SERVER: JSON.stringify(devMode ? 'localhost:2347' : '.'),
+      'process.env.SERVER_URL': `"${devMode ? 'http://localhost:2347' : '.'}"`,
+      SOCKET_IO_SERVER: JSON.stringify(devMode ? 'localhost:2347' : ''),
+      SOCKET_IO_PATH: JSON.stringify(devMode ? '/socket.io' : '/time/socket.io'),
     },
     html: [
       {

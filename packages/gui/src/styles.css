@@ -64,6 +64,7 @@ body {
 }
 #billboard .message {
   font-size: 3rem;
+  color: yellow;
   position: absolute;
   display: inline-block;
   bottom: 0rem;

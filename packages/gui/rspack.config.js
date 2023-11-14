@@ -15,7 +15,8 @@ module.exports = {
   builtins: {
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      SOCKET_IO_SERVER: JSON.stringify(devMode ? 'localhost:2347' : ''),
+      'process.env.SERVER_URL': `"${devMode ? 'http://localhost:2347' : ''}"`,
+      SOCKET_IO_SERVER: JSON.stringify(devMode ? 'localhost:2347' : '.'),
     },
     html: [
       {
@@ -49,7 +50,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|webp|mp3)$/i,
         type: 'asset/resource',
       },
       {

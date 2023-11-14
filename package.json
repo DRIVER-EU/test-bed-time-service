@@ -14,8 +14,8 @@
     "docker": "npm run docker:build && npm run docker:tag && npm run docker:publish && npm run docker:tag:latest && npm run docker:publish:latest"
   },
   "devDependencies": {
-    "@rspack/cli": "^0.3.7",
-    "pnpm": "^8.9.2"
+    "@rspack/cli": "^0.3.8",
+    "pnpm": "^8.10.0"
   },
   "repository": {
     "type": "git",

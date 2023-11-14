@@ -17,6 +17,11 @@ export const VideoPlayer: FactoryComponent = () => {
       video = '';
       videoType = '';
     } else if (v.filename) {
+      if (videoEl) {
+        videoEl.pause();
+        videoEl.currentTime = 0;
+        videoEl.play();
+      }
       // Define a mapping of common video extensions to MIME types
       const videoExtensions: { [key: string]: string } = {
         mp4: 'video/mp4',
@@ -69,7 +74,7 @@ export const VideoPlayer: FactoryComponent = () => {
             };
           },
         },
-        video && m('source', { src: `/time/videos/${video}`, type: videoType }),
+        video && m('source', { src: `${process.env.SERVER_URL}/videos/${video}`, type: videoType }),
         'Your browser does not support HTML5 video.'
       );
     },

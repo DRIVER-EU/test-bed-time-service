@@ -70,7 +70,7 @@ export class TimeService extends EventEmitter implements TimeService {
       kafkaHost,
       schemaRegistry,
       fetchAllSchemas: false,
-      groupId: options.groupId || 'TimeService',
+      groupId: options.groupId || `time_service_${Math.round(Math.random() * 1000)}`,
       autoRegisterSchemas,
       schemaFolder: 'schemas',
       autoRegisterDefaultSchemas: false,

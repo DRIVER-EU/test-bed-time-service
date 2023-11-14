@@ -83,7 +83,7 @@ export class CommandLineInterface {
       name: 'groupId',
       alias: 'g',
       type: Number,
-      defaultValue: process.env.GROUP_ID || process.env.CLIENT_ID || 'TimeService',
+      defaultValue: process.env.GROUP_ID || process.env.CLIENT_ID,
       typeLabel: '[String]',
       description: 'Group ID, e.g. TimeService',
     },

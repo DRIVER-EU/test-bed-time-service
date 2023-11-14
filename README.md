@@ -1,5 +1,9 @@
 # test-bed-time-service
 
+A virtual time service that can also be used to display the time to the participants, to display general informative (billboard) messages, or a video file.
+
+![image](https://github.com/DRIVER-EU/test-bed-time-service/assets/3140667/7d663f84-7b46-4060-a685-798162a1e95b)
+
 In the test-bed, there will be one or more simulations that, together, create a virtual incident and reasonable responses of the environment. For example, there may be a flooding simulation or earthquake, after which the traffic (simulation) is disturbed too.
 
 The test-bed time service can be controlled via Apache Kafka and via a GUI available at [http://localhost:8100/time-service](http://localhost:8100) (see screenshots below). It listens to state changes of the test-bed, e.g. scenario start and stop messages.

@@ -11,7 +11,7 @@ const setupSocket = () => {
     return socket;
   }
   const ioConfig: Partial<ManagerOptions & SocketOptions> = {
-    path: '/time/socket.io',
+    path: '/socket.io',
     transports: ['websocket', 'polling'],
   };
 

@@ -25,13 +25,13 @@ export class App {
     this.app = express();
     this.app.use(cors());
     const pwd = join(cwd(), 'public');
-    this.app.use('/time', express.static(pwd));
-    this.app.use('/time/videos', express.static(options.videos));
+    this.app.use('', express.static(pwd));
+    this.app.use('/videos', express.static(options.videos));
 
     this.server = createServer(this.app);
 
     this.io = new SocketIoServer(this.server, {
-      path: '/time/socket.io',
+      path: '/socket.io',
     });
 
     console.log('Start-up options');
@@ -63,13 +63,13 @@ export class App {
     });
 
     /** Return last informative message */
-    this.app.get('/time/info_msg', (_req, res) => {
+    this.app.get('/info_msg', (_req, res) => {
       const last = this.timeService.infoMsgs.length - 1;
       res.json(last < 0 ? {} : this.timeService.infoMsgs[last]);
     });
 
     /** Return all informative messages */
-    this.app.get('/time/info_msgs', (_req, res) => {
+    this.app.get('/info_msgs', (_req, res) => {
       res.json(this.timeService.infoMsgs);
     });
 

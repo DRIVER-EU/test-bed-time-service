@@ -26,12 +26,13 @@
     "mithril": "^2.2.2",
     "mithril-materialized": "^1.1.1",
     "socket.io-client": "4.7.2",
-    "utf-8-validate": "^6.0.3"
+    "utf-8-validate": "^6.0.3",
+    "slimdown-js": "0.7.2"
   },
   "devDependencies": {
-    "@types/materialize-css": "^1.0.13",
-    "@types/mithril": "^2.2.3",
-    "@rspack/cli": "^0.3.7",
+    "@types/materialize-css": "^1.0.14",
+    "@types/mithril": "^2.2.4",
+    "@rspack/cli": "^0.3.12",
     "rimraf": "^5.0.5",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
